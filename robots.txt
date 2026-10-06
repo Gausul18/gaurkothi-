@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://gaurkothi-gaon-portal.onrender.com/sitemap.xml

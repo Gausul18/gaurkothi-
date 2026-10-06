@@ -1,0 +1,32 @@
+﻿{
+  "villageName": "गौरकोठी",
+  "villageNameEn": "Gaurkothi",
+  "portalTitle": "गौरकोठी गाँव पोर्टल",
+  "tagline": "गाँव की आवाज़, गाँव के लिए · ग्राम पंचायत गौरकोठी (देवरिया)",
+  "gramPanchayat": "गौरकोठी",
+  "postOffice": "रामपुर अवस्थी",
+  "block": "देवरिया सदर",
+  "tehsil": "देवरिया",
+  "district": "देवरिया",
+  "state": "उत्तर प्रदेश",
+  "pincode": "274202",
+  "tolas": [
+    "भगड़ा (Bhagara)",
+    "चकिया (Chakiya)",
+    "बाबू टोला (Babu Tola)",
+    "धरमपुर (Dharampur)",
+    "सिन्हा टोला (Sinha Tola)",
+    "चौबे टोला (Chaube Tola)",
+    "रामनगर (Ramnagar)"
+  ],
+  "pradhanName": "ग्राम प्रधान (गौरकोठी)",
+  "pradhanPhone": "9838000000",
+  "developerName": "गौरकोठी डिजिटल टीम",
+  "developerPhone": "918423406830",
+  "adminPassword": "pradhan123",
+  "weatherDefault": {
+    "name": "गौरकोठी (देवरिया)",
+    "lat": 26.5024,
+    "lon": 83.7791
+  }
+}
