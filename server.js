@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json({ limit: '15mb' }));
 app.use(express.urlencoded({ extended: true, limit: '15mb' }));
 
-// Helper to resolve data file from ./data/ or root ./
+// Helper to resolve data file from ./data/ or from root ./
 function resolveDataFile(filename) {
   const inData = path.join(__dirname, 'data', filename);
   if (fs.existsSync(inData)) return inData;
@@ -310,9 +310,7 @@ app.use(express.static(__dirname));
 app.get('*', (req, res) => {
   const pubHtml = path.join(__dirname, 'public', 'index.html');
   if (fs.existsSync(pubHtml)) return res.sendFile(pubHtml);
-  const rootHtml = path.join(__dirname, 'index.html');
-  if (fs.existsSync(rootHtml)) return res.sendFile(rootHtml);
-  res.send('गौरकोठी गाँव पोर्टल लोड हो रहा है...');
+  res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 app.listen(PORT, () => {
