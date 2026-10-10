@@ -1,7 +1,7 @@
-﻿{
-  "name": "गाँव पोर्टल — Gaon Portal",
-  "short_name": "गाँव पोर्टल",
-  "description": "गाँव की समस्याएं, सूचनाएं, जानकारी, सरकारी योजनाएं व कृषि सेवा — एक जगह",
+{
+  "name": "गौरकोठी गाँव पोर्टल — Gaurkothi Gaon Portal",
+  "short_name": "गौरकोठी पोर्टल",
+  "description": "ग्राम पंचायत गौरकोठी (देवरिया) का आधिकारिक डिजिटल पोर्टल — समस्याएं, सूचनाएं, मौसम, कृषि सेवा व सरकारी योजनाएं",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -14,13 +14,13 @@
       "src": "/icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
       "src": "/icons/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     }
   ]
 }

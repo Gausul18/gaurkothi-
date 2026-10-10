@@ -58,6 +58,30 @@ function requireAdmin(req, res, next) {
   return res.status(401).json({ error: 'Unauthorized: Pradhan Admin login required' });
 }
 
+/* ==================== PWA ROUTES ==================== */
+app.get('/sw.js', (req, res) => {
+  const p1 = path.join(__dirname, 'sw.js');
+  const p2 = path.join(__dirname, 'public', 'sw.js');
+  if (fs.existsSync(p1)) return res.type('application/javascript').sendFile(p1);
+  if (fs.existsSync(p2)) return res.type('application/javascript').sendFile(p2);
+  res.type('application/javascript').send("self.addEventListener('install',e=>self.skipWaiting());self.addEventListener('activate',e=>self.clients.claim());self.addEventListener('fetch',e=>{});");
+});
+
+app.get('/manifest.json', (req, res) => {
+  const p1 = path.join(__dirname, 'manifest.json');
+  const p2 = path.join(__dirname, 'public', 'manifest.json');
+  if (fs.existsSync(p1)) return res.type('application/json').sendFile(p1);
+  if (fs.existsSync(p2)) return res.type('application/json').sendFile(p2);
+  res.json({
+    name: "गौरकोठी गाँव पोर्टल",
+    short_name: "गौरकोठी",
+    start_url: "/",
+    display: "standalone",
+    background_color: "#EFE6D3",
+    theme_color: "#1F3F5C"
+  });
+});
+
 /* ==================== API ROUTES ==================== */
 
 // 1. Admin Login
