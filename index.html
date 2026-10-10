@@ -2558,6 +2558,23 @@
             font-size: .75rem;
             font-weight: 700;
         }
+                .btn-weather-home-quick {
+            background: linear-gradient(135deg, #16A34A, #15803D);
+            color: #fff;
+            border: none;
+            border-radius: 16px;
+            padding: 4px 11px;
+            font-size: .75rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: transform .15s;
+        }
+        .btn-weather-home-quick:active {
+            transform: scale(0.95);
+        }
         .btn-weather-gps-quick {
             background: linear-gradient(135deg, #0284C7, #0369A1);
             color: #fff;
@@ -4408,6 +4425,9 @@
                     <span class="weather-strip-rain" id="weatherStripRain">🌧️ बारिश: --%</span>
                 </div>
                 <div class="weather-strip-right">
+                                        <button type="button" class="btn-weather-home-quick" id="btnWeatherHomeQuick" title="&#2327;&#2366;&#2305;&#2357; &#2327;&#2380;&#2352;&#2325;&#2379;&#2336;&#2368; (&#2342;&#2375;&#2357;&#2352;&#2367;&#2351;&#2366;) &#2325;&#2366; &#2350;&#2380;&#2360;&#2350; &#2342;&#2375;&#2336;&#2375;&#2305;">
+                        <span>&#127969;</span> <span>&#2327;&#2380;&#2352;&#2325;&#2379;&#2336;&#2368;</span>
+                    </button>
                     <button type="button" class="btn-weather-gps-quick" id="btnWeatherGpsQuick" title="मेरे फ़ोन की वर्तमान लोकेशन से मौसम देखें">
                         <span>📍</span> <span id="lblGpsQuick">मेरी लोकेशन</span>
                     </button>
@@ -9021,18 +9041,21 @@ async function detectUserLocation(forceGps = false) {
             async (pos) => {
                 const lat = pos.coords.latitude;
                 const lon = pos.coords.longitude;
-                let locName = matchKnownRegion(lat, lon) || '📍 मेरा लाइव स्थान (GPS)';
-                try {
-                    const c1 = new AbortController();
-                    const t1 = setTimeout(() => c1.abort(), 2000);
-                    const bdcRes = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=hi`, { signal: c1.signal });
-                    clearTimeout(t1);
-                    if (bdcRes.ok) {
-                        const bdc = await bdcRes.json();
-                        const city = bdc.locality || bdc.city || bdc.principalSubdivisionDistrict || '';
-                        if (city) locName = `${city} (लाइव स्थान)`;
-                    }
-                } catch(eBDC){}
+                let knownName = matchKnownRegion(lat, lon);
+                let locName = knownName || '';
+                if (!locName) {
+                    try {
+                        const c1 = new AbortController();
+                        const t1 = setTimeout(() => c1.abort(), 2000);
+                        const bdcRes = await fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=hi`, { signal: c1.signal });
+                        clearTimeout(t1);
+                        if (bdcRes.ok) {
+                            const bdc = await bdcRes.json();
+                            const city = bdc.locality || bdc.city || bdc.principalSubdivisionDistrict || '';
+                            if (city) locName = `${city} (\u0932\u093E\u0907\u0935 \u0938\u094D\u0925\u093E\u0928)`;
+                        }
+                    } catch(eBDC){}
+                }
 
                 if (!locName || locName.includes('GPS')) {
                     try {
@@ -9825,6 +9848,17 @@ function initWeather() {
         });
     }
 
+        const btnHomeQuick = document.getElementById('btnWeatherHomeQuick');
+    if (btnHomeQuick) {
+        btnHomeQuick.addEventListener('click', () => {
+            isManualLocationSelected = true;
+            localStorage.setItem('saved_weather_location', JSON.stringify(DEFAULT_WEATHER_LOCATION));
+            loadWeatherData(DEFAULT_WEATHER_LOCATION);
+            renderModalLocChips();
+            toast('\uD83C\uDFE1 \u0917\u093E\u0901\u0935 \u0917\u094C\u0930\u0915\u094B\u0920\u0940 (\u0926\u0947\u0935\u0930\u093F\u092F\u093E) \u0915\u093E \u092E\u094C\u0938\u092E \u0938\u0947\u091F \u0939\u094B \u0917\u092F\u093E \u2705');
+        });
+    }
+
     const btnGpsQuick = document.getElementById('btnWeatherGpsQuick');
     if (btnGpsQuick) {
         btnGpsQuick.addEventListener('click', async () => {
@@ -9910,22 +9944,29 @@ function initWeather() {
     let savedLoc = null;
     try {
         const savedRaw = localStorage.getItem('saved_weather_location');
-        if (savedRaw) savedLoc = JSON.parse(savedRaw);
+        if (savedRaw) {
+            savedLoc = JSON.parse(savedRaw);
+            // Clear any stale Varanasi cache so it never shows Varanasi automatically:
+            if (savedLoc && savedLoc.name && (savedLoc.name.toLowerCase().includes('varanasi') || savedLoc.name.includes('\u0935\u093E\u0930\u093E\u0923\u0938\u0940'))) {
+                localStorage.removeItem('saved_weather_location');
+                savedLoc = null;
+            }
+        }
     } catch(e){}
 
-    if (savedLoc && savedLoc.lat && savedLoc.lon) {
+    if (savedLoc && savedLoc.lat && savedLoc.lon && !savedLoc.isGps && !savedLoc.name.toLowerCase().includes('varanasi') && !savedLoc.name.includes('\u0935\u093E\u0930\u093E\u0923\u0938\u0940')) {
         loadWeatherData(savedLoc);
     } else {
         loadWeatherData(DEFAULT_WEATHER_LOCATION);
     }
 
     // 2. ALWAYS auto-detect live GPS location on startup (wherever the user travels)
-    autoDetectCurrentLocation();
+    // Disabled auto-override: always keep Gaurkothi (Deoria) as default unless explicitly clicked
 
     // 3. Whenever user comes back to the app / window is visible, auto-refresh location:
     document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'visible' && !isManualLocationSelected) {
-            autoDetectCurrentLocation();
+            // autoDetectCurrentLocation();
         }
     });
 }
