@@ -47,7 +47,7 @@ function writeJson(filename, data) {
 }
 
 // Admin Auth Middleware
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'pradhan123';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'gaurkothi2026';
 const ADMIN_SECRET_KEY = 'gaon-admin-session-token-9988';
 
 function requireAdmin(req, res, next) {
@@ -65,7 +65,7 @@ app.post('/api/admin/login', (req, res) => {
   const { password } = req.body;
   const cfg = readJson('config.json', {});
   const expectedPass = cfg.adminPassword || ADMIN_PASSWORD;
-  if (password === expectedPass || password === 'pradhan123') {
+  if (password === expectedPass || password === 'gaurkothi2026') {
     return res.json({ success: true, key: ADMIN_SECRET_KEY, message: 'लॉगिन सफल हुआ' });
   }
   return res.status(401).json({ error: 'गलत पासवर्ड! कृपया सही प्रधान पासवर्ड दर्ज करें।' });
