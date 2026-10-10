@@ -6326,7 +6326,7 @@ const DEFAULT_SAMASYA_FALLBACK = [
             if (path === '/admin/login') {
                 const expected = villageConfig.adminPassword || 'gaurkothi2026';
                 if (body && (body.password === expected || body.password === 'gaurkothi2026')) {
-                    return { success: true, key: 'admin-local-key-9988' };
+                    return { success: true, ok: true, key: 'admin-local-key-9988' };
                 }
                 toast('à¤—à¤²à¤¤ à¤ªà¤¾à¤¸à¤µà¤°à¥à¤¡! à¤•à¥ƒà¤ªà¤¯à¤¾ à¤¸à¤¹à¥€ à¤ªà¥à¤°à¤§à¤¾à¤¨ à¤ªà¤¾à¤¸à¤µà¤°à¥à¤¡ à¤¦à¤°à¥à¤œ à¤•à¤°à¥‡à¤‚à¥¤');
                 return null;
@@ -8690,8 +8690,8 @@ document.getElementById('formAdmin').addEventListener('submit', async (e)=>{
   e.preventDefault();
   const password = document.getElementById('adminPassword').value;
   const result = await apiSend('POST', '/admin/login', {password});
-  if(result && result.ok){
-    adminKey = password;
+  if(result && (result.success || result.ok || result.key)){
+    adminKey = (result && result.key) || password;
     sessionStorage.setItem('adminKey', password);
     closeOverlay('overlayAdmin');
     updateAdminButton();
