@@ -9852,7 +9852,10 @@ function initWeather() {
     if (btnHomeQuick) {
         btnHomeQuick.addEventListener('click', () => {
             isManualLocationSelected = true;
-            localStorage.setItem('saved_weather_location', JSON.stringify(DEFAULT_WEATHER_LOCATION));
+            try {
+                localStorage.setItem('lock_gaurkothi_weather', 'true');
+                localStorage.setItem('saved_weather_location', JSON.stringify(DEFAULT_WEATHER_LOCATION));
+            } catch(e){}
             loadWeatherData(DEFAULT_WEATHER_LOCATION);
             renderModalLocChips();
             toast('\uD83C\uDFE1 \u0917\u093E\u0901\u0935 \u0917\u094C\u0930\u0915\u094B\u0920\u0940 (\u0926\u0947\u0935\u0930\u093F\u092F\u093E) \u0915\u093E \u092E\u094C\u0938\u092E \u0938\u0947\u091F \u0939\u094B \u0917\u092F\u093E \u2705');
@@ -9863,15 +9866,18 @@ function initWeather() {
     if (btnGpsQuick) {
         btnGpsQuick.addEventListener('click', async () => {
             isManualLocationSelected = false;
-            toast('📍 आपके फ़ोन की लाइव लोकेशन खोजी जा रही है...');
+            try {
+                localStorage.removeItem('lock_gaurkothi_weather');
+            } catch(e){}
+            toast('\uD83D\uDCCD \u0906\u092A\u0915\u0947 \u092B\u093C\u094B\u0928 \u0915\u0940 \u0932\u093E\u0907\u0935 \u0932\u094B\u0915\u0947\u0936\u0928 \u0916\u094B\u091C\u0940 \u091C\u093E \u0930\u0939\u0940 \u0939\u0948...');
             const loc = await detectUserLocation(true);
             if (loc) {
                 await loadWeatherData(loc);
                 renderModalLocChips();
                 const temp = (currentWeatherData && currentWeatherData.current) ? Math.round(currentWeatherData.current.temperature_2m) : '';
-                toast(`📍 आपकी वर्तमान लोकेशन: ${loc.name} (${temp}°C) अपडेट हो गई ✅`);
+                toast(`\uD83D\uDCCD \u0906\u092A\u0915\u0940 \u0935\u0930\u094D\u0924\u092E\u093E\u0928 \u0932\u094B\u0915\u0947\u0936\u0928: ${loc.name} (${temp}°C) \u0905\u092A\u0921\u0947\u091F \u0939\u094B \u0917\u0908 \u2705`);
             } else {
-                toast('GPS स्थान नहीं मिल पाया, कृपया ब्राउज़र में लोकेशन अनुमति दें ⚠️');
+                toast('\u26A0\uFE0F GPS \u0938\u094D\u0925\u093E\u0928 \u0928\u0939\u0940\u0902 \u092E\u093F\u0932 \u092A\u093E\u092F\u093E, \u0915\u0943\u092A\u092F\u093E \u092C\u094D\u0930\u093E\u0901\u0909\u091C\u093C\u0930 \u092E\u0947\u0902 \u0932\u094B\u0915\u0947\u0936\u0928 \u0905\u0928\u0941\u092E\u0924\u093F \u0926\u0947\u0902');
             }
         });
     }
@@ -9923,16 +9929,17 @@ function initWeather() {
         if (!navigator.geolocation) return;
         try {
             const gpsLoc = await detectUserLocation(false);
-            if (gpsLoc) {
+            if (gpsLoc && gpsLoc.lat && gpsLoc.lon) {
                 const distChanged = !currentWeatherLocation ||
                     Math.abs(currentWeatherLocation.lat - gpsLoc.lat) > 0.015 ||
                     Math.abs(currentWeatherLocation.lon - gpsLoc.lon) > 0.015;
                 
                 if (distChanged || !currentWeatherLocation.isGps) {
                     await loadWeatherData(gpsLoc);
-                    toast(`📍 आपका वर्तमान स्थान मिल गया: ${gpsLoc.name}`);
+                    const temp = (currentWeatherData && currentWeatherData.current) ? Math.round(currentWeatherData.current.temperature_2m) : '';
+                    toast(`\uD83D\uDCCD \u0906\u092A\u0915\u0940 \u0932\u093E\u0907\u0935 \u0932\u094B\u0915\u0947\u0936\u0928: ${gpsLoc.name} (${temp}°C) \u0938\u0947\u091F \u0939\u094B \u0917\u0908 \u2705`);
                 } else if (forceToast) {
-                    toast(`📍 वर्तमान स्थान: ${gpsLoc.name} ✅`);
+                    toast(`\uD83D\uDCCD \u0935\u0930\u094D\u0924\u092E\u093E\u0928 \u0932\u094B\u0915\u0947\u0936\u0928: ${gpsLoc.name} \u2705`);
                 }
             }
         } catch(err) {
@@ -9942,31 +9949,32 @@ function initWeather() {
 
     // 1. Initial weather load: Show cached or default village location immediately (0 waiting)
     let savedLoc = null;
+    let isUserLockedToGaurkothi = false;
     try {
+        const lockVal = localStorage.getItem('lock_gaurkothi_weather');
+        if (lockVal === 'true') isUserLockedToGaurkothi = true;
         const savedRaw = localStorage.getItem('saved_weather_location');
-        if (savedRaw) {
-            savedLoc = JSON.parse(savedRaw);
-            // Clear any stale Varanasi cache so it never shows Varanasi automatically:
-            if (savedLoc && savedLoc.name && (savedLoc.name.toLowerCase().includes('varanasi') || savedLoc.name.includes('\u0935\u093E\u0930\u093E\u0923\u0938\u0940'))) {
-                localStorage.removeItem('saved_weather_location');
-                savedLoc = null;
-            }
-        }
+        if (savedRaw) savedLoc = JSON.parse(savedRaw);
     } catch(e){}
 
-    if (savedLoc && savedLoc.lat && savedLoc.lon && !savedLoc.isGps && !savedLoc.name.toLowerCase().includes('varanasi') && !savedLoc.name.includes('\u0935\u093E\u0930\u093E\u0923\u0938\u0940')) {
+    if (isUserLockedToGaurkothi) {
+        isManualLocationSelected = true;
+        loadWeatherData(DEFAULT_WEATHER_LOCATION);
+    } else if (savedLoc && savedLoc.lat && savedLoc.lon && !savedLoc.isGps) {
         loadWeatherData(savedLoc);
     } else {
         loadWeatherData(DEFAULT_WEATHER_LOCATION);
     }
 
-    // 2. ALWAYS auto-detect live GPS location on startup (wherever the user travels)
-    // Disabled auto-override: always keep Gaurkothi (Deoria) as default unless explicitly clicked
+    // 2. OPTION B: Auto-detect user's live current location on launch (wherever user opens from)
+    if (!isUserLockedToGaurkothi) {
+        autoDetectCurrentLocation(false);
+    }
 
-    // 3. Whenever user comes back to the app / window is visible, auto-refresh location:
+    // 3. Whenever user returns to the app, refresh live location:
     document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'visible' && !isManualLocationSelected) {
-            // autoDetectCurrentLocation();
+            autoDetectCurrentLocation(false);
         }
     });
 }
