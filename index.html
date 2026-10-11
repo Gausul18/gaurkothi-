@@ -7,7 +7,7 @@
     <title>Gaurkothi Gaon Portal — गौरकोठी गाँव पोर्टल (देवरिया) | ग्राम पंचायत गौरकोठी</title>
 
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://gaurkothi-gaon-portal.onrender.com/">
+    <link rel="canonical" href="https://gaurkothi.onrender.com/">
 
     <!-- Google Search Engine SEO Meta Tags -->
     <meta name="description" content="गौरकोठी गाँव पोर्टल (Gaurkothi Gaon Portal) — ग्राम पंचायत गौरकोठी, पोस्ट रामपुर अवस्थी, जिला देवरिया (उ०प्र०)। गाँव के 7 टोले: भगड़ा, चकिया, बाबू टोला, धरमपुर, सिन्हा टोला, चौबे टोला, रामनगर। सरकारी योजनाएं, भूलेख खतौनी, राशन कार्ड, जन-समस्या निवारण, छात्रवृत्ति, स्वास्थ्य व लाइव मौसम।">
@@ -26,7 +26,7 @@
     <meta property="og:type" content="website">
     <meta property="og:title" content="Gaurkothi Gaon Portal — गौरकोठी गाँव पोर्टल (देवरिया)">
     <meta property="og:description" content="गाँव की आवाज़, गाँव के लिए — ग्राम पंचायत गौरकोठी (पोस्ट: रामपुर अवस्थी, जिला देवरिया)। 7 टोले: भगड़ा, चकिया, बाबू टोला, धरमपुर, सिन्हा टोला, चौबे टोला, रामनगर।">
-    <meta property="og:url" content="https://gaurkothi-gaon-portal.onrender.com/">
+    <meta property="og:url" content="https://gaurkothi.onrender.com/">
     <meta property="og:image" content="/images/builder-photo.jpg">
     <meta property="og:site_name" content="Gaurkothi Gaon Portal">
 
@@ -43,8 +43,8 @@
       "@graph": [
         {
           "@type": "WebSite",
-          "@id": "https://gaurkothi-gaon-portal.onrender.com/#website",
-          "url": "https://gaurkothi-gaon-portal.onrender.com/",
+          "@id": "https://gaurkothi.onrender.com/#website",
+          "url": "https://gaurkothi.onrender.com/",
           "name": "Gaurkothi Gaon Portal",
           "alternateName": [
             "गौरकोठी गाँव पोर्टल",
@@ -58,9 +58,9 @@
         },
         {
           "@type": "GovernmentOrganization",
-          "@id": "https://gaurkothi-gaon-portal.onrender.com/#organization",
+          "@id": "https://gaurkothi.onrender.com/#organization",
           "name": "Gram Panchayat Gaurkothi (ग्राम पंचायत गौरकोठी)",
-          "url": "https://gaurkothi-gaon-portal.onrender.com/",
+          "url": "https://gaurkothi.onrender.com/",
           "address": {
             "@type": "PostalAddress",
             "streetAddress": "Gaurkothi, Post Rampur Awasthi",
@@ -81,11 +81,12 @@
     <!-- PWA setup: isse 'Add to Home Screen' karne par ye asli app jaisi chalti hai -->
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#1F3F5C">
-    <link rel="icon" href="/icons/icon-192.png">
-    <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192.png">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Gaurkothi Portal">
+    <meta name="apple-mobile-web-app-title" content="à¤—à¥Œà¤°à¤•à¥‹à¤ à¥€">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Noto+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -10770,20 +10771,43 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
 async function triggerPwaInstall() {
   if (isPwaInstalled()) {
-    toast('गौरकोठी ऐप आपके फ़ोन में पहले से इंस्टॉल है! ✅');
+    toast('à¤—à¥Œà¤°à¤•à¥‹à¤ à¥€ à¤à¤ª à¤†à¤ªà¤•à¥‡ à¤«à¤¼à¥‹à¤¨ à¤®à¥‡à¤‚ à¤ªà¤¹à¤²à¥‡ à¤¸à¥‡ à¤‡à¤‚à¤¸à¥à¤Ÿà¥‰à¤² à¤¹à¥ˆ! âœ…');
     return;
   }
   if (deferredInstallPrompt) {
-    deferredInstallPrompt.prompt();
-    const { outcome } = await deferredInstallPrompt.userChoice;
-    if (outcome === 'accepted') {
-      toast('गौरकोठी ऐप इंस्टॉल हो रही है... 🎉');
-      if (pwaBanner) pwaBanner.style.display = 'none';
-      closeOverlay('overlayPwaGuide');
+    try {
+      deferredInstallPrompt.prompt();
+      const choice = await deferredInstallPrompt.userChoice;
+      if (choice && choice.outcome === 'accepted') {
+        toast('ðŸŽ‰ à¤—à¥Œà¤°à¤•à¥‹à¤ à¥€ à¤à¤ª à¤†à¤ªà¤•à¥‡ à¤«à¤¼à¥‹à¤¨ à¤®à¥‡à¤‚ à¤‡à¤‚à¤¸à¥à¤Ÿà¥‰à¤² à¤¹à¥‹ à¤°à¤¹à¥€ à¤¹à¥ˆ...');
+        if (pwaBanner) pwaBanner.style.display = 'none';
+        closeOverlay('overlayPwaGuide');
+      }
+      deferredInstallPrompt = null;
+      return;
+    } catch(err) {
+      console.warn('Install error', err);
     }
-    deferredInstallPrompt = null;
-    return;
   }
+
+  // Quick retry in case beforeinstallprompt was delayed by network
+  if (!deferredInstallPrompt) {
+    await new Promise(r => setTimeout(r, 400));
+    if (deferredInstallPrompt) {
+      try {
+        deferredInstallPrompt.prompt();
+        const choice = await deferredInstallPrompt.userChoice;
+        if (choice && choice.outcome === 'accepted') {
+          toast('ðŸŽ‰ à¤—à¥Œà¤°à¤•à¥‹à¤ à¥€ à¤à¤ª à¤†à¤ªà¤•à¥‡ à¤«à¤¼à¥‹à¤¨ à¤®à¥‡à¤‚ à¤‡à¤‚à¤¸à¥à¤Ÿà¥‰à¤² à¤¹à¥‹ à¤°à¤¹à¥€ à¤¹à¥ˆ...');
+          if (pwaBanner) pwaBanner.style.display = 'none';
+          closeOverlay('overlayPwaGuide');
+        }
+        deferredInstallPrompt = null;
+        return;
+      } catch(e){}
+    }
+  }
+
   openOverlay('overlayPwaGuide');
 }
 
