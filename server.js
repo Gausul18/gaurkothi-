@@ -1,4 +1,4 @@
-﻿const express = require('express');
+const express = require('express');
 const cors = require('cors');
 const fs = require('fs');
 const path = require('path');
@@ -104,7 +104,6 @@ app.get(['/manifest.json', '/manifest.webmanifest'], (req, res) => {
       { src: "/icon-512.png", sizes: "512x512", type: "image/png", purpose: "any maskable" }
     ]
   });
-});
 });
 
 /* ==================== API ROUTES ==================== */
