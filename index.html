@@ -79,10 +79,14 @@
     </script>
 
     <!-- PWA setup: isse 'Add to Home Screen' karne par ye asli app jaisi chalti hai -->
-    <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#1F3F5C">
-    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192.png">
-    <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192.png">
+    <link rel="manifest" href="/manifest.json?v=2">
+    <meta name="theme-color" content="#1E3A8A">
+    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2026">
+    <link rel="shortcut icon" href="/favicon.ico?v=2026">
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192-v2.png?v=2026">
+    <link rel="icon" type="image/png" sizes="512x512" href="/icons/icon-512-v2.png?v=2026">
+    <link rel="apple-touch-icon" sizes="192x192" href="/icons/icon-192-v2.png?v=2026">
+    <link rel="apple-touch-icon" sizes="512x512" href="/icons/icon-512-v2.png?v=2026">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -192,7 +196,7 @@
         .install-btn {
             margin-left: auto;
             flex: none;
-            background: var(--turmeric);
+            background: linear-gradient(135deg, #10B981, #059669); border-radius: 20px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35); color: #ffffff;
             color: var(--indigo-dark);
             border: none;
             border-radius: 9px;
@@ -1768,7 +1772,7 @@
         }
         
         .emergency-more-btn {
-            background: var(--turmeric);
+            background: linear-gradient(135deg, #10B981, #059669); border-radius: 20px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35); color: #ffffff;
             color: var(--indigo-dark);
             border: none;
             border-radius: 16px;
@@ -4315,6 +4319,7 @@
         }
         /* ============ PWA BOTTOM INSTALL BANNER & MODAL ============ */
         .pwa-install-banner {
+            display: none !important;
             position: fixed;
             bottom: 20px;
             left: 16px;
@@ -5247,7 +5252,7 @@
         <div class="toast" id="toast"></div>
 
         <!-- ===================== PWA BOTTOM MOBILE INSTALL BAR ===================== -->
-        <div class="pwa-install-banner" id="pwaInstallBanner">
+        <div class="pwa-install-banner" id="pwaInstallBanner" style="display: none !important;">
             <div class="pwa-install-left">
                 <span class="pwa-install-icon">🏡</span>
                 <div class="pwa-install-text">
@@ -10774,7 +10779,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredInstallPrompt = e;
   if (!isPwaInstalled() && pwaBanner) {
-    pwaBanner.style.display = 'flex';
+    // pwaBanner suppressed per user request - top header button only
   }
 });
 
