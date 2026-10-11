@@ -87,11 +87,11 @@ app.get('/sw.js', (req, res) => {
 app.get(['/manifest.json', '/manifest.webmanifest'], (req, res) => {
   const p1 = path.join(__dirname, 'manifest.json');
   const p2 = path.join(__dirname, 'public', 'manifest.json');
-  if (fs.existsSync(p1)) return res.type('application/manifest+json').sendFile(p1);
-  if (fs.existsSync(p2)) return res.type('application/manifest+json').sendFile(p2);
-  res.json({
-    name: "à¤—à¥Œà¤°à¤•à¥‹à¤ à¥€ à¤—à¤¾à¤à¤µ à¤ªà¥‹à¤°à¥à¤Ÿà¤²",
-    short_name: "à¤—à¥Œà¤°à¤•à¥‹à¤ à¥€",
+  if (fs.existsSync(p1)) return res.set('Content-Type', 'application/manifest+json; charset=utf-8').sendFile(p1);
+  if (fs.existsSync(p2)) return res.set('Content-Type', 'application/manifest+json; charset=utf-8').sendFile(p2);
+  res.set('Content-Type', 'application/manifest+json; charset=utf-8').json({
+    name: "\u0917\u094C\u0930\u0915\u094B\u0920\u0940",
+    short_name: "\u0917\u094C\u0930\u0915\u094B\u0920\u0940",
     start_url: "/",
     id: "/",
     display: "standalone",
