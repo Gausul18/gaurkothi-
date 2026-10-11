@@ -94,18 +94,21 @@
 
     <style>
          :root {
-            --wall: #EFE6D3;
-            --wall-dark: #E4D6B8;
-            --indigo: #1F3F5C;
-            --indigo-dark: #152C41;
-            --turmeric: #D99A2B;
-            --terracotta: #B8562F;
-            --neem: #4F6B3A;
-            --ink: #2A2118;
-            --ink-soft: #5B4E3E;
-            --card: #FFFCF5;
-            --line: #D8C9A8;
-            --radius: 14px;
+            --wall: #F8FAFC;
+            --wall-dark: #F1F5F9;
+            --indigo: #1E40AF;
+            --indigo-dark: #0F172A;
+            --turmeric: #F59E0B;
+            --terracotta: #EA580C;
+            --neem: #10B981;
+            --ink: #0F172A;
+            --ink-soft: #475569;
+            --card: #FFFFFF;
+            --line: #E2E8F0;
+            --radius: 16px;
+            --shadow-sm: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
+            --shadow-md: 0 4px 16px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+            --shadow-lg: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
             font-size: 16px;
         }
         
@@ -132,11 +135,12 @@
         /* ---- Header: hand-pump blue band with whitewash wall texture ---- */
         
         .site-header {
-            background: linear-gradient(180deg, var(--indigo) 0%, var(--indigo-dark) 100%);
-            color: #F3ECDD;
+            background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 55%, #2563EB 100%);
+            color: #FFFFFF;
             padding: 22px 20px 18px;
             position: relative;
             overflow: hidden;
+            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.15);
         }
         
         .site-header::after {
@@ -145,9 +149,9 @@
             left: 0;
             right: 0;
             bottom: 0;
-            height: 6px;
-            background: repeating-linear-gradient(90deg, var(--turmeric) 0 18px, var(--terracotta) 18px 36px);
-            opacity: .9;
+            height: 4px;
+            background: linear-gradient(90deg, #10B981 0%, #38BDF8 50%, #F59E0B 100%);
+            opacity: 1;
         }
         
         .brand-row {
@@ -159,16 +163,16 @@
         }
         
         .brand-mark {
-            width: 44px;
-            height: 44px;
+            width: 46px;
+            height: 46px;
             flex: none;
-            border-radius: 10px;
-            background: var(--turmeric);
+            border-radius: 14px;
+            background: linear-gradient(135deg, #F59E0B, #D97706);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
-            box-shadow: inset 0 -3px 0 rgba(0, 0, 0, .15);
+            font-size: 24px;
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35);
         }
         
         .brand-text h1 {
@@ -267,14 +271,15 @@
         
         .tabs {
             display: flex;
-            gap: 0;
-            background: var(--indigo-dark);
+            gap: 4px;
+            background: #0F172A;
             position: sticky;
             top: 0;
             z-index: 20;
             overflow-x: auto;
             scrollbar-width: none;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, .15);
+            padding: 6px 12px;
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12);
         }
         
         .tabs::-webkit-scrollbar {
@@ -285,15 +290,16 @@
             flex: 1 0 auto;
             background: transparent;
             border: none;
-            color: #C9D3DB;
+            color: #94A3B8;
             font-family: 'Baloo 2', sans-serif;
             font-size: .92rem;
             font-weight: 600;
-            padding: 13px 14px 11px;
+            padding: 10px 14px 8px;
             cursor: pointer;
             white-space: nowrap;
-            border-bottom: 3px solid transparent;
-            transition: .15s;
+            border-radius: 10px;
+            border-bottom: none;
+            transition: all .18s ease;
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
         }
@@ -303,7 +309,8 @@
         }
         
         .tab-btn:hover {
-            color: #fff;
+            color: #FFFFFF;
+            background: rgba(255, 255, 255, .08);
         }
         
         .tab-btn:focus-visible {
@@ -312,9 +319,10 @@
         }
         
         .tab-btn.active {
-            color: #fff;
-            border-bottom-color: var(--turmeric);
-            background: rgba(255, 255, 255, .05);
+            color: #FFFFFF;
+            border-bottom: none;
+            background: linear-gradient(135deg, #2563EB, #1D4ED8);
+            box-shadow: 0 3px 10px rgba(37, 99, 235, 0.4);
         }
         
         main {
@@ -2513,7 +2521,7 @@
 
         /* ============ WEATHER & RAIN FORECAST STYLING ============ */
         .weather-strip {
-            background: linear-gradient(90deg, #EFF6FF 0%, #E0F2FE 100%);
+            background: #FFFFFF;
             border-bottom: 1.5px solid #BAE6FD;
             padding: 8px 12px;
             font-size: .82rem;
