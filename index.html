@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="hi">
 
 <head>
@@ -4405,6 +4405,425 @@
             justify-content: center;
             font-size: .85rem;
         }
+
+        /* ============ GAON CALENDAR & PANCHANG STYLES ============ */
+        .calendar-hero-card {
+            background: linear-gradient(135deg, #1E1B4B 0%, #312E81 50%, #4338CA 100%);
+            color: #FFFFFF;
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            box-shadow: 0 4px 14px rgba(49, 46, 129, 0.25);
+        }
+        .cal-hero-badge {
+            display: inline-block;
+            background: rgba(254, 240, 138, 0.2);
+            color: #FEF08A;
+            border: 1px solid rgba(254, 240, 138, 0.4);
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: .74rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .cal-hero-date {
+            font-size: 1.25rem;
+            font-weight: 800;
+            font-family: 'Baloo 2', sans-serif;
+            line-height: 1.3;
+        }
+        .cal-hero-sub {
+            font-size: .84rem;
+            color: #E0E7FF;
+            margin-top: 2px;
+        }
+        .cal-hero-right {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .btn-cal-audio, .btn-cal-today {
+            background: rgba(255, 255, 255, 0.15);
+            color: #FFFFFF;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 7px 14px;
+            font-size: .8rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: .2s;
+            backdrop-filter: blur(4px);
+        }
+        .btn-cal-audio:hover, .btn-cal-today:hover {
+            background: rgba(255, 255, 255, 0.28);
+            transform: translateY(-1px);
+        }
+        .cal-admin-bar {
+            background: #FFFBEB;
+            border: 1.5px solid #FCD34D;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .cal-admin-info {
+            font-size: .82rem;
+            color: #92400E;
+        }
+        .cal-admin-info strong {
+            display: block;
+            font-size: .88rem;
+            color: #78350F;
+        }
+        .calendar-card {
+            background: var(--card-bg, #FFFFFF);
+            border: 1.5px solid var(--border, #E2E8F0);
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .cal-nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+        .cal-nav-btn {
+            background: var(--bg-soft, #F1F5F9);
+            border: 1px solid var(--border, #CBD5E1);
+            color: var(--ink, #1E293B);
+            padding: 6px 14px;
+            border-radius: 8px;
+            font-size: .82rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .15s;
+        }
+        .cal-nav-btn:hover {
+            background: #E2E8F0;
+        }
+        .cal-month-title-wrap {
+            text-align: center;
+        }
+        .cal-month-title {
+            margin: 0;
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: var(--indigo-dark, #1E1B4B);
+            font-family: 'Baloo 2', sans-serif;
+        }
+        .cal-hindu-month {
+            font-size: .78rem;
+            color: var(--terracotta, #D35400);
+            font-weight: 700;
+        }
+        .cal-weekdays {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            text-align: center;
+            margin-bottom: 6px;
+            font-weight: 800;
+            font-size: .76rem;
+            color: var(--ink-soft, #64748B);
+            border-bottom: 1px solid var(--border, #E2E8F0);
+            padding-bottom: 6px;
+        }
+        .cal-weekdays .cal-sun {
+            color: #DC2626;
+        }
+        .cal-days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+        .cal-day-cell {
+            aspect-ratio: 1;
+            min-height: 48px;
+            border-radius: 10px;
+            border: 1px solid transparent;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            position: relative;
+            background: var(--bg-soft, #F8FAFC);
+            transition: .15s;
+            user-select: none;
+            padding: 2px;
+        }
+        .cal-day-cell:hover {
+            background: #EEF2FF;
+            border-color: #C7D2FE;
+            transform: scale(1.03);
+        }
+        .cal-day-cell.other-month {
+            opacity: 0.35;
+            cursor: default;
+        }
+        .cal-day-cell.is-sun .cal-day-num {
+            color: #DC2626;
+        }
+        .cal-day-cell.is-today {
+            border: 2px solid #F59E0B;
+            background: #FEF3C7;
+            font-weight: 800;
+        }
+        .cal-day-cell.is-selected {
+            background: #4338CA !important;
+            color: #FFFFFF !important;
+            border-color: #312E81 !important;
+            box-shadow: 0 3px 8px rgba(67, 56, 202, 0.35);
+        }
+        .cal-day-cell.is-selected .cal-day-num,
+        .cal-day-cell.is-selected .cal-day-hindu {
+            color: #FFFFFF !important;
+        }
+        .cal-day-num {
+            font-size: .92rem;
+            font-weight: 800;
+            line-height: 1.1;
+        }
+        .cal-day-hindu {
+            font-size: .62rem;
+            color: var(--ink-soft, #64748B);
+            line-height: 1;
+            margin-top: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+        .cal-dots-wrap {
+            display: flex;
+            gap: 2px;
+            margin-top: 3px;
+            height: 5px;
+        }
+        .cal-dot {
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .dot-fest { background: #F59E0B; }
+        .dot-panchayat { background: #10B981; }
+        .dot-custom { background: #3B82F6; }
+        .dot-today { background: #EF4444; }
+        .cal-legend {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 14px;
+            padding-top: 10px;
+            border-top: 1px dashed var(--border, #E2E8F0);
+            flex-wrap: wrap;
+            font-size: .74rem;
+            color: var(--ink-soft, #64748B);
+            font-weight: 600;
+        }
+        .cal-leg-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .cal-selected-detail {
+            background: var(--card-bg, #FFFFFF);
+            border: 1.5px solid var(--border, #E2E8F0);
+            border-radius: 14px;
+            padding: 16px;
+            margin-bottom: 18px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .cal-detail-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border, #E2E8F0);
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+        .cal-detail-date-title {
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--indigo-dark, #1E1B4B);
+            font-family: 'Baloo 2', sans-serif;
+            margin: 0;
+        }
+        .cal-detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .cal-detail-pill {
+            background: var(--bg-soft, #F8FAFC);
+            border: 1px solid var(--border, #E2E8F0);
+            border-radius: 8px;
+            padding: 8px 10px;
+            font-size: .78rem;
+        }
+        .cal-detail-pill-lbl {
+            font-size: .68rem;
+            color: var(--ink-soft, #64748B);
+            font-weight: 600;
+        }
+        .cal-detail-pill-val {
+            font-weight: 800;
+            color: var(--ink, #1E293B);
+            margin-top: 2px;
+        }
+        .cal-event-tag {
+            background: #FEF3C7;
+            border-left: 4px solid #F59E0B;
+            padding: 8px 12px;
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 8px;
+            font-size: .82rem;
+            color: #92400E;
+        }
+        .cal-event-tag.tag-govt {
+            background: #ECFDF5;
+            border-left-color: #10B981;
+            color: #065F46;
+        }
+        .cal-event-tag.tag-custom {
+            background: #EFF6FF;
+            border-left-color: #3B82F6;
+            color: #1E40AF;
+        }
+        .cal-events-directory {
+            background: var(--card-bg, #FFFFFF);
+            border: 1.5px solid var(--border, #E2E8F0);
+            border-radius: 16px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .cal-dir-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .cal-dir-head h3 {
+            margin: 0;
+            font-size: .95rem;
+            font-weight: 800;
+            color: var(--ink, #1E293B);
+        }
+        .cal-dir-filters {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .cal-filter-pill {
+            background: var(--bg-soft, #F1F5F9);
+            border: 1px solid var(--border, #CBD5E1);
+            color: var(--ink, #1E293B);
+            border-radius: 16px;
+            padding: 4px 10px;
+            font-size: .74rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .15s;
+        }
+        .cal-filter-pill.active {
+            background: #4338CA;
+            color: #FFFFFF;
+            border-color: #4338CA;
+        }
+        .cal-events-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .cal-card-item {
+            border: 1px solid var(--border, #E2E8F0);
+            border-radius: 10px;
+            padding: 10px 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: var(--bg-soft, #FAFAFA);
+            transition: .2s;
+        }
+        .cal-card-item:hover {
+            transform: translateX(3px);
+            background: #FFFFFF;
+            border-color: #CBD5E1;
+        }
+        .cal-card-date-badge {
+            min-width: 52px;
+            text-align: center;
+            background: #EEF2FF;
+            color: #4338CA;
+            border-radius: 8px;
+            padding: 6px 4px;
+            font-weight: 800;
+            line-height: 1.1;
+        }
+        .cal-card-date-day {
+            font-size: 1.15rem;
+            font-weight: 800;
+        }
+        .cal-card-date-m {
+            font-size: .68rem;
+            text-transform: uppercase;
+        }
+        .cal-card-content {
+            flex: 1;
+        }
+        .cal-card-title {
+            font-size: .88rem;
+            font-weight: 800;
+            color: var(--ink, #1E293B);
+            margin-bottom: 2px;
+        }
+        .cal-card-sub {
+            font-size: .76rem;
+            color: var(--ink-soft, #64748B);
+        }
+        body.theme-dark .calendar-card,
+        body.theme-dark .cal-selected-detail,
+        body.theme-dark .cal-events-directory {
+            background: #1E293B !important;
+            border-color: #334155 !important;
+            color: #F8FAFC !important;
+        }
+        body.theme-dark .cal-day-cell {
+            background: #0F172A !important;
+            color: #E2E8F0 !important;
+        }
+        body.theme-dark .cal-day-cell:hover {
+            background: #1E293B !important;
+        }
+        body.theme-dark .cal-month-title,
+        body.theme-dark .cal-detail-date-title,
+        body.theme-dark .cal-card-title {
+            color: #F8FAFC !important;
+        }
+        body.theme-dark .cal-card-item {
+            background: #0F172A !important;
+            border-color: #334155 !important;
+        }
     </style>
 </head>
 
@@ -4470,6 +4889,7 @@
         <nav class="tabs" role="tablist">
             <button class="tab-btn active" data-tab="samasya"><span class="emoji">📢</span><span id="tabLblSamasya">समस्या</span></button>
             <button class="tab-btn" data-tab="chaupal"><span class="emoji">🗣️</span><span id="tabLblChaupal">संदेश</span></button>
+            <button class="tab-btn" data-tab="calendar"><span class="emoji">📅</span><span id="tabLblCalendar">कैलेंडर व पंचांग</span></button>
             <button class="tab-btn" data-tab="krishi"><span class="emoji">🌾</span><span id="tabLblKrishi">खेती-बाड़ी</span></button>
             <button class="tab-btn" data-tab="suchna"><span class="emoji">📌</span><span id="tabLblSuchna">सूचना बोर्ड</span></button>
             <button class="tab-btn" data-tab="jaankari"><span class="emoji">🏘️</span><span id="tabLblJaankari">गाँव की जानकारी</span></button>
@@ -4553,6 +4973,100 @@
 
                 <div id="chaupalFeed" class="chaupal-feed">
                     <div class="loading-row">संदेश लोड हो रहे हैं...</div>
+                </div>
+            </section>
+
+            <!-- ===================== GAON CALENDAR & PANCHANG PANEL ===================== -->
+            <section class="panel" id="panel-calendar">
+                <div class="panel-head">
+                    <h2>📅 ग्राम पंचायत कैलेंडर व पंचांग</h2>
+                    <p>गाँव के त्यौहार, सरकारी व पंचायत तारीखें, राशन वितरण, टीकाकरण व कृषि पंचांग।</p>
+                </div>
+
+                <!-- Today Highlight & Quick Audio Bar -->
+                <div class="calendar-hero-card" id="calendarHeroCard">
+                    <div class="cal-hero-left">
+                        <div class="cal-hero-badge" id="calTodayBadge">आज की तिथि</div>
+                        <div class="cal-hero-date" id="calHeroFullDate">--</div>
+                        <div class="cal-hero-sub" id="calHeroTithi">पंचांग लोड हो रहा है...</div>
+                    </div>
+                    <div class="cal-hero-right">
+                        <button type="button" class="btn-cal-audio" id="btnCalAudio" title="आज का पंचांग व शुभ मुहूर्त बोलकर सुनें">
+                            <span>🔊</span> <span>पंचांग सुनें</span>
+                        </button>
+                        <button type="button" class="btn-cal-today" id="btnCalJumpToday" title="वर्तमान महीने पर जाएँ">
+                            <span>📍</span> <span>आज पर जाएँ</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Pradhan Add Event Bar (visible if admin) -->
+                <div class="cal-admin-bar" id="calAdminBar" style="display:none;">
+                    <div class="cal-admin-info">
+                        <strong>👑 प्रधान जी विशेष सुविधा:</strong>
+                        <span>गाँव की खुली बैठक, कैंप या कार्य शिलान्यास का नया कार्यक्रम कैलेंडर में जोड़ें।</span>
+                    </div>
+                    <button type="button" class="btn btn-primary" id="btnOpenAddEventModal" style="white-space:nowrap; padding:7px 14px; font-size:.82rem;">
+                        ➕ नया कार्यक्रम जोड़ें
+                    </button>
+                </div>
+
+                <!-- Calendar Main Interactive Card -->
+                <div class="calendar-card">
+                    <!-- Month Navigation Header -->
+                    <div class="cal-nav-header">
+                        <button type="button" class="cal-nav-btn" id="btnCalPrevMonth" title="पिछला महीना">◀ पिछला</button>
+                        <div class="cal-month-title-wrap">
+                            <h3 class="cal-month-title" id="calMonthTitle">अक्टूबर 2026</h3>
+                            <span class="cal-hindu-month" id="calHinduMonth">आश्विन - कार्तिक</span>
+                        </div>
+                        <button type="button" class="cal-nav-btn" id="btnCalNextMonth" title="अगला महीना">अगला ▶</button>
+                    </div>
+
+                    <!-- Days Header -->
+                    <div class="cal-weekdays">
+                        <div class="cal-weekday cal-sun">रवि</div>
+                        <div class="cal-weekday">सोम</div>
+                        <div class="cal-weekday">मंगल</div>
+                        <div class="cal-weekday">बुध</div>
+                        <div class="cal-weekday">गुरु</div>
+                        <div class="cal-weekday">शुक्र</div>
+                        <div class="cal-weekday">शनि</div>
+                    </div>
+
+                    <!-- Dates Grid -->
+                    <div class="cal-days-grid" id="calDaysGrid">
+                        <!-- Dynamic Day Cells -->
+                    </div>
+
+                    <!-- Legend / संकेतक -->
+                    <div class="cal-legend">
+                        <span class="cal-leg-item"><span class="cal-dot dot-fest"></span> त्यौहार / पर्व</span>
+                        <span class="cal-leg-item"><span class="cal-dot dot-panchayat"></span> राशन / टीकाकरण</span>
+                        <span class="cal-leg-item"><span class="cal-dot dot-custom"></span> गाँव का कार्यक्रम</span>
+                        <span class="cal-leg-item"><span class="cal-dot dot-today"></span> आज की तारीख</span>
+                    </div>
+                </div>
+
+                <!-- Selected Date Detail Box -->
+                <div class="cal-selected-detail" id="calSelectedDetail">
+                    <!-- Injected details for selected date -->
+                </div>
+
+                <!-- Village Schedule & Key Dates Directory -->
+                <div class="cal-events-directory">
+                    <div class="cal-dir-head">
+                        <h3>📌 गाँव की प्रमुख नियमित तारीखें व आगामी कार्यक्रम</h3>
+                        <div class="cal-dir-filters" id="calDirFilters">
+                            <button type="button" class="cal-filter-pill active" data-cal-filter="all">सभी</button>
+                            <button type="button" class="cal-filter-pill" data-cal-filter="panchayat">🏛️ पंचायत व राशन</button>
+                            <button type="button" class="cal-filter-pill" data-cal-filter="festival">🪔 पर्व व त्यौहार</button>
+                            <button type="button" class="cal-filter-pill" data-cal-filter="krishi">🌾 कृषि पंचांग</button>
+                        </div>
+                    </div>
+                    <div class="cal-events-list" id="calEventsList">
+                        <!-- Dynamic Event Cards -->
+                    </div>
                 </div>
             </section>
 
@@ -5566,6 +6080,43 @@
                         <div class="sheet-actions">
                             <button type="button" class="btn btn-outline" data-close="overlaySuchna">रद्द करें</button>
                             <button type="submit" class="btn btn-primary">सूचना जारी करें</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===================== PRADHAN VILLAGE EVENT SHEET ===================== -->
+        <div class="overlay" id="overlayAddVillageEvent">
+            <div class="sheet">
+                <div class="sheet-wrap">
+                    <button class="close-x" data-close="overlayAddVillageEvent">✕</button>
+                    <h2>📅 गाँव का नया कार्यक्रम जोड़ें</h2>
+                    <p style="font-size:.82rem; color:var(--ink-soft); margin-top:-6px; margin-bottom:14px;">कैलेंडर में गाँव का नया कार्यक्रम, खुली बैठक, कैंप या कार्य शिलान्यास दर्ज करें।</p>
+                    <form id="formAddVillageEvent">
+                        <div class="field">
+                            <label>कार्यक्रम का नाम *</label>
+                            <input type="text" id="evTitle" placeholder="उदा. ग्राम सभा खुली बैठक / स्वास्थ्य कैंप" required>
+                        </div>
+                        <div class="field">
+                            <label>तारीख *</label>
+                            <input type="date" id="evDate" required>
+                        </div>
+                        <div class="field">
+                            <label>समय (वैकल्पिक)</label>
+                            <input type="text" id="evTime" placeholder="उदा. सुबह 10:00 बजे">
+                        </div>
+                        <div class="field">
+                            <label>स्थान</label>
+                            <input type="text" id="evLocation" placeholder="उदा. पंचायत भवन गौरकोठी / प्राथमिक विद्यालय" value="पंचायत भवन गौरकोठी">
+                        </div>
+                        <div class="field">
+                            <label>विवरण / ग्रामीणों के लिए संदेश (वैकल्पिक)</label>
+                            <textarea id="evDesc" placeholder="कार्यक्रम का विवरण लिखें..."></textarea>
+                        </div>
+                        <div class="sheet-actions">
+                            <button type="button" class="btn btn-outline" data-close="overlayAddVillageEvent">रद्द करें</button>
+                            <button type="submit" class="btn btn-primary">कार्यक्रम सुरक्षित करें ✅</button>
                         </div>
                     </form>
                 </div>
@@ -6699,16 +7250,26 @@ const DEFAULT_SAMASYA_FALLBACK = [
             const isEn = (typeof currentLang !== 'undefined' && currentLang === 'en');
             if (tab === 'samasya') {
                 fab.style.display = 'inline-flex';
-                fab.textContent = isEn ? '+ Report Grievance' : '+ समस्या दर्ज करें';
+                fab.textContent = isEn ? '+ Report Grievance' : '+ à¤¸à¤®à¤¸à¥à¤¯à¤¾ à¤¦à¤°à¥à¤œ à¤•à¤°à¥‡à¤‚';
                 fab.onclick = () => openSamasyaForm();
             } else if (tab === 'chaupal') {
                 fab.style.display = 'inline-flex';
-                fab.textContent = isEn ? '+ Post Message' : '+ संदेश लिखें';
+                fab.textContent = isEn ? '+ Post Message' : '+ à¤¸à¤‚à¤¦à¥‡à¤¶ à¤²à¤¿à¤–à¥‡à¤‚';
                 fab.onclick = () => openChaupalForm();
             } else if (tab === 'suchna') {
                 fab.style.display = 'inline-flex';
-                fab.textContent = isEn ? '+ Post Notice' : '+ नई सूचना जोड़ें';
+                fab.textContent = isEn ? '+ Post Notice' : '+ à¤¨à¤ˆ à¤¸à¥‚à¤šà¤¨à¤¾ à¤œà¥‹à¤¡à¤¼à¥‡à¤‚';
                 fab.onclick = () => openOverlay('overlaySuchna');
+            } else if (tab === 'calendar' && adminKey) {
+                fab.style.display = 'inline-flex';
+                fab.textContent = isEn ? '+ Add Village Event' : '+ à¤¨à¤¯à¤¾ à¤•à¤¾à¤°à¥à¤¯à¤•à¥à¤°à¤® à¤œà¥‹à¤¡à¤¼à¥‡à¤‚';
+                fab.onclick = () => {
+                    const dateInp = document.getElementById('evDate');
+                    if (dateInp) {
+                        dateInp.value = formatCalDateKey(selectedCalDate.getFullYear(), selectedCalDate.getMonth(), selectedCalDate.getDate());
+                    }
+                    openOverlay('overlayAddVillageEvent');
+                };
             } else {
                 fab.style.display = 'none';
             }
@@ -9326,16 +9887,23 @@ function updateAdminButton(){
   const btn = document.getElementById('adminLoginBtn');
   if(btn){
     if(adminKey){
-      btn.textContent = '🔓 Pradhan Mode — Logout';
+      btn.textContent = 'ðŸ”“ Pradhan Mode â€” Logout';
       btn.classList.add('logged-in');
     } else {
-      btn.textContent = '🔐 Pradhan Login';
+      btn.textContent = 'ðŸ” Pradhan Login';
       btn.classList.remove('logged-in');
     }
   }
   const trackerCard = document.getElementById('samasyaTrackerCard');
   if(trackerCard){
     trackerCard.style.display = adminKey ? 'none' : 'block';
+  }
+  const calAdminBar = document.getElementById('calAdminBar');
+  if(calAdminBar){
+    calAdminBar.style.display = adminKey ? 'flex' : 'none';
+  }
+  if(document.querySelector('.tab-btn[data-tab="calendar"]')?.classList.contains('active')){
+    updateFab('calendar');
   }
 }
 function adminLogout(){
@@ -9349,6 +9917,14 @@ function adminLogout(){
   renderChaupal();
   renderSuchna();
   renderJaankari();
+  try {
+    const calAdminBar = document.getElementById('calAdminBar');
+    if(calAdminBar) calAdminBar.style.display = 'none';
+    if (typeof selectedCalDate !== 'undefined') {
+      const dateKey = formatCalDateKey(selectedCalDate.getFullYear(), selectedCalDate.getMonth(), selectedCalDate.getDate());
+      selectCalendarDate(dateKey);
+    }
+  } catch(e){}
   toast('Logout ho gaya');
 }
 async function loadSamasyaList(){
@@ -10502,6 +11078,867 @@ function initWeather() {
     });
 }
 
+/* ==========================================================================
+   GAURKOTHI GRAM PANCHAYAT CALENDAR & HINDU PANCHANG MODULE
+   ========================================================================== */
+
+let currentCalDate = new Date();
+let selectedCalDate = new Date();
+let currentCalFilter = 'all';
+let isCalSpeaking = false;
+
+const MONTH_NAMES_HI = [
+  'जनवरी', 'फ़रवरी', 'मार्च', 'अप्रैल', 'मई', 'जून',
+  'जुलाई', 'अगस्त', 'सितंबर', 'अक्टूबर', 'नवंबर', 'दिसंबर'
+];
+
+const HINDI_WEEKDAYS = [
+  'रविवार', 'सोमवार', 'मंगलवार', 'बुधवार', 'गुरुवार', 'शुक्रवार', 'शनिवार'
+];
+
+const TITHI_NAMES = [
+  'प्रतिपदा', 'द्वितीया', 'तृतीया', 'चतुर्थी', 'पंचमी',
+  'षष्ठी', 'सप्तमी', 'अष्टमी', 'नवमी', 'दशमी',
+  'एकादशी', 'द्वादशी', 'त्रयोदशी', 'चतुर्दशी', 'पूर्णिमा'
+];
+
+const NAKSHATRAS = [
+  'अश्विनी', 'भरणी', 'कृत्तिका', 'रोहिणी', 'मृगशिरा', 'आर्द्रा',
+  'पुनर्वसु', 'पुष्य', 'अश्लेषा', 'मघा', 'पूर्वा फाल्गुनी', 'उत्तरा फाल्गुनी',
+  'हस्त', 'चित्रा', 'स्वाति', 'विशाखा', 'अनुराधा', 'ज्येष्ठा',
+  'मूल', 'पूर्वाषाढ़ा', 'उत्तराषाढ़ा', 'श्रवण', 'धनिष्ठा', 'शतभिषा',
+  'पूर्वाभाद्रपद', 'उत्तराभाद्रपद', 'रेवती'
+];
+
+const RAHU_KAAL_TIMINGS = [
+  '04:30 PM - 06:00 PM', // Sun
+  '07:30 AM - 09:00 AM', // Mon
+  '03:00 PM - 04:30 PM', // Tue
+  '12:00 PM - 01:30 PM', // Wed
+  '01:30 PM - 03:00 PM', // Thu
+  '10:30 AM - 12:00 PM', // Fri
+  '09:00 AM - 10:30 AM'  // Sat
+];
+
+const GAURKOTHI_HOLIDAYS_2026 = [
+  { date: '2026-01-01', name: 'नया साल (New Year)', type: 'govt', desc: 'नववर्ष का प्रथम दिन।' },
+  { date: '2026-01-14', name: 'मकर संक्रांति / खिचड़ी महापर्व 🌾', type: 'festival', desc: 'गोरखपुर-देवरिया का प्रसिद्ध खिचड़ी मेला व तिल-गुड़ दान।' },
+  { date: '2026-01-23', name: 'नेताजी सुभाष चंद्र बोस जयंती', type: 'govt', desc: 'पराक्रम दिवस।' },
+  { date: '2026-01-26', name: 'गणतंत्र दिवस व ग्राम सभा खुली बैठक 🇮🇳', type: 'panchayat', desc: 'पंचायत भवन गौरकोठी में ध्वजारोहण व अनिवार्य खुली बैठक।' },
+  { date: '2026-02-01', name: 'संत रविदास जयंती', type: 'festival', desc: 'संत शिरोमणि रविदास जी का जन्मोत्सव।' },
+  { date: '2026-02-15', name: 'महाशिवरात्रि 🔱', type: 'festival', desc: 'भोलेनाथ का रुद्राभिषेक, जलाभिषेक व गाँव में शिव चर्चा।' },
+  { date: '2026-03-03', name: 'होलिका दहन 🔥', type: 'festival', desc: 'बुराई पर अच्छाई की विजय का प्रतीक होलिका दहन।' },
+  { date: '2026-03-04', name: 'होली / धुलेंडी (रंगोत्सव) 🎨', type: 'festival', desc: 'रंग, अबीर-गुलाल और आपसी सौहार्द का पावन पर्व।' },
+  { date: '2026-03-20', name: 'ईद-उल-फ़ितर (मीठी ईद) 🌙', type: 'festival', desc: 'रमज़ान माह की समाप्ति पर आपसी प्रेम व सेवइयों का त्योहार।' },
+  { date: '2026-03-27', name: 'श्री राम नवमी 🏹', type: 'festival', desc: 'मर्यादा पुरुषोत्तम भगवान श्री राम जन्मोत्सव।' },
+  { date: '2026-03-31', name: 'महावीर जयंती', type: 'festival', desc: 'भगवान महावीर जन्मोत्सव।' },
+  { date: '2026-04-02', name: 'हनुमान जयंती 🚩', type: 'festival', desc: 'संकटमोचन हनुमान जी का जन्मोत्सव।' },
+  { date: '2026-04-03', name: 'गुड फ्राइडे (Good Friday)', type: 'govt', desc: 'ईसाई समुदाय का पवित्र दिन।' },
+  { date: '2026-04-14', name: 'डॉ. भीमराव अंबेडकर जयंती ⚖️', type: 'govt', desc: 'संविधान निर्माता बाबा साहब डॉ. अंबेडकर का जन्मोत्सव।' },
+  { date: '2026-05-01', name: 'मजदूर दिवस व ग्राम सभा समीक्षा 🛠️', type: 'panchayat', desc: 'अंतर्राष्ट्रीय श्रमिक दिवस एवं मनरेगा मजदूरी समीक्षा।' },
+  { date: '2026-05-01', name: 'बुद्ध पूर्णिमा ☸️', type: 'festival', desc: 'तथागत भगवान बुद्ध की जयंती व निर्वाण दिवस।' },
+  { date: '2026-05-27', name: 'बकरीद / ईद-उल-अजहा 🐑', type: 'festival', desc: 'कुर्बानी व त्याग का पावन पर्व।' },
+  { date: '2026-06-21', name: 'अंतर्राष्ट्रीय योग दिवस 🧘', type: 'govt', desc: 'पंचायत भवन व प्राथमिक विद्यालय में योग अभ्यास।' },
+  { date: '2026-06-26', name: 'मोहर्रम (आशूरा) 🕌', type: 'festival', desc: 'हज़रत इमाम हुसैन की शहादत की याद में ताजिया जुलूस।' },
+  { date: '2026-07-29', name: 'गुरु पूर्णिमा 🙏', type: 'festival', desc: 'गुरु पूजन व महर्षि वेद व्यास जयंती।' },
+  { date: '2026-08-15', name: 'स्वतंत्रता दिवस व ग्राम सभा बैठक 🇮🇳', type: 'panchayat', desc: '79वां स्वतंत्रता दिवस समारोह, ध्वजारोहण एवं खुली बैठक।' },
+  { date: '2026-08-28', name: 'रक्षाबंधन (राखी पर्व) 🧵', type: 'festival', desc: 'भाई-बहन के अटूट स्नेह और सुरक्षा का पावन पर्व।' },
+  { date: '2026-09-04', name: 'श्री कृष्ण जन्माष्टमी 🦚', type: 'festival', desc: 'भगवान श्री कृष्ण का जन्मोत्सव व दही हांडी।' },
+  { date: '2026-09-05', name: 'ईद-ए-मिलाद (बारावफात) 🌹', type: 'festival', desc: 'पैगंबर मोहम्मद साहब का यौम-ए-पैदाइश।' },
+  { date: '2026-09-25', name: 'अनंत चतुर्दशी व गणेश विसर्जन 🐘', type: 'festival', desc: 'अनंत सूत्र धारण व गणपति बप्पा विसर्जन।' },
+  { date: '2026-10-02', name: 'गांधी जयंती व स्वच्छ भारत दिवस 🧹', type: 'govt', desc: 'राष्ट्रपिता महात्मा गांधी व लाल बहादुर शास्त्री जयंती।' },
+  { date: '2026-10-11', name: 'शारदीय नवरात्रि घटस्थापना 🚩', type: 'festival', desc: 'माँ दुर्गा की नौ दिवसीय उपासना का शुभारंभ।' },
+  { date: '2026-10-18', name: 'दुर्गा महाअष्टमी (संधि पूजा) 🌺', type: 'festival', desc: 'महागौरी पूजन व गाँव में कन्या पूजन।' },
+  { date: '2026-10-19', name: 'महानवमी व हवन 🪔', type: 'festival', desc: 'सिद्धिदात्री पूजन, नवरात्रि पूर्णाहूति व कन्या भोज।' },
+  { date: '2026-10-20', name: 'विजयादशमी / दशहरा 🏹', type: 'festival', desc: 'अधर्म पर धर्म की विजय, रावण दहन व शस्त्र पूजा।' },
+  { date: '2026-10-29', name: 'करवा चौथ 🌕', type: 'festival', desc: 'सुहागिनों का अखंड सौभाग्य व्रत व चंद्र दर्शन।' },
+  { date: '2026-11-06', name: 'धनतेरस / धन्वंतरि जयंती 🪙', type: 'festival', desc: 'धन एवं आरोग्य के देवता भगवान धन्वंतरि का पूजन।' },
+  { date: '2026-11-07', name: 'नरक चतुर्दशी (छोटी दिवाली)', type: 'festival', desc: 'यम दीपदान व रूप चौदस।' },
+  { date: '2026-11-08', name: 'दीपावली (लक्ष्मी-गणेश पूजन) 🪔', type: 'festival', desc: 'दीपों का महापर्व, माता लक्ष्मी व गणेश जी का पूजन।' },
+  { date: '2026-11-09', name: 'गोवर्धन पूजा / अन्नकूट 🐄', type: 'festival', desc: 'प्रकृति व गोवंश पूजन, अन्नकूट प्रसाद।' },
+  { date: '2026-11-10', name: 'भैया दूज / चित्रगुप्त पूजा ✍️', type: 'festival', desc: 'यम द्वितीया, भाई के तिलक व कलम-दवात पूजन।' },
+  { date: '2026-11-14', name: 'छठ पूजा नहाय-खाय 🌊', type: 'festival', desc: 'पूर्वांचल का महापर्व: कद्दू-भात से 4 दिवसीय अनुष्ठान प्रारंभ।' },
+  { date: '2026-11-15', name: 'छठ पूजा खरना (लोहंडा) 🥣', type: 'festival', desc: 'खीर-रोटी का प्रसाद ग्रहण कर 36 घंटे का निर्जला व्रत।' },
+  { date: '2026-11-16', name: 'छठ महापर्व संध्या अर्घ्य 🌅', type: 'festival', desc: 'गौरकोठी पोखरे/घाट पर अस्ताचलगामी सूर्य को अर्घ्य।' },
+  { date: '2026-11-17', name: 'छठ महापर्व प्रातः अर्घ्य व पारण ☀️', type: 'festival', desc: 'उदीयमान सूर्य को अर्घ्य देकर व्रत का मंगल पारण।' },
+  { date: '2026-11-24', name: 'गुरु नानक जयंती व देव दीपावली 🪔', type: 'festival', desc: 'सिख धर्म के प्रथम गुरु का प्रकाश पर्व व घाटों पर दीपदान।' },
+  { date: '2026-12-23', name: 'राष्ट्रीय किसान दिवस 🚜', type: 'panchayat', desc: 'पूर्व प्रधानमंत्री चौधरी चरण सिंह जयंती व किसान गोष्ठी।' },
+  { date: '2026-12-25', name: 'क्रिसमस (बड़ा दिन) 🎄', type: 'govt', desc: 'प्रभु ईसा मसीह का जन्मोत्सव।' }
+];
+
+const KRISHI_CALENDAR_GUIDE = {
+  0: { season: 'शिशिर ऋतु (माघ)', title: 'गेहूं में दूसरी सिंचाई व पाला सुरक्षा', tasks: ['गेहूं में दूसरी सिंचाई (बुवाई के 40-45 दिन बाद) करें तथा यूरिया (30 किग्रा/एकड़) का छिड़काव करें।', 'सरसों में माहू (चेपा) कीट नियंत्रण हेतु नीम तेल या इमिडाक्लोप्रिड का स्प्रे करें।', 'अगेती आलू की खुदाई शुरू करें व पिछेती झुलसा से बचाव रखें।'] },
+  1: { season: 'शिशिर - वसंत ऋतु (फाल्गुन)', title: 'गन्ना बसंतकालीन बुवाई व जायद सब्जियों की तैयारी', tasks: ['गन्ने की बसंतकालीन बुवाई हेतु खेत तैयार कर रोगमुक्त बीज 0238 / 0118 का चयन करें।', 'जायद भिंडी, लौकी, कद्दू, खीरा, तोरई की बुवाई आरंभ करें।', 'गेहूं में बालियां निकलने से पहले हल्की सिंचाई करें, तेज हवा में पानी न दें।'] },
+  2: { season: 'वसंत ऋतु (चैत्र)', title: 'जायद मूंग, उड़द बुवाई व गेहूं कटाई प्रबंधन', tasks: ['गेहूं की फसल पकने की ओर है, कंबाइन हार्वेस्टर या रीपर की व्यवस्था कर लें।', 'खेत खाली होते ही जायद मूंग (सम्राट/विराट) व उड़द (पंत यू-31) की तुरंत बुवाई करें।', 'पशुओं को खुरपका-मुंहपका (FMD) का टीका अवश्य लगवाएं।'] },
+  3: { season: 'ग्रीष्म ऋतु (वैशाख)', title: 'गेहूं मड़ाई, भंडारण व ग्रीष्मकालीन गहरी जुताई', tasks: ['गेहूं की सुरक्षित मड़ाई कर अनाज को 10-12% नमी पर नीम पत्तियों के साथ ड्रम में रखें।', 'नरई (डंठल) खेत में न जलाएं, मिट्टी पलटने वाले हल से गहरी जुताई कर खेत खुला छोड़ें।', 'जायद मक्का व हरी खाद (ढैंचा/सनई) की बुवाई करें।'] },
+  4: { season: 'ग्रीष्म ऋतु (ज्येष्ठ)', title: 'धान की नर्सरी (बेहन) व ढैंचा बुवाई', tasks: ['धान की मध्यम व देर से पकने वाली प्रजातियों (सांभा मसूरी, MTU 7029) की नर्सरी 20-25 मई से डालें।', 'भूमि की उर्वरा शक्ति बढ़ाने हेतु ढैंचा (20 किग्रा/एकड़) बोएं ताकि बारिश में हरी खाद बन सके।', 'गन्ने में कंसुआ (शूट बोरर) कीट नियंत्रण का उपाय करें।'] },
+  5: { season: 'ग्रीष्म - वर्षा ऋतु (आषाढ़)', title: 'धान नर्सरी सुरक्षा व मानसून पूर्व तैयारी', tasks: ['खेतों की मजबूत मेड़बंदी करें ताकि मानसूनी बारिश का जल संचयन हो सके।', 'ढैंचा को 40-45 दिन पर हल चलाकर खेत में दबा दें।', 'अरहर (नरेंद्र अरहर-1, पारस) तथा ज्वार/बाजरा की बुवाई पहली अच्छी बारिश पर करें।'] },
+  6: { season: 'वर्षा ऋतु (श्रावण)', title: 'धान की मुख्य रोपाई व खरपतवार नियंत्रण', tasks: ['21-25 दिन की स्वस्थ धान की पौध की रोपाई प्रति थान 2-3 पौधों के साथ कतार में करें।', 'रोपाई के 2-3 दिन के अंदर ब्युटाक्लोर या प्रीटिलाक्लोर का प्रयोग करें।', 'रोपाई के 7 दिन बाद प्रति एकड़ 5 किग्रा जिंक सल्फेट और यूरिया की पहली खुराक दें।'] },
+  7: { season: 'वर्षा ऋतु (भाद्रपद)', title: 'धान में कल्ले बनना व यूरिया टॉप-ड्रेसिंग', tasks: ['धान में कल्ले फूटते समय 2-3 सेमी पानी बनाए रखें व यूरिया की दूसरी टॉप-ड्रेसिंग करें।', 'गन्ने में 5-6 फीट ऊंचाई होने पर आपस में बंधाई करें ताकि तेज आंधी में गिरे नहीं।', 'सब्जियों व मक्का के खेतों में पानी भराव न होने दें, जल निकासी नाली दुरुस्त रखें।'] },
+  8: { season: 'शरद ऋतु (आश्विन)', title: 'तोरिया (अगेती सरसों) बुवाई व गंधी बग रोकथाम', tasks: ['धान में बालियां निकलने व दुग्धावस्था पर गंधी बग कीट से बचाव हेतु मैलाथियान डस्ट बुरकें।', 'खाली खेतों में तोरिया (अगेती लाही) की बुवाई 15-25 सितंबर तक पूरी करें।', 'रबी आलू व मटर की बुवाई हेतु गोबर की सड़ी खाद डालकर खेत तैयार करें।'] },
+  9: { season: 'शरद ऋतु (कार्तिक)', title: 'धान कटाई, रबी आलू, मटर व सरसों बुवाई', tasks: ['अगेती धान की कटाई कर सुरक्षित खलिहान में लाएं। पराली को कदापि न जलाएं।', 'आलू (कुफरी ख्याति, पुखराज) व हरी मटर (आजाद पी-1) की बुवाई तेजी से निपटाएं।', 'सरसों (पूसा मस्टर्ड 25/28, वरुणा) की बुवाई 15 से 30 अक्टूबर के बीच पूरी करें।'] },
+  10: { season: 'हेमंत ऋतु (मार्गशीर्ष)', title: 'रबी गेहूं की समय पर बुवाई व चना-मसूर', tasks: ['गेहूं की बुवाई (1-20 नवंबर) सर्वोत्तम समय है: DBW 187, DBW 303, HD 2967 का प्रयोग करें।', 'बीज को थीरम/बाविस्टिन (2.5 ग्राम/किग्रा) से शोधित करके ही सीड-ड्रिल से बोएं।', 'आलू के पौधों पर 20-25 दिन की अवस्था में मिट्टी चढ़ाने का कार्य संपन्न करें।'] },
+  11: { season: 'हेमंत ऋतु (पौष)', title: 'गेहूं की पहली सिंचाई (CRI अवस्था) व पाला बचाव', tasks: ['गेहूं बुवाई के 21-25 दिन बाद सीआरआई (मुकुट जड़) अवस्था पर पहली हल्की सिंचाई अवश्य करें।', 'सिंचाई के 3-4 दिन बाद प्रति एकड़ 30 किग्रा यूरिया और 4 किग्रा सल्फर का छिड़काव करें।', 'सब्जियों व आलू को शीतलहर और पाले से बचाने हेतु शाम को हल्की सिंचाई या धुआं करें।'] }
+};
+
+function formatCalDateKey(y, m, d) {
+  const mm = String(m + 1).padStart(2, '0');
+  const dd = String(d).padStart(2, '0');
+  return `${y}-${mm}-${dd}`;
+}
+
+function getPanchangDetails(dateObj) {
+  const y = dateObj.getFullYear();
+  const m = dateObj.getMonth();
+  const d = dateObj.getDate();
+  const dayOfWeek = dateObj.getDay();
+
+  // Vikram Samvat calculation
+  const samvat = (m > 2 || (m === 2 && d >= 19)) ? (y + 57) : (y + 56);
+
+  // Synodic lunar month calculation:
+  // Reference New Moon: Jan 18, 2026, 19:50 UTC
+  const refTime = new Date(Date.UTC(2026, 0, 18, 19, 50, 0)).getTime();
+  const targetTime = new Date(Date.UTC(y, m, d, 6, 30, 0)).getTime();
+  const diffDays = (targetTime - refTime) / (1000 * 60 * 60 * 24);
+  const LUNAR_MONTH = 29.53058867;
+  const moonAge = ((diffDays % LUNAR_MONTH) + LUNAR_MONTH) % LUNAR_MONTH;
+  const tithiIndex = Math.floor((moonAge / LUNAR_MONTH) * 30); // 0 to 29
+
+  const isShukla = (tithiIndex < 15);
+  const paksha = isShukla ? 'शुक्ल पक्ष' : 'कृष्ण पक्ष';
+  const tithiNum = isShukla ? (tithiIndex + 1) : (tithiIndex - 14); // 1 to 15
+  let tithiName = TITHI_NAMES[tithiNum - 1] || 'प्रतिपदा';
+  if (!isShukla && tithiNum === 15) {
+    tithiName = 'अमावस्या';
+  }
+
+  // Sidereal Moon Nakshatra (approx 27.32166 days)
+  const SIDEREAL_CYCLE = 27.321661;
+  const refNakshatraTime = new Date(Date.UTC(2026, 0, 1, 0, 0, 0)).getTime();
+  const diffNakDays = (targetTime - refNakshatraTime) / (1000 * 60 * 60 * 24);
+  const nakAge = ((diffNakDays % SIDEREAL_CYCLE) + SIDEREAL_CYCLE) % SIDEREAL_CYCLE;
+  const nakIndex = Math.floor((nakAge / SIDEREAL_CYCLE) * 27) % 27;
+  const nakshatra = NAKSHATRAS[nakIndex];
+
+  // Hindu Solar/Lunar Month approx name
+  let hinduMonth = 'कार्तिक';
+  if (m === 0) hinduMonth = (d < 14) ? 'पौष' : 'माघ';
+  else if (m === 1) hinduMonth = (d < 13) ? 'माघ' : 'फाल्गुन';
+  else if (m === 2) hinduMonth = (d < 14) ? 'फाल्गुन' : 'चैत्र';
+  else if (m === 3) hinduMonth = (d < 14) ? 'चैत्र' : 'वैशाख';
+  else if (m === 4) hinduMonth = (d < 15) ? 'वैशाख' : 'ज्येष्ठ';
+  else if (m === 5) hinduMonth = (d < 15) ? 'ज्येष्ठ' : 'आषाढ़';
+  else if (m === 6) hinduMonth = (d < 16) ? 'आषाढ़' : 'श्रावण';
+  else if (m === 7) hinduMonth = (d < 17) ? 'श्रावण' : 'भाद्रपद';
+  else if (m === 8) hinduMonth = (d < 17) ? 'भाद्रपद' : 'आश्विन';
+  else if (m === 9) hinduMonth = (d < 17) ? 'आश्विन' : 'कार्तिक';
+  else if (m === 10) hinduMonth = (d < 16) ? 'कार्तिक' : 'मार्गशीर्ष';
+  else if (m === 11) hinduMonth = (d < 16) ? 'मार्गशीर्ष' : 'पौष';
+
+  // Day of year for sunrise / sunset calculation (Deoria approx 26.5° N)
+  const startOfYear = new Date(y, 0, 1);
+  const dayOfYear = Math.floor((dateObj - startOfYear) / (1000 * 60 * 60 * 24)) + 1;
+  const solarAngle = (360 / 365) * (dayOfYear - 81) * (Math.PI / 180);
+  const sunriseOffset = -0.75 * Math.sin(solarAngle); // hours
+  const sunsetOffset = 0.75 * Math.sin(solarAngle);
+
+  const baseSunrise = 6.15 + sunriseOffset; // approx 6:09 AM baseline
+  const baseSunset = 17.65 + sunsetOffset;  // approx 5:39 PM baseline
+
+  const srH = Math.floor(baseSunrise);
+  const srM = Math.floor((baseSunrise - srH) * 60);
+  const ssH = Math.floor(baseSunset);
+  const ssM = Math.floor((baseSunset - ssH) * 60);
+
+  const sunrise = `${String(srH).padStart(2, '0')}:${String(srM).padStart(2, '0')} AM`;
+  const sunsetHour12 = ssH > 12 ? (ssH - 12) : ssH;
+  const sunset = `${String(sunsetHour12).padStart(2, '0')}:${String(ssM).padStart(2, '0')} PM`;
+
+  const rahuKaal = RAHU_KAAL_TIMINGS[dayOfWeek] || '03:00 PM - 04:30 PM';
+  const abhijit = '11:42 AM - 12:30 PM';
+
+  return {
+    samvat,
+    hinduMonth,
+    paksha,
+    tithiName,
+    tithiNum,
+    nakshatra,
+    sunrise,
+    sunset,
+    rahuKaal,
+    abhijit,
+    dayName: HINDI_WEEKDAYS[dayOfWeek]
+  };
+}
+
+function getVillageEvents() {
+  try {
+    const raw = localStorage.getItem('gaurkothi_village_events');
+    return raw ? JSON.parse(raw) : [];
+  } catch (e) {
+    console.error('getVillageEvents err:', e);
+    return [];
+  }
+}
+
+function saveVillageEvent(ev) {
+  try {
+    const list = getVillageEvents();
+    list.unshift(ev);
+    localStorage.setItem('gaurkothi_village_events', JSON.stringify(list));
+  } catch (e) {
+    console.error('saveVillageEvent err:', e);
+  }
+}
+
+function deleteVillageEvent(id) {
+  if (!confirm('क्या आप सचमुच इस कार्यक्रम को कैलेंडर से हटाना चाहते हैं?')) return;
+  try {
+    let list = getVillageEvents();
+    list = list.filter(e => e.id !== id);
+    localStorage.setItem('gaurkothi_village_events', JSON.stringify(list));
+    toast('कार्यक्रम हटा दिया गया! 🗑️');
+    renderCalendarGrid();
+    const dateKey = formatCalDateKey(selectedCalDate.getFullYear(), selectedCalDate.getMonth(), selectedCalDate.getDate());
+    selectCalendarDate(dateKey);
+    renderEventsDirectory();
+  } catch (e) {
+    console.error('deleteVillageEvent err:', e);
+  }
+}
+
+function getVillageEventsForDate(dateKey, dateObj) {
+  const events = [];
+  const y = dateObj.getFullYear();
+  const m = dateObj.getMonth();
+  const d = dateObj.getDate();
+  const dow = dateObj.getDay();
+
+  // 1. Check fixed/dated holiday list
+  const holiday = GAURKOTHI_HOLIDAYS_2026.find(h => h.date === dateKey);
+  if (holiday) {
+    events.push({
+      id: 'hol_' + holiday.date,
+      title: holiday.name,
+      time: 'पूरा दिन',
+      location: 'समस्त ग्राम गौरकोठी',
+      desc: holiday.desc,
+      type: holiday.type,
+      isHoliday: true
+    });
+  }
+
+  // 2. Ration Distribution: 5th to 20th of every month
+  if (d >= 5 && d <= 20) {
+    events.push({
+      id: 'ration_' + dateKey,
+      title: '🌾 राशन वितरण दिवस (कोटेदार दुकान)',
+      time: 'सुबह 08:00 - शाम 05:00',
+      location: 'उचित दर विक्रेता दुकान, गौरकोठी',
+      desc: 'पात्र गृहस्थी व अंत्योदय कार्डधारकों को खाद्यान्न (गेहूं व चावल) वितरण जारी है। ई-पॉस मशीन से अंगूठा लगाकर राशन प्राप्त करें।',
+      type: 'panchayat'
+    });
+  }
+
+  // 3. VHND Vaccination & Health: Every Wednesday & Friday
+  if (dow === 3 || dow === 5) {
+    events.push({
+      id: 'vhnd_' + dateKey,
+      title: '💉 वीएचएनडी (VHND) स्वास्थ्य एवं टीकाकरण दिवस',
+      time: 'सुबह 09:30 - दोपहर 02:00',
+      location: 'आँगनबाड़ी केंद्र गौरकोठी',
+      desc: 'एएनएम व आशा कार्यकत्री द्वारा गर्भवती महिलाओं की एएनसी जांच तथा नवजात व छोटे बच्चों का नियमित टीकाकरण।',
+      type: 'panchayat'
+    });
+  }
+
+  // 4. 2nd Saturday: Pension & Samadhan Diwas
+  if (dow === 6 && d >= 8 && d <= 14) {
+    events.push({
+      id: 'samadhan_' + dateKey,
+      title: '🏛️ पेंशन ई-केवाईसी व समाधान दिवस शिविर',
+      time: 'सुबह 10:00 - दोपहर 03:00',
+      location: 'पंचायत भवन गौरकोठी',
+      desc: 'वृद्धावस्था, विधवा व दिव्यांग पेंशन का आधार प्रमाणीकरण (e-KYC), किसान सम्मान निधि समस्या निवारण व जनसुनवाई।',
+      type: 'panchayat'
+    });
+  }
+
+  // 5. Gram Sabha mandatory meetings (26 Jan, 1 May, 15 Aug, 2 Oct)
+  if ((m === 0 && d === 26) || (m === 4 && d === 1) || (m === 7 && d === 15) || (m === 9 && d === 2)) {
+    if (!events.some(e => e.title.includes('ग्राम सभा'))) {
+      events.push({
+        id: 'baithak_' + dateKey,
+        title: '📢 ग्राम सभा की अनिवार्य खुली बैठक',
+        time: 'सुबह 11:00 बजे',
+        location: 'पंचायत भवन गौरकोठी',
+        desc: 'ग्राम प्रधान एवं ग्राम विकास अधिकारी (VDO) की उपस्थिति में गाँव के विकास कार्यों का प्रस्ताव व अनुमोदन।',
+        type: 'panchayat'
+      });
+    }
+  }
+
+  // 6. Pradhan Custom Events from localStorage
+  const customEvents = getVillageEvents();
+  customEvents.forEach(cev => {
+    if (cev.date === dateKey) {
+      events.push({
+        id: cev.id,
+        title: cev.title,
+        time: cev.time || 'निर्धारित समय पर',
+        location: cev.location || 'पंचायत भवन गौरकोठी',
+        desc: cev.desc || 'ग्राम प्रधान द्वारा आयोजित विशेष कार्यक्रम।',
+        type: 'custom',
+        isCustom: true
+      });
+    }
+  });
+
+  return events;
+}
+
+function renderCalendarHero() {
+  const heroDate = document.getElementById('calHeroFullDate');
+  const heroTithi = document.getElementById('calHeroTithi');
+  if (!heroDate || !heroTithi) return;
+
+  const now = new Date();
+  const p = getPanchangDetails(now);
+  const dStr = `${now.getDate()} ${MONTH_NAMES_HI[now.getMonth()]} ${now.getFullYear()} (${p.dayName})`;
+  heroDate.textContent = dStr;
+
+  heroTithi.innerHTML = `<strong>विक्रम संवत ${p.samvat}</strong> · ${p.hinduMonth} मास · ${p.paksha} ${p.tithiName} · ${p.nakshatra} नक्षत्र · <span style="color:#d97706;">सूर्योदय ${p.sunrise}</span>`;
+}
+
+function renderCalendarGrid() {
+  const grid = document.getElementById('calDaysGrid');
+  const titleEl = document.getElementById('calMonthTitle');
+  const hinduEl = document.getElementById('calHinduMonth');
+  if (!grid || !titleEl) return;
+
+  const year = currentCalDate.getFullYear();
+  const month = currentCalDate.getMonth();
+
+  titleEl.textContent = `${MONTH_NAMES_HI[month]} ${year}`;
+
+  const midMonthObj = new Date(year, month, 15);
+  const pMid = getPanchangDetails(midMonthObj);
+  if (hinduEl) {
+    hinduEl.textContent = `${pMid.hinduMonth} मास (विक्रम संवत ${pMid.samvat})`;
+  }
+
+  const firstDayIndex = new Date(year, month, 1).getDay(); // 0: Sun, 1: Mon...
+  const totalDays = new Date(year, month + 1, 0).getDate();
+  const prevMonthTotalDays = new Date(year, month, 0).getDate();
+
+  const today = new Date();
+  const isCurMonth = (today.getFullYear() === year && today.getMonth() === month);
+  const todayDateNum = today.getDate();
+
+  const selYear = selectedCalDate.getFullYear();
+  const selMonth = selectedCalDate.getMonth();
+  const selDateNum = selectedCalDate.getDate();
+
+  let html = '';
+
+  // 1. Previous Month Spillover Days
+  for (let i = firstDayIndex - 1; i >= 0; i--) {
+    const pDay = prevMonthTotalDays - i;
+    html += `<div class="cal-day cal-day-other"><span class="cal-day-num">${pDay}</span></div>`;
+  }
+
+  // 2. Current Month Days
+  for (let d = 1; d <= totalDays; d++) {
+    const thisDateObj = new Date(year, month, d);
+    const dateKey = formatCalDateKey(year, month, d);
+    const isToday = (isCurMonth && d === todayDateNum);
+    const isSelected = (selYear === year && selMonth === month && selDateNum === d);
+
+    const panchang = getPanchangDetails(thisDateObj);
+    const events = getVillageEventsForDate(dateKey, thisDateObj);
+
+    let classes = 'cal-day';
+    if (isToday) classes += ' is-today';
+    if (isSelected) classes += ' is-selected';
+
+    const hasFest = events.some(e => e.type === 'festival' || e.isHoliday);
+    const hasPanchayat = events.some(e => e.type === 'panchayat');
+    const hasCustom = events.some(e => e.type === 'custom');
+
+    let dotsHtml = '';
+    if (hasFest) dotsHtml += '<span class="cal-dot dot-fest" title="त्यौहार / पर्व"></span>';
+    if (hasPanchayat) dotsHtml += '<span class="cal-dot dot-panchayat" title="राशन / पंचायत"></span>';
+    if (hasCustom) dotsHtml += '<span class="cal-dot dot-custom" title="गाँव का कार्यक्रम"></span>';
+
+    html += `
+      <div class="${classes}" data-date="${dateKey}" role="button" tabindex="0">
+        <span class="cal-day-num">${d}</span>
+        <span class="cal-day-tithi">${panchang.tithiName}</span>
+        ${dotsHtml ? `<div class="cal-dots-wrap">${dotsHtml}</div>` : ''}
+      </div>
+    `;
+  }
+
+  // 3. Next Month Spillover Days to fill 35 or 42 grid cells
+  const totalRendered = firstDayIndex + totalDays;
+  const remainingSlots = (totalRendered % 7 === 0) ? 0 : (7 - (totalRendered % 7));
+  for (let n = 1; n <= remainingSlots; n++) {
+    html += `<div class="cal-day cal-day-other"><span class="cal-day-num">${n}</span></div>`;
+  }
+
+  grid.innerHTML = html;
+
+  // Add click listeners to active days
+  grid.querySelectorAll('.cal-day[data-date]').forEach(cell => {
+    cell.addEventListener('click', () => {
+      const dateKey = cell.getAttribute('data-date');
+      const [y, m, d] = dateKey.split('-').map(Number);
+      selectedCalDate = new Date(y, m - 1, d);
+      grid.querySelectorAll('.cal-day').forEach(c => c.classList.remove('is-selected'));
+      cell.classList.add('is-selected');
+      selectCalendarDate(dateKey);
+    });
+  });
+}
+
+function selectCalendarDate(dateKey) {
+  const detailEl = document.getElementById('calSelectedDetail');
+  if (!detailEl) return;
+
+  const [y, m, d] = dateKey.split('-').map(Number);
+  const dateObj = new Date(y, m - 1, d);
+  const p = getPanchangDetails(dateObj);
+  const events = getVillageEventsForDate(dateKey, dateObj);
+
+  const today = new Date();
+  const isToday = (today.getFullYear() === y && today.getMonth() === (m - 1) && today.getDate() === d);
+
+  const fullDateText = `${d} ${MONTH_NAMES_HI[m - 1]} ${y} (${p.dayName})`;
+
+  let badgesHtml = '';
+  if (isToday) {
+    badgesHtml += '<span class="cal-det-badge badge-today">📍 आज की तारीख</span>';
+  }
+  if (events.some(e => e.type === 'festival' || e.isHoliday)) {
+    badgesHtml += '<span class="cal-det-badge badge-fest">🪔 पर्व / त्यौहार</span>';
+  }
+  if (events.some(e => e.type === 'panchayat')) {
+    badgesHtml += '<span class="cal-det-badge badge-panchayat">🏛️ पंचायत गतिविधि</span>';
+  }
+  if (events.some(e => e.type === 'custom')) {
+    badgesHtml += '<span class="cal-det-badge badge-custom">👑 प्रधान कार्यक्रम</span>';
+  }
+
+  let eventsListHtml = '';
+  if (events.length === 0) {
+    eventsListHtml = `
+      <div style="font-size:.85rem; color:var(--ink-soft); padding:8px 0;">
+        इस तारीख को कोई विशेष सार्वजनिक बैठक या त्यौहार दर्ज नहीं है। कृषि कार्य व नियमित दिनचर्या हेतु सामान्य दिन।
+      </div>
+    `;
+  } else {
+    eventsListHtml = events.map(ev => {
+      const canDelete = (adminKey && ev.isCustom);
+      return `
+        <div class="cal-det-event-item ${ev.type}">
+          <div class="cal-det-event-head">
+            <span class="cal-det-event-title">${ev.title}</span>
+            ${canDelete ? `<button type="button" class="btn-del-ev" onclick="deleteVillageEvent('${ev.id}')" title="हटाएँ">🗑️ हटाएँ</button>` : ''}
+          </div>
+          <div class="cal-det-event-meta">
+            <span>⏰ ${ev.time}</span>
+            <span>📍 ${ev.location}</span>
+          </div>
+          <p class="cal-det-event-desc">${ev.desc}</p>
+        </div>
+      `;
+    }).join('');
+  }
+
+  detailEl.innerHTML = `
+    <div class="cal-det-card">
+      <div class="cal-det-header">
+        <div>
+          <h4 class="cal-det-date">${fullDateText}</h4>
+          <span class="cal-det-sub">विक्रम संवत ${p.samvat} · ${p.hinduMonth} मास · ${p.paksha} (${p.tithiName})</span>
+        </div>
+        <div class="cal-det-badges-row">${badgesHtml}</div>
+      </div>
+
+      <!-- Panchang 4-Grid Breakdown -->
+      <div class="cal-panchang-grid">
+        <div class="cal-p-box">
+          <div class="cal-p-label">🕉️ तिथि व पक्ष</div>
+          <div class="cal-p-val">${p.paksha} ${p.tithiName}</div>
+        </div>
+        <div class="cal-p-box">
+          <div class="cal-p-label">⭐ नक्षत्र</div>
+          <div class="cal-p-val">${p.nakshatra}</div>
+        </div>
+        <div class="cal-p-box">
+          <div class="cal-p-label">🌅 सूर्योदय / सूर्यास्त</div>
+          <div class="cal-p-val">${p.sunrise} / ${p.sunset}</div>
+        </div>
+        <div class="cal-p-box">
+          <div class="cal-p-label">✨ शुभ अभिजीत मुहूर्त</div>
+          <div class="cal-p-val" style="color:#059669;">${p.abhijit}</div>
+        </div>
+        <div class="cal-p-box span-all">
+          <div class="cal-p-label">⏳ राहु काल (अशुभ काल — शुभ कार्य वर्जित)</div>
+          <div class="cal-p-val text-rahu">${p.rahuKaal}</div>
+        </div>
+      </div>
+
+      <!-- Events for this day -->
+      <div class="cal-det-events-wrap">
+        <h5 class="cal-det-sec-title">📌 इस तारीख की गतिविधियाँ व विवरण (${events.length})</h5>
+        ${eventsListHtml}
+      </div>
+    </div>
+  `;
+}
+
+function renderEventsDirectory() {
+  const container = document.getElementById('calEventsList');
+  if (!container) return;
+
+  const month = currentCalDate.getMonth();
+  const year = currentCalDate.getFullYear();
+
+  let html = '';
+
+  if (currentCalFilter === 'krishi') {
+    const guide = KRISHI_CALENDAR_GUIDE[month] || KRISHI_CALENDAR_GUIDE[9];
+    html = `
+      <div class="cal-dir-card krishi-highlight">
+        <div class="cal-dir-card-head">
+          <span class="cal-dir-type-pill pill-krishi">🌾 ${MONTH_NAMES_HI[month]} माह कृषि सलाह</span>
+          <span class="cal-dir-time">${guide.season}</span>
+        </div>
+        <h4 class="cal-dir-title">${guide.title}</h4>
+        <ul class="cal-krishi-tasks">
+          ${guide.tasks.map(t => `<li>🌱 ${t}</li>`).join('')}
+        </ul>
+        <div style="margin-top:10px; font-size:.82rem; color:var(--ink-soft);">
+          💡 गौरकोठी कृषि परामर्श: मौसम अनुरूप खाद-बीज कीटनाशक व सरकारी अनुदान की जानकारी हेतु 'कृषि चौपाल' टैब देखें।
+        </div>
+      </div>
+    `;
+  } else if (currentCalFilter === 'panchayat') {
+    const customEvents = getVillageEvents();
+    let customHtml = '';
+    if (customEvents.length > 0) {
+      customHtml = customEvents.map(cev => `
+        <div class="cal-dir-card custom-type">
+          <div class="cal-dir-card-head">
+            <span class="cal-dir-type-pill pill-custom">👑 प्रधान जी का कार्यक्रम</span>
+            <span class="cal-dir-time">📅 ${cev.date} · ⏰ ${cev.time || ''}</span>
+          </div>
+          <h4 class="cal-dir-title">${cev.title}</h4>
+          <p class="cal-dir-desc">📍 <strong>स्थान:</strong> ${cev.location} — ${cev.desc}</p>
+        </div>
+      `).join('');
+    }
+
+    html = `
+      ${customHtml}
+      <div class="cal-dir-card panchayat-type">
+        <div class="cal-dir-card-head">
+          <span class="cal-dir-type-pill pill-panchayat">🌾 नियमित राशन वितरण</span>
+          <span class="cal-dir-time">हर महीने की 5 से 20 तारीख</span>
+        </div>
+        <h4 class="cal-dir-title">उचित दर विक्रेता (कोटेदार) खाद्यान्न वितरण</h4>
+        <p class="cal-dir-desc">अंत्योदय एवं पात्र गृहस्थी कार्डधारकों को निःशुल्क चावल व गेहूं का वितरण। अपना राशन कार्ड व आधार साथ लाएं।</p>
+      </div>
+
+      <div class="cal-dir-card panchayat-type">
+        <div class="cal-dir-card-head">
+          <span class="cal-dir-type-pill pill-panchayat">💉 वीएचएनडी (VHND) स्वास्थ्य दिवस</span>
+          <span class="cal-dir-time">हर बुधवार एवं शुक्रवार</span>
+        </div>
+        <h4 class="cal-dir-title">मातृ एवं शिशु पोषण, स्वास्थ्य जांच व टीकाकरण</h4>
+        <p class="cal-dir-desc">आँगनबाड़ी केंद्र पर एएनएम दीदी द्वारा गर्भवती महिलाओं की नियमित जांच, आयरन की गोलियां व बच्चों को टीके लगाए जाते हैं।</p>
+      </div>
+
+      <div class="cal-dir-card panchayat-type">
+        <div class="cal-dir-card-head">
+          <span class="cal-dir-type-pill pill-panchayat">🏛️ समाधान व पेंशन दिवस</span>
+          <span class="cal-dir-time">माह का दूसरा शनिवार</span>
+        </div>
+        <h4 class="cal-dir-title">पेंशन ई-केवाईसी शिविर व ग्राम जनसुनवाई</h4>
+        <p class="cal-dir-desc">पंचायत भवन गौरकोठी में वृद्धा, विधवा, दिव्यांग पेंशन आधार सत्यापन, KCC आवेदन एवं जनसमस्याओं का त्वरित निस्तारण।</p>
+      </div>
+
+      <div class="cal-dir-card panchayat-type">
+        <div class="cal-dir-card-head">
+          <span class="cal-dir-type-pill pill-panchayat">📢 ग्राम सभा खुली बैठक</span>
+          <span class="cal-dir-time">26 जनवरी · 1 मई · 15 अगस्त · 2 अक्टूबर</span>
+        </div>
+        <h4 class="cal-dir-title">ग्राम पंचायत अनिवार्य खुली बैठक एवं कार्ययोजना</h4>
+        <p class="cal-dir-desc">पंचायत भवन में सभी ग्रामवासियों की उपस्थिति में गाँव के विकास कार्यों (नाली, खड़ंजा, लाइट) का प्रस्ताव तैयार व स्वीकृत किया जाता है।</p>
+      </div>
+    `;
+  } else if (currentCalFilter === 'festival') {
+    // Festivals for current month & next months
+    const monthPrefix = `${year}-${String(month + 1).padStart(2, '0')}`;
+    const monthHols = GAURKOTHI_HOLIDAYS_2026.filter(h => h.date.startsWith(monthPrefix) && h.type === 'festival');
+    const allFestivals = (monthHols.length > 0) ? monthHols : GAURKOTHI_HOLIDAYS_2026.filter(h => h.type === 'festival').slice(0, 10);
+
+    html = allFestivals.map(fest => `
+      <div class="cal-dir-card fest-type">
+        <div class="cal-dir-card-head">
+          <span class="cal-dir-type-pill pill-fest">🪔 पर्व व त्यौहार</span>
+          <span class="cal-dir-time">📅 ${fest.date}</span>
+        </div>
+        <h4 class="cal-dir-title">${fest.name}</h4>
+        <p class="cal-dir-desc">${fest.desc}</p>
+      </div>
+    `).join('');
+  } else {
+    // 'all'
+    const customEvents = getVillageEvents();
+    let customHtml = '';
+    if (customEvents.length > 0) {
+      customHtml = customEvents.map(cev => `
+        <div class="cal-dir-card custom-type">
+          <div class="cal-dir-card-head">
+            <span class="cal-dir-type-pill pill-custom">👑 प्रधान जी का कार्यक्रम</span>
+            <span class="cal-dir-time">📅 ${cev.date} · ⏰ ${cev.time || ''}</span>
+          </div>
+          <h4 class="cal-dir-title">${cev.title}</h4>
+          <p class="cal-dir-desc">📍 <strong>स्थान:</strong> ${cev.location} — ${cev.desc}</p>
+        </div>
+      `).join('');
+    }
+
+    const monthPrefix = `${year}-${String(month + 1).padStart(2, '0')}`;
+    const thisMonthHolidays = GAURKOTHI_HOLIDAYS_2026.filter(h => h.date.startsWith(monthPrefix));
+
+    let holsHtml = thisMonthHolidays.map(h => `
+      <div class="cal-dir-card ${h.type}-type">
+        <div class="cal-dir-card-head">
+          <span class="cal-dir-type-pill pill-${h.type}">${(h.type === 'festival') ? '🪔 पर्व व त्यौहार' : (h.type === 'panchayat') ? '🏛️ ग्राम पंचायत' : '🇮🇳 सरकारी दिवस'}</span>
+          <span class="cal-dir-time">📅 ${h.date}</span>
+        </div>
+        <h4 class="cal-dir-title">${h.name}</h4>
+        <p class="cal-dir-desc">${h.desc}</p>
+      </div>
+    `).join('');
+
+    const guide = KRISHI_CALENDAR_GUIDE[month] || KRISHI_CALENDAR_GUIDE[9];
+    const krishiHtml = `
+      <div class="cal-dir-card krishi-highlight">
+        <div class="cal-dir-card-head">
+          <span class="cal-dir-type-pill pill-krishi">🌾 इस महीने की कृषि सलाह</span>
+          <span class="cal-dir-time">${guide.season}</span>
+        </div>
+        <h4 class="cal-dir-title">${guide.title}</h4>
+        <p class="cal-dir-desc">🌱 ${guide.tasks[0]}</p>
+      </div>
+    `;
+
+    html = customHtml + holsHtml + krishiHtml + `
+      <div class="cal-dir-card panchayat-type">
+        <div class="cal-dir-card-head">
+          <span class="cal-dir-type-pill pill-panchayat">🌾 नियमित राशन वितरण</span>
+          <span class="cal-dir-time">हर महीने की 5 से 20 तारीख</span>
+        </div>
+        <h4 class="cal-dir-title">कोटेदार उचित दर दुकान पर खाद्यान्न वितरण जारी</h4>
+        <p class="cal-dir-desc">गाँव के समस्त कार्डधारक समय पर ई-पॉस मशीन द्वारा अपना राशन प्राप्त करें।</p>
+      </div>
+    `;
+  }
+
+  container.innerHTML = html;
+}
+
+function speakCalendarPanchang() {
+  if (!('speechSynthesis' in window)) {
+    toast('आपके फ़ोन/ब्राउज़र में आवाज़ (Text-to-Speech) की सुविधा उपलब्ध नहीं है। 🔇');
+    return;
+  }
+  const btn = document.getElementById('btnCalAudio');
+  if (isCalSpeaking || window.speechSynthesis.speaking) {
+    window.speechSynthesis.cancel();
+    isCalSpeaking = false;
+    if (btn) btn.innerHTML = '<span>🔊</span> <span>पंचांग सुनें</span>';
+    toast('आवाज़ बंद कर दी गई 🔇');
+    return;
+  }
+
+  const p = getPanchangDetails(selectedCalDate || new Date());
+  const dateFormatted = `${selectedCalDate.getDate()} ${MONTH_NAMES_HI[selectedCalDate.getMonth()]} ${selectedCalDate.getFullYear()}`;
+  const dayName = HINDI_WEEKDAYS[selectedCalDate.getDay()];
+
+  let speechText = `नमस्कार गौरकोठी ग्रामवासियों। आज ${dayName}, ${dateFormatted} है। ` +
+    `आज विक्रम संवत ${p.samvat}, ${p.hinduMonth} मास, ${p.paksha} की ${p.tithiName} तिथि है। ` +
+    `आज का नक्षत्र ${p.nakshatra} है। ` +
+    `सूर्योदय सुबह ${p.sunrise} और सूर्यास्त शाम ${p.sunset} पर होगा। ` +
+    `आज का शुभ अभिजीत मुहूर्त ${p.abhijit} तक रहेगा। ` +
+    `राहु काल ${p.rahuKaal} तक रहेगा, जिसमें शुभ कार्य न करें। `;
+
+  const d = selectedCalDate.getDate();
+  if (d >= 5 && d <= 20) {
+    speechText += `गाँव में कोटेदार द्वारा राशन वितरण जारी है। `;
+  }
+  if (selectedCalDate.getDay() === 3 || selectedCalDate.getDay() === 5) {
+    speechText += `आज वी एच एन डी स्वास्थ्य एवं टीकाकरण दिवस है। `;
+  }
+
+  const dateKey = formatCalDateKey(selectedCalDate.getFullYear(), selectedCalDate.getMonth(), selectedCalDate.getDate());
+  const evs = getVillageEventsForDate(dateKey, selectedCalDate);
+  const fest = evs.filter(e => e.type === 'festival' || e.isHoliday);
+  if (fest.length > 0) {
+    speechText += `आज ${fest.map(f => f.title).join(' तथा ')} का पावन पर्व है। आप सभी ग्रामवासियों को बहुत-बहुत बधाई।`;
+  }
+
+  const utter = new SpeechSynthesisUtterance(speechText);
+  utter.lang = 'hi-IN';
+  utter.rate = 0.95;
+  utter.pitch = 1.0;
+
+  const voices = window.speechSynthesis.getVoices();
+  const hiVoice = voices.find(v => v.lang && v.lang.toLowerCase().includes('hi'));
+  if (hiVoice) utter.voice = hiVoice;
+
+  utter.onstart = () => {
+    isCalSpeaking = true;
+    if (btn) btn.innerHTML = '<span>⏹️</span> <span>आवाज़ बंद करें</span>';
+  };
+  utter.onend = () => {
+    isCalSpeaking = false;
+    if (btn) btn.innerHTML = '<span>🔊</span> <span>पंचांग सुनें</span>';
+  };
+  utter.onerror = () => {
+    isCalSpeaking = false;
+    if (btn) btn.innerHTML = '<span>🔊</span> <span>पंचांग सुनें</span>';
+  };
+
+  window.speechSynthesis.speak(utter);
+  toast('पंचांग बोला जा रहा है... 🔊');
+}
+
+function initCalendar() {
+  // 1. Initial renders
+  renderCalendarHero();
+  renderCalendarGrid();
+
+  const todayKey = formatCalDateKey(selectedCalDate.getFullYear(), selectedCalDate.getMonth(), selectedCalDate.getDate());
+  selectCalendarDate(todayKey);
+  renderEventsDirectory();
+
+  // 2. Check Admin Pradhan status
+  const calAdminBar = document.getElementById('calAdminBar');
+  if (calAdminBar) {
+    calAdminBar.style.display = adminKey ? 'flex' : 'none';
+  }
+
+  // 3. Audio Button
+  const btnAudio = document.getElementById('btnCalAudio');
+  if (btnAudio) {
+    btnAudio.addEventListener('click', speakCalendarPanchang);
+  }
+
+  // 4. Jump Today Button
+  const btnToday = document.getElementById('btnCalJumpToday');
+  if (btnToday) {
+    btnToday.addEventListener('click', () => {
+      currentCalDate = new Date();
+      selectedCalDate = new Date();
+      renderCalendarGrid();
+      const nowKey = formatCalDateKey(selectedCalDate.getFullYear(), selectedCalDate.getMonth(), selectedCalDate.getDate());
+      selectCalendarDate(nowKey);
+      renderEventsDirectory();
+      toast('आज की तारीख पर आ गए 📅');
+    });
+  }
+
+  // 5. Month Prev / Next
+  const btnPrev = document.getElementById('btnCalPrevMonth');
+  if (btnPrev) {
+    btnPrev.addEventListener('click', () => {
+      currentCalDate = new Date(currentCalDate.getFullYear(), currentCalDate.getMonth() - 1, 1);
+      renderCalendarGrid();
+      renderEventsDirectory();
+    });
+  }
+
+  const btnNext = document.getElementById('btnCalNextMonth');
+  if (btnNext) {
+    btnNext.addEventListener('click', () => {
+      currentCalDate = new Date(currentCalDate.getFullYear(), currentCalDate.getMonth() + 1, 1);
+      renderCalendarGrid();
+      renderEventsDirectory();
+    });
+  }
+
+  // 6. Directory Filter Buttons
+  const filterWrap = document.getElementById('calDirFilters');
+  if (filterWrap) {
+    filterWrap.querySelectorAll('.cal-filter-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        filterWrap.querySelectorAll('.cal-filter-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        currentCalFilter = pill.getAttribute('data-cal-filter') || 'all';
+        renderEventsDirectory();
+      });
+    });
+  }
+
+  // 7. Pradhan Add Event Modal Button & Form
+  const btnOpenAdd = document.getElementById('btnOpenAddEventModal');
+  if (btnOpenAdd) {
+    btnOpenAdd.addEventListener('click', () => {
+      const dateInp = document.getElementById('evDate');
+      if (dateInp) {
+        dateInp.value = formatCalDateKey(selectedCalDate.getFullYear(), selectedCalDate.getMonth(), selectedCalDate.getDate());
+      }
+      openOverlay('overlayAddVillageEvent');
+    });
+  }
+
+  const formAddEv = document.getElementById('formAddVillageEvent');
+  if (formAddEv) {
+    formAddEv.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const title = document.getElementById('evTitle').value.trim();
+      const date = document.getElementById('evDate').value;
+      const time = document.getElementById('evTime').value.trim() || 'समय तय नहीं';
+      const loc = document.getElementById('evLocation').value.trim() || 'पंचायत भवन गौरकोठी';
+      const desc = document.getElementById('evDesc').value.trim() || 'ग्राम प्रधान द्वारा आयोजित कार्यक्रम।';
+
+      if (!title || !date) {
+        toast('कृपया कार्यक्रम का नाम और तारीख दर्ज करें! ⚠️');
+        return;
+      }
+
+      const newEv = {
+        id: 'ev_' + Date.now(),
+        title,
+        date,
+        time,
+        location: loc,
+        desc,
+        type: 'custom',
+        createdBy: 'प्रधान जी',
+        createdAt: new Date().toISOString()
+      };
+
+      saveVillageEvent(newEv);
+      formAddEv.reset();
+      closeOverlay('overlayAddVillageEvent');
+      toast('गाँव का कार्यक्रम सफलतापूर्वक कैलेंडर में दर्ज हो गया! 📅');
+
+      renderCalendarGrid();
+      selectCalendarDate(date);
+      renderEventsDirectory();
+    });
+  }
+}
+
+
 /* ============ Init ============ */
 async function init(){
   try { updateAdminButton(); } catch(e) { console.error('updateAdminButton err:', e); }
@@ -10509,6 +11946,7 @@ async function init(){
   try { initWeather(); } catch(e) { console.error('initWeather err:', e); }
   try { initCitizenServices(); } catch(e) { console.error('initCitizenServices err:', e); }
   try { initMachinery(); } catch(e) { console.error('initMachinery err:', e); }
+  try { initCalendar(); } catch(e) { console.error('initCalendar err:', e); }
 
   const btnEmAll = document.getElementById('btnEmergencyAll');
   if(btnEmAll){
