@@ -10957,9 +10957,12 @@ function isPwaInstalled() {
   return installed;
 }
 window.addEventListener('DOMContentLoaded', isPwaInstalled);
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
   deferredInstallPrompt = e;
-  if (!isPwaInstalled() && pwaBanner) {
-    // pwaBanner suppressed per user request - top header button only
+  if (!isPwaInstalled() && installBtn) {
+    installBtn.style.display = 'inline-flex';
   }
 });
 
