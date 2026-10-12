@@ -329,11 +329,13 @@ app.get('/api/samasya', requireAdmin, (req, res) => {
 app.get('/api/samasya/track/:query', (req, res) => {
   const rawQ = req.params.query.trim();
   const q = rawQ.toUpperCase();
+  const cleanQ = q.replace(/^GP-?/i, '').replace(/[^0-9A-Z]/g, '');
   const list = readJson('samasya.json', []);
   const matches = list.filter(item => {
     const tok = String(item.token || '').trim().toUpperCase();
+    const cleanTok = tok.replace(/^GP-?/i, '').replace(/[^0-9A-Z]/g, '');
     const mob = String(item.mobile || item.phone || '').trim();
-    return tok === q || mob === rawQ;
+    return tok === q || (cleanQ && cleanTok === cleanQ) || mob === rawQ || (rawQ.length >= 10 && mob.endsWith(rawQ));
   });
   if (matches.length > 0) {
     return res.json({ success: true, ok: true, items: matches });

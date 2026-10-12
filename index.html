@@ -6482,11 +6482,13 @@ const DEFAULT_SAMASYA_FALLBACK = [
             if (path.startsWith('/samasya/track/')) {
                 const rawQ = decodeURIComponent(path.replace('/samasya/track/', '')).trim();
                 const q = rawQ.toUpperCase();
+                const cleanQ = q.replace(/^GP-?/i, '').replace(/[^0-9A-Z]/g, '');
                 const list = getLocalData('samasya', DEFAULT_SAMASYA_FALLBACK);
                 const matches = list.filter(item => {
                     const tok = String(item.token || '').trim().toUpperCase();
+                    const cleanTok = tok.replace(/^GP-?/i, '').replace(/[^0-9A-Z]/g, '');
                     const mob = String(item.mobile || item.phone || '').trim();
-                    return tok === q || mob === rawQ;
+                    return tok === q || (cleanQ && cleanTok === cleanQ) || mob === rawQ || (rawQ.length >= 10 && mob.endsWith(rawQ));
                 });
                 if (matches.length > 0) return { success: true, ok: true, items: matches };
                 return null;
@@ -6950,28 +6952,42 @@ async function searchTrackComplaint(){
   wrap.innerHTML = `<div style="text-align:center; padding:16px; font-size:.85rem; color:var(--ink-soft);">🔍 स्थिति जांची जा रही है...</div>`;
 
   let items = [];
-  try {
-    const res = await apiGet('/samasya/track/' + encodeURIComponent(query));
-    if (Array.isArray(res)) {
-      items = res;
-    } else if (res && Array.isArray(res.items)) {
-      items = res.items;
-    } else if (res && res.item) {
-      items = [res.item];
-    }
-  } catch(e) {
-    console.warn('Track fetch error:', e);
+  const rawQ = query.trim();
+  const qUpper = rawQ.toUpperCase();
+  const cleanQ = qUpper.replace(/^GP-?/i, '').replace(/[^0-9A-Z]/g, '');
+
+  // If citizen typed only digits (e.g. 22449), search both rawQ and GP-22449
+  const searchCandidates = [rawQ];
+  if (/^\d{4,6}$/.test(rawQ)) {
+    searchCandidates.push('GP-' + rawQ);
+  } else if (/^GP\d{4,6}$/i.test(rawQ)) {
+    searchCandidates.push('GP-' + rawQ.substring(2));
   }
 
-  // Fallback to local data if server returned nothing
+  for (const term of searchCandidates) {
+    if (items.length > 0) break;
+    try {
+      const res = await apiGet('/samasya/track/' + encodeURIComponent(term));
+      if (Array.isArray(res)) {
+        items = res;
+      } else if (res && Array.isArray(res.items)) {
+        items = res.items;
+      } else if (res && res.item) {
+        items = [res.item];
+      }
+    } catch(e) {
+      console.warn('Track fetch error:', e);
+    }
+  }
+
+  // Fallback to in-memory list or local storage
   if (items.length === 0) {
-    const rawQ = query.trim();
-    const qUpper = rawQ.toUpperCase();
     const sourceList = (samasyaList && samasyaList.length > 0) ? samasyaList : getLocalData('samasya', DEFAULT_SAMASYA_FALLBACK);
     items = sourceList.filter(item => {
       const tok = String(item.token || '').trim().toUpperCase();
+      const cleanTok = tok.replace(/^GP-?/i, '').replace(/[^0-9A-Z]/g, '');
       const mob = String(item.mobile || item.phone || '').trim();
-      return tok === qUpper || mob === rawQ;
+      return tok === qUpper || (cleanQ && cleanTok === cleanQ) || mob === rawQ || (rawQ.length >= 10 && mob.endsWith(rawQ));
     });
   }
 
