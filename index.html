@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="hi">
 
 <head>
@@ -5454,19 +5454,22 @@
             <div class="sheet" style="max-width:440px; text-align:center; padding:24px 20px 26px; border-radius:18px;">
                 <div class="sheet-wrap">
                     <button class="close-x" data-close="overlayTokenSuccess">✕</button>
-                    <div style="font-size:2.4rem; margin-bottom:4px;">✅</div>
-                    <h2 style="margin:0 0 6px; font-size:1.2rem; color:var(--indigo-dark);">समस्या सफलतापूर्वक दर्ज हुई!</h2>
-                    <p style="color:var(--ink-soft); font-size:.85rem; margin:0 0 12px; line-height:1.4;">
-                        आपकी शिकायत प्रधान जी तक पहुँच गई है। स्थिति ट्रैक करने के लिए अपना टोकन नंबर संभाल कर रखें:
+                    <div style="font-size:2.8rem; margin-bottom:4px;">🎉 ✅</div>
+                    <h2 style="margin:0 0 6px; font-size:1.3rem; color:var(--indigo-dark); font-family:'Baloo 2',sans-serif; font-weight:800;">आपकी समस्या सफलतापूर्वक दर्ज हो गई है!</h2>
+                    <p style="color:var(--ink-soft); font-size:.86rem; margin:0 0 12px; line-height:1.4;">
+                        आपकी शिकायत प्रधान कार्यालय में सुरक्षित दर्ज कर ली गई है। समस्या की प्रगति (Status) देखने व ट्रैक करने के लिए अपना टोकन नंबर सुरक्षित रखें:
                     </p>
                     <div class="token-display-box" id="modalTokenVal">GP-48291</div>
-                    <p id="modalPhoneNote" style="font-size:.8rem; color:var(--ink-soft); margin-bottom:14px;"></p>
-                    <div style="display:flex; flex-direction:column; gap:8px;">
-                        <button type="button" class="btn btn-primary btn-block" id="btnCopyToken">📋 टोकन कॉपी करें</button>
-                        <button type="button" class="btn btn-outline btn-block" id="btnShareTokenWa" style="background:#25D366; color:#fff; border:none; font-family:'Baloo 2',sans-serif; font-weight:700;">
-            💬 WhatsApp पर सेव करें
-          </button>
-                        <button type="button" class="btn btn-outline btn-block" data-close="overlayTokenSuccess">ठीक है (Close)</button>
+                    <p id="modalPhoneNote" style="font-size:.82rem; color:var(--ink-soft); margin-bottom:14px; font-weight:600;"></p>
+                    <div style="display:flex; flex-direction:column; gap:10px;">
+                        <button type="button" class="btn btn-primary btn-block" id="btnCopyToken" style="font-size:.95rem; padding:10px 16px;">📋 टोकन कॉपी करें</button>
+                        <button type="button" class="btn btn-outline btn-block" id="btnShareTokenWa" style="background:#25D366; color:#fff; border:none; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:.95rem; padding:10px 16px;">
+                            💬 WhatsApp पर रसीद सुरक्षित करें
+                        </button>
+                        <button type="button" class="btn btn-outline btn-block" id="btnTrackFromModal" style="background:var(--terracotta); color:#fff; border:none; font-family:'Baloo 2',sans-serif; font-weight:700; font-size:.95rem; padding:10px 16px;">
+                            🔍 अपनी शिकायत अभी ट्रैक करें
+                        </button>
+                        <button type="button" class="btn btn-outline btn-block" data-close="overlayTokenSuccess">ठीक है (बंद करें)</button>
                     </div>
                 </div>
             </div>
@@ -6458,7 +6461,7 @@ const DEFAULT_SAMASYA_FALLBACK = [
                     headers: { 'x-admin-key': adminKey || '' }
                 } : {};
                 const ctrl = new AbortController();
-                const timeoutId = setTimeout(() => ctrl.abort(), 1800);
+                const timeoutId = setTimeout(() => ctrl.abort(), 6000);
                 opts.signal = ctrl.signal;
                 const res = await fetch(API + path, opts);
                 clearTimeout(timeoutId);
@@ -6477,10 +6480,15 @@ const DEFAULT_SAMASYA_FALLBACK = [
             if (path === '/config') return villageConfig;
             if (path === '/samasya') return getLocalData('samasya', DEFAULT_SAMASYA_FALLBACK);
             if (path.startsWith('/samasya/track/')) {
-                const q = decodeURIComponent(path.replace('/samasya/track/', '')).trim().toUpperCase();
+                const rawQ = decodeURIComponent(path.replace('/samasya/track/', '')).trim();
+                const q = rawQ.toUpperCase();
                 const list = getLocalData('samasya', DEFAULT_SAMASYA_FALLBACK);
-                const matches = list.filter(item => item.token?.toUpperCase() === q || item.mobile === q);
-                if (matches.length > 0) return { success: true, items: matches };
+                const matches = list.filter(item => {
+                    const tok = String(item.token || '').trim().toUpperCase();
+                    const mob = String(item.mobile || item.phone || '').trim();
+                    return tok === q || mob === rawQ;
+                });
+                if (matches.length > 0) return { success: true, ok: true, items: matches };
                 return null;
             }
             return null;
@@ -6941,8 +6949,33 @@ async function searchTrackComplaint(){
   wrap.style.display = 'block';
   wrap.innerHTML = `<div style="text-align:center; padding:16px; font-size:.85rem; color:var(--ink-soft);">🔍 स्थिति जांची जा रही है...</div>`;
 
-  const res = await apiGet('/samasya/track/' + encodeURIComponent(query));
-  if(!res || !res.ok || !res.items || res.items.length === 0){
+  let items = [];
+  try {
+    const res = await apiGet('/samasya/track/' + encodeURIComponent(query));
+    if (Array.isArray(res)) {
+      items = res;
+    } else if (res && Array.isArray(res.items)) {
+      items = res.items;
+    } else if (res && res.item) {
+      items = [res.item];
+    }
+  } catch(e) {
+    console.warn('Track fetch error:', e);
+  }
+
+  // Fallback to local data if server returned nothing
+  if (items.length === 0) {
+    const rawQ = query.trim();
+    const qUpper = rawQ.toUpperCase();
+    const sourceList = (samasyaList && samasyaList.length > 0) ? samasyaList : getLocalData('samasya', DEFAULT_SAMASYA_FALLBACK);
+    items = sourceList.filter(item => {
+      const tok = String(item.token || '').trim().toUpperCase();
+      const mob = String(item.mobile || item.phone || '').trim();
+      return tok === qUpper || mob === rawQ;
+    });
+  }
+
+  if(!items || items.length === 0){
     lastTrackedItems = [];
     wrap.innerHTML = `
       <div class="track-result-card" style="text-align:center; padding:18px;">
@@ -6953,11 +6986,11 @@ async function searchTrackComplaint(){
     return;
   }
 
-  lastTrackedItems = res.items;
-  wrap.innerHTML = res.items.map(item => {
+  lastTrackedItems = items;
+  wrap.innerHTML = items.map(item => {
     const isDoneNayi = true;
-    const isDoneProg = item.status === 'progress' || item.status === 'solved';
-    const isDoneSolved = item.status === 'solved';
+    const isDoneProg = item.status === 'progress' || item.status === 'solved' || item.status === 'प्रगति पर' || item.status === 'समाधान हुआ';
+    const isDoneSolved = item.status === 'solved' || item.status === 'समाधान हुआ';
     const cat = CATEGORIES.find(c => c.id === item.category);
 
     return `
@@ -7102,11 +7135,19 @@ document.getElementById('trackResultWrap').addEventListener('click', async (e) =
     sendBtn.disabled = false;
     inp.disabled = false;
 
-    if(res && res.ok){
+    if(res && (res.ok || res.success || res.message)){
       inp.value = '';
+      const newMsg = res.message || {
+        sender: adminKey ? 'pradhan' : 'user',
+        senderName,
+        text,
+        date: Date.now()
+      };
       if(item){
         if(!Array.isArray(item.messages)) item.messages = [];
-        item.messages.push(res.message);
+        item.messages.push(newMsg);
+        if(!Array.isArray(item.replies)) item.replies = [];
+        item.replies.push(newMsg);
       }
       const chatBox = document.getElementById('trackChatMsgs_' + token);
       if(chatBox && item){
@@ -7171,9 +7212,11 @@ document.getElementById('trackResultWrap').addEventListener('click', async (e) =
 
     const res = await apiSend('DELETE', '/samasya/' + encodeURIComponent(token), { token }, !!adminKey, { 'x-user-token': token });
     if(res && res.unauthorized){ adminLogout(); return; }
-    if(res && res.ok){
+    if(res && (res.ok || res.success)){
       samasyaList = samasyaList.filter(s => s.id !== id && s.token !== token);
       lastTrackedItems = lastTrackedItems.filter(s => s.id !== id && s.token !== token);
+      const localList = getLocalData('samasya', DEFAULT_SAMASYA_FALLBACK);
+      setLocalData('samasya', localList.filter(s => s.id !== id && s.token !== token));
       renderCatGrid();
       renderSamasyaList();
       toast('समस्या व ट्रैक आईडी हमेशा के लिए हटा दी गई ✅');
@@ -7264,7 +7307,7 @@ document.getElementById('formEditSamasya').addEventListener('submit', async (e) 
   saveBtn.disabled = false;
   saveBtn.textContent = '💾 बदलाव सुरक्षित करें';
 
-  if(res && res.ok){
+  if(res && (res.ok || res.success || res.item)){
     closeOverlay('overlayEditSamasya');
     toast('शिकायत में सफलतापूर्वक सुधार हो गया ✅');
 
@@ -7276,6 +7319,16 @@ document.getElementById('formEditSamasya').addEventListener('submit', async (e) 
       if(payload.photo !== undefined) found.photo = payload.photo;
       renderCatGrid();
       renderSamasyaList();
+    }
+
+    // Also update in LocalStorage
+    const localList = getLocalData('samasya', DEFAULT_SAMASYA_FALLBACK);
+    const locItem = localList.find(s => s.token === token || s.id === token);
+    if(locItem){
+      locItem.desc = desc;
+      locItem.category = category;
+      if(payload.photo !== undefined) locItem.photo = payload.photo;
+      setLocalData('samasya', localList);
     }
 
     // Refresh tracker
@@ -7385,6 +7438,20 @@ document.getElementById('btnShareTokenWa').addEventListener('click', () => {
   window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`, '_blank');
 });
 
+const btnTrackModal = document.getElementById('btnTrackFromModal');
+if(btnTrackModal){
+  btnTrackModal.addEventListener('click', async () => {
+    closeOverlay('overlayTokenSuccess');
+    const inp = document.getElementById('trackInput');
+    if(inp && currentSavedToken){
+      inp.value = currentSavedToken;
+      const trackCard = document.getElementById('samasyaTrackerCard') || inp;
+      if(trackCard) trackCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      await searchTrackComplaint();
+    }
+  });
+}
+
 function renderSamasyaList(){
   const wrap = document.getElementById('samasyaListWrap');
 
@@ -7450,18 +7517,36 @@ document.getElementById('samasyaListWrap').addEventListener('click', async (e)=>
   const remarkBtn = e.target.closest('[data-remark-id]');
   if(remarkBtn){
     const id = remarkBtn.dataset.remarkId;
-    const item = samasyaList.find(s=>s.id===id);
+    const item = samasyaList.find(s=>s.id===id || s.token===id);
     if(!item) return;
     const currentRemark = item.adminRemark || '';
     const newRemark = prompt('प्रधान जी की टिप्पणी / कार्यवाही दर्ज करें (Status & Action Remark):', currentRemark);
     if(newRemark===null) return;
-    const res = await apiSend('PATCH', '/samasya/'+id, {adminRemark: newRemark.trim()}, true);
+    const cleanRemark = newRemark.trim();
+    const res = await apiSend('PATCH', '/samasya/'+(item.id||id), {adminRemark: cleanRemark}, true);
     if(res && res.unauthorized){ adminLogout(); return; }
-    if(res){
-      item.adminRemark = res.adminRemark;
-      renderSamasyaList();
-      toast('टिप्पणी अपडेट हो गई ✅');
+    
+    const finalRemark = (res && res.item && res.item.adminRemark !== undefined)
+      ? res.item.adminRemark
+      : ((res && res.adminRemark !== undefined) ? res.adminRemark : cleanRemark);
+    
+    item.adminRemark = finalRemark;
+    
+    // Also save in LocalStorage so it persists
+    const localList = getLocalData('samasya', DEFAULT_SAMASYA_FALLBACK);
+    const locItem = localList.find(s=>s.id===id || s.token===id || (item.token && s.token===item.token));
+    if(locItem){
+      locItem.adminRemark = finalRemark;
+      setLocalData('samasya', localList);
     }
+    
+    renderCatGrid();
+    renderSamasyaList();
+    if(typeof searchTrackComplaint === 'function'){
+      const trkInp = document.getElementById('trackInput');
+      if(trkInp && trkInp.value) searchTrackComplaint();
+    }
+    toast('प्रधान जी की टिप्पणी सफलतापूर्वक सुरक्षित हो गई ✅');
     return;
   }
 
@@ -7471,8 +7556,10 @@ document.getElementById('samasyaListWrap').addEventListener('click', async (e)=>
     if(!confirm('क्या आप सच में इस समस्या को हटाना चाहते हैं?')) return;
     const res = await apiSend('DELETE', '/samasya/'+id, {}, true);
     if(res && res.unauthorized){ adminLogout(); return; }
-    if(res && res.ok){
-      samasyaList = samasyaList.filter(s=>s.id!==id);
+    if(res && (res.ok || res.success)){
+      samasyaList = samasyaList.filter(s=>s.id!==id && s.token!==id);
+      const localList = getLocalData('samasya', DEFAULT_SAMASYA_FALLBACK);
+      setLocalData('samasya', localList.filter(s=>s.id!==id && s.token!==id));
       renderCatGrid();
       renderSamasyaList();
       toast('समस्या हटा दी गई ✅');
@@ -7483,15 +7570,28 @@ document.getElementById('samasyaListWrap').addEventListener('click', async (e)=>
   const btn = e.target.closest('.status-cycle');
   if(!btn) return;
   const id = btn.dataset.id;
-  const item = samasyaList.find(s=>s.id===id);
+  const item = samasyaList.find(s=>s.id===id || s.token===id);
   if(!item) return;
-  const idx = STATUS_CYCLE.indexOf(item.status);
+  let idx = STATUS_CYCLE.indexOf(item.status);
+  if(idx === -1) idx = 0;
   const newStatus = STATUS_CYCLE[(idx+1)%STATUS_CYCLE.length];
-  const updated = await apiSend('PATCH', '/samasya/'+id, {status:newStatus}, true);
+  const updated = await apiSend('PATCH', '/samasya/'+(item.id||id), {status:newStatus}, true);
   if(updated && updated.unauthorized){ adminLogout(); return; }
-  if(updated) item.status = updated.status;
+  
+  const finalStatus = (updated && updated.item && updated.item.status)
+    ? updated.item.status
+    : ((updated && updated.status) ? updated.status : newStatus);
+    
+  item.status = finalStatus;
+  const localList = getLocalData('samasya', DEFAULT_SAMASYA_FALLBACK);
+  const locItem = localList.find(s=>s.id===id || s.token===id || (item.token && s.token===item.token));
+  if(locItem){
+    locItem.status = finalStatus;
+    setLocalData('samasya', localList);
+  }
   renderCatGrid();
   renderSamasyaList();
+  toast('शिकायत स्थिति बदल दी गई: ' + (STATUS_LABEL[finalStatus] || finalStatus) + ' ✅');
 });
 
 function closeLightbox(){
@@ -7572,18 +7672,77 @@ document.getElementById('fPhoto').addEventListener('change', (e)=>{
 });
 document.getElementById('formSamasya').addEventListener('submit', async (e)=>{
   e.preventDefault();
+  const phoneVal = (document.getElementById('fPhone') ? document.getElementById('fPhone').value.trim() : '');
+  const wardVal = (document.getElementById('fWard') ? document.getElementById('fWard').value : '');
+  const catVal = (document.getElementById('fCategory') ? document.getElementById('fCategory').value : 'अन्य');
+  const catObj = CATEGORIES.find(c => c.id === catVal);
   const payload = {
-    category: document.getElementById('fCategory').value,
+    category: catVal,
+    categoryLabel: catObj ? catObj.name : catVal,
     desc: document.getElementById('fDesc').value.trim(),
-    name: document.getElementById('fName').value.trim(),
-    phone: (document.getElementById('fPhone') ? document.getElementById('fPhone').value.trim() : ''),
+    name: (document.getElementById('fName') ? document.getElementById('fName').value.trim() : '') || 'गाँव का नागरिक',
+    ward: wardVal,
+    mobile: phoneVal,
+    phone: phoneVal,
+    status: 'nayi',
     photo: pendingPhotoBase64
   };
+
+  const submitBtn = e.target.querySelector('button[type="submit"]');
+  if(submitBtn) { submitBtn.disabled = true; submitBtn.textContent = 'दर्ज हो रहा है... ⏳'; }
+
   const result = await apiSend('POST', '/samasya', payload);
-  if(!result || !result.ok) return;
+  if(submitBtn) { submitBtn.disabled = false; submitBtn.textContent = 'समस्या दर्ज करें'; }
+
+  const isOk = result && (result.success || result.ok || result.token);
+  if(!isOk){
+    toast('समस्या दर्ज करने में त्रुटि हुई। कृपया दोबारा प्रयास करें ⚠️');
+    return;
+  }
+
+  const token = result.token || (result.item && result.item.token) || ('GP-' + Math.floor(10000 + Math.random() * 90000));
+  
+  // Close form overlay & reset inputs
   closeOverlay('overlaySamasya');
+  document.getElementById('formSamasya').reset();
+  pendingPhotoBase64 = null;
+  const photoPreview = document.getElementById('photoPreview');
+  if(photoPreview) { photoPreview.style.display = 'none'; photoPreview.src = ''; }
+  const photoLabel = document.getElementById('photoLabel');
+  if(photoLabel) photoLabel.textContent = '📷 फ़ोटो चुनने के लिए टैप करें';
+
+  const newItem = (result && result.item) ? result.item : {
+    id: 's-' + Date.now(),
+    token: token,
+    name: payload.name,
+    mobile: phoneVal,
+    phone: phoneVal,
+    ward: wardVal,
+    category: catVal,
+    categoryLabel: payload.categoryLabel,
+    desc: payload.desc,
+    status: 'nayi',
+    date: new Date().toLocaleDateString('hi-IN'),
+    adminRemark: '',
+    photo: payload.photo,
+    messages: []
+  };
+
+  // Add to in-memory list
+  samasyaList.unshift(newItem);
+
+  // Save to LocalStorage
+  const localList = getLocalData('samasya', DEFAULT_SAMASYA_FALLBACK);
+  localList.unshift(newItem);
+  setLocalData('samasya', localList);
+
+  renderCatGrid();
+  renderSamasyaList();
+
   if(adminKey) await loadSamasyaList();
-  showTokenModal(result.token, payload.phone, payload.desc);
+
+  // Show prominent token modal
+  showTokenModal(token, phoneVal, payload.desc);
 });
 
 /* ============ CHAUPAL (Community Social Feed) ============ */
@@ -8867,7 +9026,28 @@ function adminLogout(){
 async function loadSamasyaList(){
   const res = await apiGet('/samasya', true);
   if(res && res.unauthorized){ adminLogout(); return; }
-  samasyaList = res || [];
+  let list = [];
+  if (Array.isArray(res)) {
+    list = res;
+  } else if (res && Array.isArray(res.items)) {
+    list = res.items;
+  }
+  
+  // Merge with locally stored complaints so nothing is lost
+  const localList = getLocalData('samasya', DEFAULT_SAMASYA_FALLBACK);
+  if (list.length === 0 && localList.length > 0) {
+    list = localList;
+  } else if (localList.length > 0) {
+    const serverTokens = new Set(list.map(s => s.token || s.id));
+    localList.forEach(locItem => {
+      const key = locItem.token || locItem.id;
+      if (!serverTokens.has(key)) {
+        list.push(locItem);
+      }
+    });
+  }
+  
+  samasyaList = list || [];
   renderCatGrid();
   renderSamasyaList();
 }
@@ -10772,11 +10952,11 @@ if ('serviceWorker' in navigator) {
 }
 
 function isPwaInstalled() {
-  return window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  const installed = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  if (installed && installBtn) installBtn.style.display = 'none';
+  return installed;
 }
-
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
+window.addEventListener('DOMContentLoaded', isPwaInstalled);
   deferredInstallPrompt = e;
   if (!isPwaInstalled() && pwaBanner) {
     // pwaBanner suppressed per user request - top header button only
@@ -10785,7 +10965,7 @@ window.addEventListener('beforeinstallprompt', (e) => {
 
 async function triggerPwaInstall() {
   if (isPwaInstalled()) {
-    toast('à¤—à¥Œà¤°à¤•à¥‹à¤ à¥€ à¤à¤ª à¤†à¤ªà¤•à¥‡ à¤«à¤¼à¥‹à¤¨ à¤®à¥‡à¤‚ à¤ªà¤¹à¤²à¥‡ à¤¸à¥‡ à¤‡à¤‚à¤¸à¥à¤Ÿà¥‰à¤² à¤¹à¥ˆ! âœ…');
+    toast('\u0917\u094C\u0930\u0915\u094B\u0920\u0940 \u0910\u092A \u0906\u092A\u0915\u0947 \u0921\u093F\u0935\u093E\u0907\u0938 \u092A\u0930 \u092A\u0939\u0932\u0947 \u0938\u0947 \u0907\u0902\u0938\u094D\u091F\u0949\u0932 \u0939\u0948! \u2705');
     return;
   }
   if (deferredInstallPrompt) {
@@ -10793,7 +10973,7 @@ async function triggerPwaInstall() {
       deferredInstallPrompt.prompt();
       const choice = await deferredInstallPrompt.userChoice;
       if (choice && choice.outcome === 'accepted') {
-        toast('ðŸŽ‰ à¤—à¥Œà¤°à¤•à¥‹à¤ à¥€ à¤à¤ª à¤†à¤ªà¤•à¥‡ à¤«à¤¼à¥‹à¤¨ à¤®à¥‡à¤‚ à¤‡à¤‚à¤¸à¥à¤Ÿà¥‰à¤² à¤¹à¥‹ à¤°à¤¹à¥€ à¤¹à¥ˆ...');
+        toast('\uD83C\uDF89 \u0917\u094C\u0930\u0915\u094B\u0920\u0940 \u0910\u092A \u0907\u0902\u0938\u094D\u091F\u0949\u0932 \u0939\u094B \u0930\u0939\u0940 \u0939\u0948...');
         if (pwaBanner) pwaBanner.style.display = 'none';
         closeOverlay('overlayPwaGuide');
       }
@@ -10812,7 +10992,7 @@ async function triggerPwaInstall() {
         deferredInstallPrompt.prompt();
         const choice = await deferredInstallPrompt.userChoice;
         if (choice && choice.outcome === 'accepted') {
-          toast('ðŸŽ‰ à¤—à¥Œà¤°à¤•à¥‹à¤ à¥€ à¤à¤ª à¤†à¤ªà¤•à¥‡ à¤«à¤¼à¥‹à¤¨ à¤®à¥‡à¤‚ à¤‡à¤‚à¤¸à¥à¤Ÿà¥‰à¤² à¤¹à¥‹ à¤°à¤¹à¥€ à¤¹à¥ˆ...');
+        toast('\uD83C\uDF89 \u0917\u094C\u0930\u0915\u094B\u0920\u0940 \u0910\u092A \u0907\u0902\u0938\u094D\u091F\u0949\u0932 \u0939\u094B \u0930\u0939\u0940 \u0939\u0948...');
           if (pwaBanner) pwaBanner.style.display = 'none';
           closeOverlay('overlayPwaGuide');
         }

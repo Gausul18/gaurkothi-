@@ -297,25 +297,28 @@ app.post('/api/yojana', requireAdmin, (req, res) => {
 app.post('/api/samasya', (req, res) => {
   const list = readJson('samasya.json', []);
   const token = 'GP-' + Math.floor(10000 + Math.random() * 90000);
+  const phoneVal = String(req.body.mobile || req.body.phone || '').trim();
   const newItem = {
     id: 's-' + Date.now(),
     token,
     name: req.body.name || 'गाँव का नागरिक',
-    mobile: req.body.mobile || '',
+    mobile: phoneVal,
+    phone: phoneVal,
     ward: req.body.ward || '',
     category: req.body.category || 'अन्य',
     categoryLabel: req.body.categoryLabel || req.body.category || 'समस्या',
     title: req.body.title || 'जन समस्या',
     desc: req.body.desc || '',
-    status: 'लंबित',
+    status: req.body.status || 'nayi',
     date: new Date().toLocaleDateString('hi-IN'),
     adminRemark: '',
     photo: req.body.photo || null,
+    messages: [],
     replies: []
   };
   list.unshift(newItem);
   writeJson('samasya.json', list);
-  res.json({ success: true, token, item: newItem });
+  res.json({ success: true, ok: true, token, item: newItem });
 });
 
 app.get('/api/samasya', requireAdmin, (req, res) => {
@@ -324,26 +327,45 @@ app.get('/api/samasya', requireAdmin, (req, res) => {
 });
 
 app.get('/api/samasya/track/:query', (req, res) => {
-  const q = req.params.query.trim().toUpperCase();
+  const rawQ = req.params.query.trim();
+  const q = rawQ.toUpperCase();
   const list = readJson('samasya.json', []);
   const matches = list.filter(item => {
-    return item.token.toUpperCase() === q || item.mobile === q;
+    const tok = String(item.token || '').trim().toUpperCase();
+    const mob = String(item.mobile || item.phone || '').trim();
+    return tok === q || mob === rawQ;
   });
   if (matches.length > 0) {
-    return res.json({ success: true, items: matches });
+    return res.json({ success: true, ok: true, items: matches });
   }
-  return res.status(404).json({ error: 'इस टोकन या मोबाइल नंबर से कोई शिकायत नहीं मिली।' });
+  return res.status(404).json({ success: false, ok: false, error: 'इस टोकन या मोबाइल नंबर से कोई शिकायत नहीं मिली।' });
 });
 
 app.patch('/api/samasya/:id', requireAdmin, (req, res) => {
   const list = readJson('samasya.json', []);
   const item = list.find(s => s.id === req.params.id || s.token === req.params.id);
-  if (!item) return res.status(404).json({ error: 'शिकायत नहीं मिली।' });
+  if (!item) return res.status(404).json({ success: false, ok: false, error: 'शिकायत नहीं मिली।' });
 
   if (req.body.status) item.status = req.body.status;
   if (req.body.adminRemark !== undefined) item.adminRemark = req.body.adminRemark;
+  if (req.body.title) item.title = req.body.title;
+  if (req.body.desc) item.desc = req.body.desc;
+  if (req.body.photo !== undefined) item.photo = req.body.photo;
   writeJson('samasya.json', list);
-  res.json({ success: true, item });
+  res.json({ success: true, ok: true, item, adminRemark: item.adminRemark, status: item.status });
+});
+
+app.patch('/api/samasya/:token/user-edit', (req, res) => {
+  const list = readJson('samasya.json', []);
+  const token = req.params.token;
+  const item = list.find(s => s.token === token || s.id === token);
+  if (!item) return res.status(404).json({ success: false, ok: false, error: 'शिकायत नहीं मिली।' });
+
+  if (req.body.desc) item.desc = req.body.desc;
+  if (req.body.category) item.category = req.body.category;
+  if (req.body.photo !== undefined) item.photo = req.body.photo;
+  writeJson('samasya.json', list);
+  res.json({ success: true, ok: true, item });
 });
 
 app.delete('/api/samasya/:token', (req, res) => {
@@ -351,23 +373,29 @@ app.delete('/api/samasya/:token', (req, res) => {
   const token = req.params.token;
   list = list.filter(s => s.token !== token && s.id !== token);
   writeJson('samasya.json', list);
-  res.json({ success: true });
+  res.json({ success: true, ok: true });
 });
 
 app.post('/api/samasya/:token/reply', (req, res) => {
   const list = readJson('samasya.json', []);
   const token = req.params.token;
   const item = list.find(s => s.token === token || s.id === token);
-  if (!item) return res.status(404).json({ error: 'शिकायत नहीं मिली।' });
+  if (!item) return res.status(404).json({ success: false, ok: false, error: 'शिकायत नहीं मिली।' });
   item.replies = item.replies || [];
+  item.messages = item.messages || [];
+  const senderType = (req.body.sender === 'pradhan' || req.headers['x-admin-key']) ? 'pradhan' : 'user';
   const reply = {
-    by: req.body.by || 'नागरिक',
+    sender: senderType,
+    senderName: req.body.senderName || (senderType === 'pradhan' ? 'प्रधान जी' : 'नागरिक'),
+    by: req.body.senderName || (senderType === 'pradhan' ? 'प्रधान जी' : 'नागरिक'),
     text: req.body.text,
-    time: new Date().toLocaleTimeString('hi-IN')
+    time: new Date().toLocaleTimeString('hi-IN'),
+    date: Date.now()
   };
   item.replies.push(reply);
+  item.messages.push(reply);
   writeJson('samasya.json', list);
-  res.json({ success: true, item, message: reply });
+  res.json({ success: true, ok: true, item, message: reply });
 });
 
 // Serve frontend static assets from public/ or root ./
