@@ -345,7 +345,13 @@ app.get('/api/samasya/track/:query', (req, res) => {
 
 app.patch('/api/samasya/:id', requireAdmin, (req, res) => {
   const list = readJson('samasya.json', []);
-  const item = list.find(s => s.id === req.params.id || s.token === req.params.id);
+  const target = String(req.params.id).trim();
+  const cleanTarget = target.replace(/^GP-?/i, '').replace(/[^0-9A-Z]/g, '');
+  const item = list.find(s => {
+    const tok = String(s.token || '').trim();
+    const cleanTok = tok.replace(/^GP-?/i, '').replace(/[^0-9A-Z]/g, '');
+    return s.id === target || tok === target || (cleanTarget && cleanTok === cleanTarget);
+  });
   if (!item) return res.status(404).json({ success: false, ok: false, error: 'शिकायत नहीं मिली।' });
 
   if (req.body.status) item.status = req.body.status;
@@ -353,6 +359,25 @@ app.patch('/api/samasya/:id', requireAdmin, (req, res) => {
   if (req.body.title) item.title = req.body.title;
   if (req.body.desc) item.desc = req.body.desc;
   if (req.body.photo !== undefined) item.photo = req.body.photo;
+
+  // Auto notification in chat thread when status changes
+  if (req.body.status) {
+    item.replies = item.replies || [];
+    item.messages = item.messages || [];
+    const statusLabelHi = req.body.status === 'progress' ? 'प्रगति पर (कार्य जारी)' : (req.body.status === 'solved' ? 'समाधान हुआ (कार्य पूर्ण)' : 'नई (लंबित)');
+    const statusNote = `👑 ग्राम प्रधान द्वारा स्थिति अपडेट: कार्य अब "${statusLabelHi}" है।${req.body.adminRemark ? `\nटिप्पणी: ${req.body.adminRemark}` : ''}`;
+    const autoMsg = {
+      sender: 'pradhan',
+      senderName: '👑 ग्राम प्रधान',
+      by: '👑 ग्राम प्रधान',
+      text: statusNote,
+      time: new Date().toLocaleTimeString('hi-IN'),
+      date: Date.now()
+    };
+    item.replies.push(autoMsg);
+    item.messages.push(autoMsg);
+  }
+
   writeJson('samasya.json', list);
   res.json({ success: true, ok: true, item, adminRemark: item.adminRemark, status: item.status });
 });

@@ -657,8 +657,9 @@
         }
         
         .status-progress {
-            background: #FBF0D6;
-            color: #8a6a10;
+            background: #FEF3C7;
+            color: #92400E;
+            border: 1px solid #F59E0B;
         }
         
         .status-solved {
@@ -671,6 +672,15 @@
             border: none;
             touch-action: manipulation;
             -webkit-tap-highlight-color: transparent;
+        }
+
+        .btn-set-status {
+            transition: all 0.15s ease-in-out;
+            user-select: none;
+            touch-action: manipulation;
+        }
+        .btn-set-status:active {
+            transform: scale(0.96);
         }
         
         .empty-state {
@@ -4548,7 +4558,7 @@
 
             <!-- ===================== SAMASYA PANEL ===================== -->
             <section class="panel active" id="panel-samasya">
-                <div class="panel-head">
+                <div class="panel-head" id="samasyaPanelHead">
                     <h2>अपनी समस्या बताएं</h2>
                     <p>श्रेणी चुनें और फ़ोटो के साथ समस्या दर्ज करें — सिर्फ गाँव के प्रधान ही इसे देख पाएंगे।</p>
                 </div>
@@ -6274,7 +6284,11 @@ setLanguage(currentLang);
         const STATUS_LABEL = {
             nayi: 'नई (लंबित)',
             progress: 'प्रगति पर',
-            solved: 'समाधान हुआ'
+            solved: 'समाधान हुआ',
+            'नई (लंबित)': 'नई (लंबित)',
+            'प्रगति पर': 'प्रगति पर',
+            'समाधान हुआ': 'समाधान हुआ',
+            'लंबित': 'नई (लंबित)'
         };
 
         let samasyaList = [];
@@ -6940,6 +6954,89 @@ function renderChatMessagesHtml(item){
   }).join('');
 }
 
+async function changeComplaintStatus(idOrToken, newStatus, optionalRemark){
+  if(!adminKey){
+    toast('कार्य की स्थिति बदलने के लिए कृपया पहले प्रधान लॉगिन करें 🔐');
+    return false;
+  }
+
+  let item = samasyaList.find(s => s.id === idOrToken || s.token === idOrToken);
+  if(!item && typeof lastTrackedItems !== 'undefined' && Array.isArray(lastTrackedItems)){
+    item = lastTrackedItems.find(s => s.id === idOrToken || s.token === idOrToken);
+  }
+
+  const targetId = (item && item.id) ? item.id : idOrToken;
+  const payload = { status: newStatus };
+  if(optionalRemark !== undefined && optionalRemark !== null && optionalRemark.trim() !== ''){
+    payload.adminRemark = optionalRemark.trim();
+  }
+
+  const res = await apiSend('PATCH', '/samasya/' + encodeURIComponent(targetId), payload, true);
+  if(res && res.unauthorized){
+    adminLogout();
+    return false;
+  }
+
+  const finalStatus = (res && res.item && res.item.status) ? res.item.status : newStatus;
+  const finalRemark = (res && res.item && res.item.adminRemark !== undefined)
+    ? res.item.adminRemark
+    : (addedRemark !== undefined ? addedRemark : (item ? item.adminRemark : ''));
+
+  if(item){
+    item.status = finalStatus;
+    if(finalRemark !== undefined) item.adminRemark = finalRemark;
+  }
+
+  const matched = samasyaList.find(s => s.id === targetId || s.token === targetId || (item && item.token && s.token === item.token));
+  if(matched){
+    matched.status = finalStatus;
+    if(finalRemark !== undefined) matched.adminRemark = finalRemark;
+  }
+
+  const localList = getLocalData('samasya', DEFAULT_SAMASYA_FALLBACK);
+  const locItem = localList.find(s => s.id === targetId || s.token === targetId || (item && item.token && s.token === item.token));
+  if(locItem){
+    locItem.status = finalStatus;
+    if(finalRemark !== undefined) locItem.adminRemark = finalRemark;
+    setLocalData('samasya', localList);
+  }
+
+  // Push official update to chat thread in memory
+  const statusLabelHi = (finalStatus === 'progress' || finalStatus === 'प्रगति पर')
+    ? 'प्रगति पर (कार्य जारी)'
+    : ((finalStatus === 'solved' || finalStatus === 'समाधान हुआ') ? 'समाधान हुआ (कार्य पूर्ण)' : 'नई (लंबित)');
+  const statusNote = `👑 ग्राम प्रधान द्वारा स्थिति अपडेट: कार्य अब "${statusLabelHi}" है।${finalRemark ? `\nटिप्पणी: ${finalRemark}` : ''}`;
+  const autoMsg = {
+    sender: 'pradhan',
+    senderName: '👑 ग्राम प्रधान',
+    by: '👑 ग्राम प्रधान',
+    text: statusNote,
+    time: new Date().toLocaleTimeString('hi-IN'),
+    date: Date.now()
+  };
+
+  [item, matched, locItem].forEach(it => {
+    if(it){
+      it.messages = it.messages || [];
+      it.replies = it.replies || [];
+      it.messages.push(autoMsg);
+      it.replies.push(autoMsg);
+    }
+  });
+
+  renderCatGrid();
+  renderSamasyaList();
+
+  const trkInp = document.getElementById('trackInput');
+  if(trkInp && trkInp.value.trim() && typeof searchTrackComplaint === 'function'){
+    searchTrackComplaint();
+  }
+
+  const statusName = STATUS_LABEL[finalStatus] || finalStatus;
+  toast(`कार्य की स्थिति '${statusName}' अपडेट कर दी गई ✅ ग्रामीणों को अब यह दिखेगी!`);
+  return true;
+}
+
 async function searchTrackComplaint(){
   const input = document.getElementById('trackInput');
   const query = (input ? input.value : '').trim();
@@ -7013,7 +7110,7 @@ async function searchTrackComplaint(){
       <div class="track-result-card" id="trackCard_${escapeHtml(item.token)}">
         <div class="track-card-head">
           <span class="track-token-badge">🎫 ${escapeHtml(item.token || 'GP')}</span>
-          <span class="status-pill status-${item.status}">${STATUS_LABEL[item.status] || item.status}</span>
+          <span class="status-pill status-${item.status}">${(item.status==='progress'||item.status==='प्रगति पर')?'⏳ ':((item.status==='solved'||item.status==='समाधान हुआ')?'✅ ':'🆕 ')}${STATUS_LABEL[item.status] || item.status}</span>
         </div>
 
         <div class="tracker-stepper">
@@ -7033,6 +7130,31 @@ async function searchTrackComplaint(){
           </div>
         </div>
 
+        ${adminKey ? `
+          <!-- Pradhan Direct Status Control in Tracker Card -->
+          <div class="admin-track-status-box" style="margin: 12px 0; padding: 10px 12px; background: #FFFBEB; border: 1.5px solid #FCD34D; border-radius: 8px;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; flex-wrap: wrap; gap: 4px;">
+              <span style="font-weight: 800; font-size: .84rem; color: #92400E; display: inline-flex; align-items: center; gap: 4px;">
+                👑 प्रधान जी: कार्य की स्थिति बदलें (नागरिकों को दिखेगा):
+              </span>
+              <span style="font-size: .76rem; font-weight: 700; color: #78350F; background: #FEF3C7; padding: 3px 8px; border-radius: 6px; border: 1px solid #FDE68A;">
+                वर्तमान: ${(item.status === 'progress' || item.status === 'प्रगति पर') ? '⏳ प्रगति पर' : ((item.status === 'solved' || item.status === 'समाधान हुआ') ? '✅ समाधान हुआ' : '🆕 नई (लंबित)')}
+              </span>
+            </div>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <button type="button" class="btn-set-status btn-status-progress" data-status-val="progress" data-samasya-id="${item.id}" data-samasya-token="${escapeHtml(item.token||'')}" style="flex: 1; min-width: 120px; padding: 8px 12px; border-radius: 6px; font-weight: 800; font-size: .82rem; border: 1.5px solid #D97706; background: ${(item.status==='progress'||item.status==='प्रगति पर') ? '#D97706' : '#FFFFFF'}; color: ${(item.status==='progress'||item.status==='प्रगति पर') ? '#FFFFFF' : '#92400E'}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.06);">
+                ⏳ प्रगति पर करें
+              </button>
+              <button type="button" class="btn-set-status btn-status-solved" data-status-val="solved" data-samasya-id="${item.id}" data-samasya-token="${escapeHtml(item.token||'')}" style="flex: 1; min-width: 120px; padding: 8px 12px; border-radius: 6px; font-weight: 800; font-size: .82rem; border: 1.5px solid #059669; background: ${(item.status==='solved'||item.status==='समाधान हुआ') ? '#059669' : '#FFFFFF'}; color: ${(item.status==='solved'||item.status==='समाधान हुआ') ? '#FFFFFF' : '#065F46'}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.06);">
+                ✅ समाधान हुआ
+              </button>
+              <button type="button" class="btn-set-status btn-status-nayi" data-status-val="nayi" data-samasya-id="${item.id}" data-samasya-token="${escapeHtml(item.token||'')}" style="flex: 1; min-width: 100px; padding: 8px 10px; border-radius: 6px; font-weight: 800; font-size: .82rem; border: 1.5px solid #DC2626; background: ${(item.status==='nayi'||item.status==='नई (लंबित)') ? '#DC2626' : '#FFFFFF'}; color: ${(item.status==='nayi'||item.status==='नई (लंबित)') ? '#FFFFFF' : '#991B1B'}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.06);">
+                🆕 नई / लंबित
+              </button>
+            </div>
+          </div>
+        ` : ''}
+
         <div class="track-details">
           <p><strong>श्रेणी:</strong> ${cat ? cat.icon + ' ' + cat.name : item.category}</p>
           <p><strong>विवरण:</strong> ${escapeHtml(item.desc)}</p>
@@ -7048,14 +7170,18 @@ async function searchTrackComplaint(){
         ${item.adminRemark ? `
           <div class="track-admin-remark">
             <span style="font-size:1.2rem;">👑</span>
-            <div>
-              <strong style="font-size:.82rem; color:var(--indigo-dark);">प्रधान जी का संदेश / कार्यवाही:</strong>
-              <p>${escapeHtml(item.adminRemark)}</p>
+            <div style="flex:1;">
+              <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:4px;">
+                <strong style="font-size:.82rem; color:var(--indigo-dark);">प्रधान जी का संदेश / कार्यवाही:</strong>
+                ${adminKey ? `<button type="button" class="btn-track-remark" data-remark-id="${item.id||item.token}" style="font-size:.74rem; font-weight:700; padding:2px 8px; border:1px solid #C7D2FE; background:#EEF2FF; border-radius:4px; cursor:pointer;">✍️ टिप्पणी बदलें</button>` : ''}
+              </div>
+              <p style="margin:4px 0 0;">${escapeHtml(item.adminRemark)}</p>
             </div>
           </div>
         ` : `
-          <div class="track-admin-pending">
-            ⏳ <em>प्रधान जी द्वारा कार्यवाही जारी है। जल्द ही अपडेट दिया जाएगा।</em>
+          <div class="track-admin-pending" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:6px;">
+            <span>⏳ <em>प्रधान जी द्वारा कार्यवाही जारी है। जल्द ही अपडेट दिया जाएगा।</em></span>
+            ${adminKey ? `<button type="button" class="btn-track-remark" data-remark-id="${item.id||item.token}" style="font-size:.74rem; padding:4px 9px; border:1px solid #FDE68A; background:#FFFBEB; border-radius:4px; cursor:pointer; font-weight:700;">✍️ प्रधान जी की टिप्पणी जोड़ें</button>` : ''}
           </div>
         `}
 
@@ -7082,9 +7208,9 @@ async function searchTrackComplaint(){
                    data-chat-token="${escapeHtml(item.token)}" 
                    data-chat-id="${item.id}" />
             <button type="button" 
-                    class="track-chat-send-btn" 
-                    data-chat-send-token="${escapeHtml(item.token)}" 
-                    data-chat-send-id="${item.id}">
+                   class="track-chat-send-btn" 
+                   data-chat-send-token="${escapeHtml(item.token)}" 
+                   data-chat-send-id="${item.id}">
               <span>भेजें</span> <span>✈️</span>
             </button>
           </div>
@@ -7104,7 +7230,7 @@ async function searchTrackComplaint(){
   }).join('');
 
   // Auto scroll chat boxes to bottom
-  res.items.forEach(it => {
+  items.forEach(it => {
     const box = document.getElementById('trackChatMsgs_' + it.token);
     if(box) box.scrollTop = box.scrollHeight;
   });
@@ -7238,6 +7364,41 @@ document.getElementById('trackResultWrap').addEventListener('click', async (e) =
       toast('समस्या व ट्रैक आईडी हमेशा के लिए हटा दी गई ✅');
       searchTrackComplaint();
     }
+    return;
+  }
+
+  // 5. Direct Status Changer from Tracker Card
+  const trackStatusBtn = e.target.closest('[data-status-val]');
+  if(trackStatusBtn){
+    const sVal = trackStatusBtn.dataset.statusVal;
+    const sId = trackStatusBtn.dataset.samasyaId || trackStatusBtn.dataset.samasyaToken;
+    await changeComplaintStatus(sId, sVal);
+    return;
+  }
+
+  // 6. Pradhan Remark from Tracker Card
+  const trackRemarkBtn = e.target.closest('.btn-track-remark');
+  if(trackRemarkBtn){
+    const rId = trackRemarkBtn.dataset.remarkId;
+    const item = (typeof lastTrackedItems !== 'undefined' && lastTrackedItems.find(s => s.id === rId || s.token === rId)) || samasyaList.find(s => s.id === rId || s.token === rId);
+    if(!item) return;
+    const cur = item.adminRemark || '';
+    const newRem = prompt('प्रधान जी की टिप्पणी / कार्यवाही संदेश दर्ज करें (Action Remark):', cur);
+    if(newRem === null) return;
+    const cleanRem = newRem.trim();
+    const res = await apiSend('PATCH', '/samasya/' + encodeURIComponent(item.id || rId), { adminRemark: cleanRem }, true);
+    if(res && res.unauthorized){ adminLogout(); return; }
+    item.adminRemark = cleanRem;
+    const localList = getLocalData('samasya', DEFAULT_SAMASYA_FALLBACK);
+    const locItem = localList.find(s => s.id === rId || s.token === rId || (item.token && s.token === item.token));
+    if(locItem){
+      locItem.adminRemark = cleanRem;
+      setLocalData('samasya', localList);
+    }
+    renderCatGrid();
+    renderSamasyaList();
+    searchTrackComplaint();
+    toast('प्रधान जी की टिप्पणी सुरक्षित हो गई ✅');
     return;
   }
 });
@@ -7470,6 +7631,25 @@ if(btnTrackModal){
 
 function renderSamasyaList(){
   const wrap = document.getElementById('samasyaListWrap');
+  const trackerCard = document.getElementById('samasyaTrackerCard');
+  if(trackerCard){
+    trackerCard.style.display = adminKey ? 'none' : 'block';
+  }
+
+  const headEl = document.getElementById('samasyaPanelHead');
+  if(headEl){
+    if(adminKey){
+      headEl.innerHTML = `
+        <h2>👑 गाँव की समस्याएं (प्रधान कक्ष)</h2>
+        <p>गाँव के नागरिकों द्वारा दर्ज सभी समस्याएं — यहाँ से स्थिति बदलें (प्रगति पर / समाधान हुआ) और कार्यवाही दर्ज करें।</p>
+      `;
+    } else {
+      headEl.innerHTML = `
+        <h2>अपनी समस्या बताएं</h2>
+        <p>श्रेणी चुनें और फ़ोटो के साथ समस्या दर्ज करें — सिर्फ गाँव के प्रधान ही इसे देख पाएंगे।</p>
+      `;
+    }
+  }
 
   renderAdminDashboard();
 
@@ -7508,14 +7688,86 @@ document.getElementById('samasyaListWrap').addEventListener('click', async (e)=>
   const chatOpenBtn = e.target.closest('[data-open-chat-token]');
   if(chatOpenBtn){
     const token = chatOpenBtn.dataset.openChatToken;
-    const inp = document.getElementById('trackInput');
-    if(inp){
-      inp.value = token;
-      await searchTrackComplaint();
-      const card = document.getElementById('trackCard_' + token);
-      if(card){
-        card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    const drawer = document.getElementById('chatDrawer_' + token);
+    if(drawer){
+      const isHidden = (drawer.style.display === 'none' || !drawer.style.display);
+      drawer.style.display = isHidden ? 'block' : 'none';
+      if(isHidden){
+        const box = document.getElementById('cardChatMsgs_' + token);
+        if(box) box.scrollTop = box.scrollHeight;
+        const inp = document.getElementById('cardChatInp_' + token);
+        if(inp) inp.focus();
       }
+    } else {
+      const inp = document.getElementById('trackInput');
+      if(inp){
+        inp.value = token;
+        await searchTrackComplaint();
+        const card = document.getElementById('trackCard_' + token);
+        if(card){
+          card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+    }
+    return;
+  }
+
+  const chatCloseBtn = e.target.closest('[data-toggle-chat-token]');
+  if(chatCloseBtn){
+    const token = chatCloseBtn.dataset.toggleChatToken;
+    const drawer = document.getElementById('chatDrawer_' + token);
+    if(drawer) drawer.style.display = 'none';
+    return;
+  }
+
+  const sendChatBtn = e.target.closest('[data-send-chat-token]');
+  if(sendChatBtn){
+    const token = sendChatBtn.dataset.sendChatToken;
+    const inp = document.getElementById('cardChatInp_' + token);
+    if(!inp) return;
+    const text = inp.value.trim();
+    if(!text) return;
+
+    sendChatBtn.disabled = true;
+    inp.disabled = true;
+
+    const res = await apiSend('POST', '/samasya/' + encodeURIComponent(token) + '/reply', {
+      text,
+      token,
+      senderName: '👑 ग्राम प्रधान'
+    }, true);
+
+    sendChatBtn.disabled = false;
+    inp.disabled = false;
+
+    if(res && (res.ok || res.success || res.message)){
+      inp.value = '';
+      const newMsg = res.message || {
+        sender: 'pradhan',
+        senderName: '👑 ग्राम प्रधान',
+        text,
+        date: Date.now()
+      };
+      const item = samasyaList.find(s => s.token === token || s.id === token);
+      if(item){
+        item.messages = item.messages || [];
+        item.messages.push(newMsg);
+        item.replies = item.replies || [];
+        item.replies.push(newMsg);
+        const localList = getLocalData('samasya', DEFAULT_SAMASYA_FALLBACK);
+        const locItem = localList.find(s => s.token === token || s.id === token);
+        if(locItem){
+          locItem.messages = item.messages;
+          locItem.replies = item.replies;
+          setLocalData('samasya', localList);
+        }
+      }
+      const box = document.getElementById('cardChatMsgs_' + token);
+      if(box && item){
+        box.innerHTML = renderChatMessagesHtml(item);
+        box.scrollTop = box.scrollHeight;
+      }
+      toast('संदेश भेजा गया 📩');
     }
     return;
   }
@@ -7583,31 +7835,37 @@ document.getElementById('samasyaListWrap').addEventListener('click', async (e)=>
     return;
   }
 
+  const statusBtn = e.target.closest('[data-status-val]');
+  if(statusBtn){
+    const sVal = statusBtn.dataset.statusVal;
+    const sId = statusBtn.dataset.samasyaId || statusBtn.dataset.samasyaToken;
+    await changeComplaintStatus(sId, sVal);
+    return;
+  }
+
   const btn = e.target.closest('.status-cycle');
   if(!btn) return;
   const id = btn.dataset.id;
   const item = samasyaList.find(s=>s.id===id || s.token===id);
   if(!item) return;
+  if(!adminKey){
+    toast('शिकायत की वर्तमान स्थिति: ' + (STATUS_LABEL[item.status] || item.status));
+    return;
+  }
   let idx = STATUS_CYCLE.indexOf(item.status);
   if(idx === -1) idx = 0;
   const newStatus = STATUS_CYCLE[(idx+1)%STATUS_CYCLE.length];
-  const updated = await apiSend('PATCH', '/samasya/'+(item.id||id), {status:newStatus}, true);
-  if(updated && updated.unauthorized){ adminLogout(); return; }
-  
-  const finalStatus = (updated && updated.item && updated.item.status)
-    ? updated.item.status
-    : ((updated && updated.status) ? updated.status : newStatus);
-    
-  item.status = finalStatus;
-  const localList = getLocalData('samasya', DEFAULT_SAMASYA_FALLBACK);
-  const locItem = localList.find(s=>s.id===id || s.token===id || (item.token && s.token===item.token));
-  if(locItem){
-    locItem.status = finalStatus;
-    setLocalData('samasya', localList);
+  await changeComplaintStatus(item.id || id, newStatus);
+});
+
+// Card chat input Enter key event
+document.getElementById('samasyaListWrap').addEventListener('keydown', (e) => {
+  if(e.key === 'Enter' && e.target.classList.contains('card-chat-input')){
+    e.preventDefault();
+    const token = e.target.id.replace('cardChatInp_', '');
+    const sendBtn = document.querySelector(`[data-send-chat-token="${token}"]`);
+    if(sendBtn) sendBtn.click();
   }
-  renderCatGrid();
-  renderSamasyaList();
-  toast('शिकायत स्थिति बदल दी गई: ' + (STATUS_LABEL[finalStatus] || finalStatus) + ' ✅');
 });
 
 function closeLightbox(){
@@ -7622,12 +7880,17 @@ document.getElementById('photoLightbox').addEventListener('click', (e)=>{
 function renderItemCard(s){
   const cat = CATEGORIES.find(c=>c.id===s.category);
   const photoStyle = s.photo ? `background-image:url('${s.photo}')` : '';
+  const isProg = s.status === 'progress' || s.status === 'प्रगति पर';
+  const isSolv = s.status === 'solved' || s.status === 'समाधान हुआ';
+  const isNayi = !isProg && !isSolv;
+  const currentStatusDisplay = isProg ? '⏳ प्रगति पर' : (isSolv ? '✅ समाधान हुआ' : '🆕 नई (लंबित)');
+
   return `<div class="item-card">
     <div class="item-photo ${s.photo?'has-photo':''}" style="${photoStyle}" ${s.photo?`data-photo-id="${s.id}"`:''}>${s.photo?'':(cat?cat.icon:'📷')}</div>
     <div class="item-body">
       <div class="item-top">
         <span class="item-cat">${cat?cat.icon+' '+cat.name:''} <span class="token-pill">🎫 ${escapeHtml(s.token || 'GP')}</span></span>
-        <button class="status-pill status-cycle status-${s.status}" data-id="${s.id}" title="स्थिति बदलने के लिए क्लिक करें">${STATUS_LABEL[s.status]}</button>
+        <button class="status-pill status-cycle status-${s.status}" data-id="${s.id}" title="${adminKey ? 'स्थिति बदलने के लिए क्लिक करें' : 'वर्तमान स्थिति'}">${currentStatusDisplay}</button>
       </div>
       <p class="item-desc">${escapeHtml(s.desc)}</p>
       ${s.adminRemark ? `
@@ -7635,14 +7898,57 @@ function renderItemCard(s){
           <strong>👑 प्रधान जी की टिप्पणी:</strong> ${escapeHtml(s.adminRemark)}
         </div>
       ` : ''}
+
+      ${adminKey ? `
+        <!-- Direct Pradhan Status Control Bar -->
+        <div class="admin-status-control-box" style="margin: 8px 0; padding: 8px 10px; background: #FFFBEB; border: 1.5px solid #FCD34D; border-radius: 8px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; flex-wrap: wrap; gap: 4px;">
+            <span style="font-size: .78rem; font-weight: 800; color: #92400E; display: inline-flex; align-items: center; gap: 4px;">
+              👑 कार्य स्थिति सेट करें (नागरिकों को दिखेगा):
+            </span>
+            <span style="font-size: .74rem; font-weight: 700; color: #78350F; background: #FEF3C7; padding: 2px 8px; border-radius: 6px; border: 1px solid #FDE68A;">
+              वर्तमान: ${currentStatusDisplay}
+            </span>
+          </div>
+          <div style="display: flex; gap: 6px; flex-wrap: wrap;">
+            <button type="button" class="btn-set-status btn-status-progress" data-status-val="progress" data-samasya-id="${s.id}" data-samasya-token="${escapeHtml(s.token||'')}" style="flex: 1; min-width: 105px; padding: 6px 10px; border-radius: 6px; font-weight: 800; font-size: .78rem; border: 1.5px solid #D97706; background: ${isProg ? '#D97706' : '#FFFFFF'}; color: ${isProg ? '#FFFFFF' : '#92400E'}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.06);">
+              ⏳ प्रगति पर
+            </button>
+            <button type="button" class="btn-set-status btn-status-solved" data-status-val="solved" data-samasya-id="${s.id}" data-samasya-token="${escapeHtml(s.token||'')}" style="flex: 1; min-width: 105px; padding: 6px 10px; border-radius: 6px; font-weight: 800; font-size: .78rem; border: 1.5px solid #059669; background: ${isSolv ? '#059669' : '#FFFFFF'}; color: ${isSolv ? '#FFFFFF' : '#065F46'}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.06);">
+              ✅ समाधान हुआ
+            </button>
+            <button type="button" class="btn-set-status btn-status-nayi" data-status-val="nayi" data-samasya-id="${s.id}" data-samasya-token="${escapeHtml(s.token||'')}" style="flex: 1; min-width: 90px; padding: 6px 8px; border-radius: 6px; font-weight: 800; font-size: .78rem; border: 1.5px solid #DC2626; background: ${isNayi ? '#DC2626' : '#FFFFFF'}; color: ${isNayi ? '#FFFFFF' : '#991B1B'}; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 4px; box-shadow: 0 1px 2px rgba(0,0,0,0.06);">
+              🆕 नई / लंबित
+            </button>
+          </div>
+        </div>
+      ` : ''}
+
       <div class="item-meta">
         <span class="item-by">${escapeHtml(s.name||'गाँव वासी')}${s.phone?` (${escapeHtml(s.phone)})`:''} · ${fmtDate(s.date)}</span>
         <div style="display:flex; gap:6px; margin-left:auto; flex-wrap:wrap;">
           <button type="button" class="btn-chat-samasya" data-open-chat-token="${escapeHtml(s.token)}" style="color:#047857; font-size:.78rem; padding:4px 9px; border:1px solid #A7F3D0; border-radius:6px; background:#ECFDF5; cursor:pointer; font-weight:700; display:inline-flex; align-items:center; gap:4px;">
             💬 चैट ${(s.messages && s.messages.length) ? `(${s.messages.length})` : ''}
           </button>
-          <button type="button" class="btn-remark" data-remark-id="${s.id}">✍️ टिप्पणी</button>
-          <button type="button" class="btn-delete-samasya" data-delete-samasya="${s.id}" title="यह समस्या हटाएं">🗑️ हटाएं</button>
+          ${adminKey ? `<button type="button" class="btn-remark" data-remark-id="${s.id}">✍️ टिप्पणी</button>` : ''}
+          ${adminKey ? `<button type="button" class="btn-delete-samasya" data-delete-samasya="${s.id}" title="यह समस्या हटाएं">🗑️ हटाएं</button>` : ''}
+        </div>
+      </div>
+
+      <!-- Inline Chat Drawer for Pradhan & Citizen Conversation -->
+      <div class="card-chat-drawer" id="chatDrawer_${escapeHtml(s.token)}" style="display:none; margin-top:10px; padding:10px 12px; background:#F8FAFC; border:1.5px solid #CBD5E1; border-radius:8px;">
+        <div style="font-weight:700; font-size:.8rem; color:#1E293B; margin-bottom:6px; display:flex; justify-content:space-between; align-items:center;">
+          <span>💬 बातचीत थ्रेड: ${escapeHtml(s.name||'गाँव वासी')} (${escapeHtml(s.token||'GP')})</span>
+          <button type="button" class="btn-toggle-chat" data-toggle-chat-token="${escapeHtml(s.token)}" style="border:none; background:none; font-size:.78rem; cursor:pointer; color:#64748B; font-weight:700;">✖️ बंद करें</button>
+        </div>
+        <div class="card-chat-messages" id="cardChatMsgs_${escapeHtml(s.token)}" style="max-height:160px; overflow-y:auto; display:flex; flex-direction:column; gap:6px; margin-bottom:8px; padding:4px;">
+          ${renderChatMessagesHtml(s)}
+        </div>
+        <div style="display:flex; gap:6px;">
+          <input type="text" class="card-chat-input" id="cardChatInp_${escapeHtml(s.token)}" placeholder="👑 प्रधान जी के रूप में जवाब लिखें..." style="flex:1; padding:6px 10px; font-size:.8rem; border:1.5px solid #CBD5E1; border-radius:6px;" maxlength="500">
+          <button type="button" class="card-chat-send-btn" data-send-chat-token="${escapeHtml(s.token)}" data-send-chat-id="${s.id}" style="padding:6px 14px; background:#047857; color:#fff; border:none; border-radius:6px; font-weight:700; font-size:.8rem; cursor:pointer; white-space:nowrap;">
+            भेजें ✈️
+          </button>
         </div>
       </div>
     </div>
@@ -9018,12 +9324,18 @@ function initMachinery() {
 /* ============ PRADHAN LOGIN / LOGOUT ============ */
 function updateAdminButton(){
   const btn = document.getElementById('adminLoginBtn');
-  if(adminKey){
-    btn.textContent = '🔓 Pradhan Mode — Logout';
-    btn.classList.add('logged-in');
-  } else {
-    btn.textContent = '🔐 Pradhan Login';
-    btn.classList.remove('logged-in');
+  if(btn){
+    if(adminKey){
+      btn.textContent = '🔓 Pradhan Mode — Logout';
+      btn.classList.add('logged-in');
+    } else {
+      btn.textContent = '🔐 Pradhan Login';
+      btn.classList.remove('logged-in');
+    }
+  }
+  const trackerCard = document.getElementById('samasyaTrackerCard');
+  if(trackerCard){
+    trackerCard.style.display = adminKey ? 'none' : 'block';
   }
 }
 function adminLogout(){
