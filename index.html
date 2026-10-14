@@ -7250,19 +7250,19 @@ const DEFAULT_SAMASYA_FALLBACK = [
             const isEn = (typeof currentLang !== 'undefined' && currentLang === 'en');
             if (tab === 'samasya') {
                 fab.style.display = 'inline-flex';
-                fab.textContent = isEn ? '+ Report Grievance' : '+ à¤¸à¤®à¤¸à¥à¤¯à¤¾ à¤¦à¤°à¥à¤œ à¤•à¤°à¥‡à¤‚';
+                fab.textContent = isEn ? '+ Report Grievance' : '+ \u0938\u092E\u0938\u094D\u092F\u093E \u0926\u0930\u094D\u091C \u0915\u0930\u0947\u0902';
                 fab.onclick = () => openSamasyaForm();
             } else if (tab === 'chaupal') {
                 fab.style.display = 'inline-flex';
-                fab.textContent = isEn ? '+ Post Message' : '+ à¤¸à¤‚à¤¦à¥‡à¤¶ à¤²à¤¿à¤–à¥‡à¤‚';
+                fab.textContent = isEn ? '+ Post Message' : '+ \u0938\u0902\u0926\u0947\u0936 \u0932\u093F\u0916\u0947\u0902';
                 fab.onclick = () => openChaupalForm();
             } else if (tab === 'suchna') {
                 fab.style.display = 'inline-flex';
-                fab.textContent = isEn ? '+ Post Notice' : '+ à¤¨à¤ˆ à¤¸à¥‚à¤šà¤¨à¤¾ à¤œà¥‹à¤¡à¤¼à¥‡à¤‚';
+                fab.textContent = isEn ? '+ Post Notice' : '+ \u0928\u0908 \u0938\u0942\u091A\u0928\u093E \u091C\u094B\u0921\u093C\u0947\u0902';
                 fab.onclick = () => openOverlay('overlaySuchna');
             } else if (tab === 'calendar' && adminKey) {
                 fab.style.display = 'inline-flex';
-                fab.textContent = isEn ? '+ Add Village Event' : '+ à¤¨à¤¯à¤¾ à¤•à¤¾à¤°à¥à¤¯à¤•à¥à¤°à¤® à¤œà¥‹à¤¡à¤¼à¥‡à¤‚';
+                fab.textContent = isEn ? '+ Add Village Event' : '+ \u0928\u092F\u093E \u0915\u093E\u0930\u094D\u092F\u0915\u094D\u0930\u092E \u091C\u094B\u0921\u093C\u0947\u0902';
                 fab.onclick = () => {
                     const dateInp = document.getElementById('evDate');
                     if (dateInp) {
@@ -9887,10 +9887,10 @@ function updateAdminButton(){
   const btn = document.getElementById('adminLoginBtn');
   if(btn){
     if(adminKey){
-      btn.textContent = 'ðŸ”“ Pradhan Mode â€” Logout';
+      btn.textContent = '\uD83D\uDD13 \u092A\u094D\u0930\u0927\u093E\u0928 \u092E\u094B\u0921 (\u0932\u0949\u0917\u0906\u0909\u091F)';
       btn.classList.add('logged-in');
     } else {
-      btn.textContent = 'ðŸ” Pradhan Login';
+      btn.textContent = '\uD83D\uDD10 \u092A\u094D\u0930\u0927\u093E\u0928 \u0932\u0949\u0917\u0907\u0928';
       btn.classList.remove('logged-in');
     }
   }
