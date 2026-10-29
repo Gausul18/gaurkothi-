@@ -4407,18 +4407,19 @@
         }
 
         /* ============ GAON CALENDAR & PANCHANG STYLES ============ */
-        .calendar-hero-card {
+                .calendar-hero-card {
             background: linear-gradient(135deg, #1E1B4B 0%, #312E81 50%, #4338CA 100%);
             color: #FFFFFF;
-            border-radius: 16px;
+            border-radius: 18px;
             padding: 16px 20px;
-            margin-bottom: 16px;
+            margin: 0 auto 16px auto;
+            max-width: 860px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
             gap: 12px;
-            box-shadow: 0 4px 14px rgba(49, 46, 129, 0.25);
+            box-shadow: 0 4px 16px rgba(49, 46, 129, 0.22);
         }
         .cal-hero-badge {
             display: inline-block;
@@ -4469,9 +4470,10 @@
         .cal-admin-bar {
             background: #FFFBEB;
             border: 1.5px solid #FCD34D;
-            border-radius: 12px;
-            padding: 12px 16px;
-            margin-bottom: 16px;
+            border-radius: 14px;
+            padding: 12px 18px;
+            margin: 0 auto 16px auto;
+            max-width: 860px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -4490,10 +4492,11 @@
         .calendar-card {
             background: var(--card-bg, #FFFFFF);
             border: 1.5px solid var(--border, #E2E8F0);
-            border-radius: 16px;
-            padding: 16px;
-            margin-bottom: 18px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border-radius: 18px;
+            padding: 18px 20px;
+            margin: 0 auto 20px auto;
+            max-width: 860px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.05);
         }
         .cal-nav-header {
             display: flex;
@@ -4504,101 +4507,129 @@
         .cal-nav-btn {
             background: var(--bg-soft, #F1F5F9);
             border: 1px solid var(--border, #CBD5E1);
-            color: var(--ink, #1E293B);
-            padding: 6px 14px;
-            border-radius: 8px;
-            font-size: .82rem;
+            color: var(--indigo-dark, #1E1B4B);
+            padding: 7px 16px;
+            border-radius: 10px;
+            font-size: .84rem;
             font-weight: 700;
             cursor: pointer;
-            transition: .15s;
+            transition: all .15s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
         }
         .cal-nav-btn:hover {
-            background: #E2E8F0;
+            background: #EEF2FF;
+            border-color: #A5B4FC;
+            color: #4338CA;
+            transform: translateY(-1px);
         }
         .cal-month-title-wrap {
             text-align: center;
         }
         .cal-month-title {
             margin: 0;
-            font-size: 1.15rem;
+            font-size: 1.25rem;
             font-weight: 800;
             color: var(--indigo-dark, #1E1B4B);
             font-family: 'Baloo 2', sans-serif;
+            letter-spacing: -0.2px;
         }
         .cal-hindu-month {
+            display: inline-block;
             font-size: .78rem;
             color: var(--terracotta, #D35400);
             font-weight: 700;
+            background: #FFF7ED;
+            padding: 2px 8px;
+            border-radius: 6px;
+            margin-top: 2px;
+            border: 1px solid #FFEDD5;
         }
         .cal-weekdays {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 4px;
+            gap: 6px;
             text-align: center;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
             font-weight: 800;
-            font-size: .76rem;
+            font-size: .78rem;
             color: var(--ink-soft, #64748B);
-            border-bottom: 1px solid var(--border, #E2E8F0);
-            padding-bottom: 6px;
+            padding: 8px 4px;
+            background: var(--bg-soft, #F8FAFC);
+            border-radius: 10px;
         }
         .cal-weekdays .cal-sun {
             color: #DC2626;
+            font-weight: 900;
         }
         .cal-days-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
-            gap: 4px;
+            gap: 6px;
         }
-        .cal-day-cell {
-            aspect-ratio: 1;
-            min-height: 48px;
-            border-radius: 10px;
-            border: 1px solid transparent;
+        .cal-day-cell, .cal-day {
+            height: 58px;
+            min-height: 52px;
+            border-radius: 12px;
+            border: 1.5px solid var(--border, #E2E8F0);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             cursor: pointer;
             position: relative;
-            background: var(--bg-soft, #F8FAFC);
-            transition: .15s;
+            background: var(--card-bg, #FFFFFF);
+            transition: all .15s ease;
             user-select: none;
-            padding: 2px;
+            padding: 3px 2px;
         }
-        .cal-day-cell:hover {
+        .cal-day-cell:hover, .cal-day:hover {
             background: #EEF2FF;
-            border-color: #C7D2FE;
-            transform: scale(1.03);
+            border-color: #A5B4FC;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(99, 102, 241, 0.16);
+            z-index: 2;
         }
-        .cal-day-cell.other-month {
+        .cal-day-cell.other-month, .cal-day.cal-day-other {
             opacity: 0.35;
             cursor: default;
+            background: var(--bg-soft, #F8FAFC);
+            border-color: transparent;
+            box-shadow: none;
+            transform: none;
         }
-        .cal-day-cell.is-sun .cal-day-num {
+        .cal-day-cell.is-sun .cal-day-num, .cal-day.is-sun .cal-day-num {
             color: #DC2626;
         }
-        .cal-day-cell.is-today {
+        .cal-day-cell.is-today, .cal-day.is-today {
             border: 2px solid #F59E0B;
             background: #FEF3C7;
             font-weight: 800;
         }
-        .cal-day-cell.is-selected {
+        .cal-day-cell.is-today .cal-day-num, .cal-day.is-today .cal-day-num {
+            color: #B45309;
+        }
+        .cal-day-cell.is-selected, .cal-day.is-selected {
             background: #4338CA !important;
             color: #FFFFFF !important;
             border-color: #312E81 !important;
-            box-shadow: 0 3px 8px rgba(67, 56, 202, 0.35);
+            box-shadow: 0 4px 14px rgba(67, 56, 202, 0.4);
+            transform: scale(1.02);
+            z-index: 3;
         }
         .cal-day-cell.is-selected .cal-day-num,
-        .cal-day-cell.is-selected .cal-day-hindu {
+        .cal-day.is-selected .cal-day-num,
+        .cal-day-cell.is-selected .cal-day-hindu,
+        .cal-day.is-selected .cal-day-tithi {
             color: #FFFFFF !important;
         }
         .cal-day-num {
-            font-size: .92rem;
+            font-size: 1.05rem;
             font-weight: 800;
             line-height: 1.1;
         }
-        .cal-day-hindu {
+        .cal-day-hindu, .cal-day-tithi {
             font-size: .62rem;
             color: var(--ink-soft, #64748B);
             line-height: 1;
@@ -4606,7 +4637,9 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            max-width: 100%;
+            max-width: 96%;
+            text-align: center;
+            font-weight: 600;
         }
         .cal-dots-wrap {
             display: flex;
@@ -4620,35 +4653,151 @@
             border-radius: 50%;
             display: inline-block;
         }
-        .dot-fest { background: #F59E0B; }
-        .dot-panchayat { background: #10B981; }
-        .dot-custom { background: #3B82F6; }
-        .dot-today { background: #EF4444; }
+        .cal-dot.dot-fest, .dot-fest { background: #E11D48; }
+        .cal-dot.dot-panchayat, .dot-panchayat { background: #059669; }
+        .cal-dot.dot-custom, .dot-custom { background: #D97706; }
+        .cal-dot.dot-today, .dot-today { background: #F59E0B; }
         .cal-legend {
             display: flex;
             justify-content: center;
-            gap: 12px;
+            gap: 16px;
             margin-top: 14px;
-            padding-top: 10px;
+            padding-top: 12px;
             border-top: 1px dashed var(--border, #E2E8F0);
             flex-wrap: wrap;
-            font-size: .74rem;
+            font-size: .76rem;
             color: var(--ink-soft, #64748B);
             font-weight: 600;
         }
         .cal-leg-item {
             display: inline-flex;
             align-items: center;
-            gap: 4px;
+            gap: 5px;
         }
-        .cal-selected-detail {
-            background: var(--card-bg, #FFFFFF);
-            border: 1.5px solid var(--border, #E2E8F0);
+
+        /* ============ THIS MONTH'S FESTIVALS BOX (MODERN MODELING UI) ============ */
+        .cal-month-festivals-card {
+            background: linear-gradient(180deg, #FFFDF8 0%, #FFFFFF 100%);
+            border: 1.5px solid #FCD34D;
+            border-radius: 18px;
+            padding: 18px 20px;
+            margin: 0 auto 20px auto;
+            max-width: 860px;
+            box-shadow: 0 4px 16px rgba(245, 158, 11, 0.08);
+        }
+        .cal-mf-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1.5px dashed #FDE68A;
+            padding-bottom: 12px;
+            margin-bottom: 14px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .cal-mf-icon {
+            font-size: 1.5rem;
+            line-height: 1;
+        }
+        .cal-mf-title {
+            margin: 0;
+            font-size: 1.1rem;
+            color: var(--indigo-dark, #1E1B4B);
+            font-weight: 800;
+            font-family: 'Baloo 2', sans-serif;
+        }
+        .cal-mf-sub {
+            margin: 2px 0 0;
+            font-size: .78rem;
+            color: var(--ink-soft, #64748B);
+        }
+        .cal-mf-count-badge {
+            background: #FEF3C7;
+            color: #92400E;
+            font-weight: 800;
+            font-size: .8rem;
+            padding: 5px 12px;
+            border-radius: 20px;
+            border: 1px solid #FCD34D;
+        }
+        .cal-mf-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 10px;
+        }
+        .cal-mf-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #FFFFFF;
+            border: 1.5px solid #F1F5F9;
             border-radius: 14px;
-            padding: 16px;
-            margin-bottom: 18px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            padding: 10px 14px;
+            transition: all .15s ease;
+            cursor: pointer;
+            position: relative;
         }
+        .cal-mf-item:hover {
+            border-color: #F59E0B;
+            background: #FFFBEB;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.12);
+        }
+        .cal-mf-date-badge {
+            background: linear-gradient(135deg, #4338CA 0%, #312E81 100%);
+            color: #FFFFFF;
+            border-radius: 10px;
+            padding: 6px 10px;
+            text-align: center;
+            min-width: 52px;
+            line-height: 1.1;
+            flex-shrink: 0;
+            box-shadow: 0 2px 6px rgba(67, 56, 202, 0.25);
+        }
+        .cal-mf-date-badge.is-sun {
+            background: linear-gradient(135deg, #DC2626 0%, #991B1B 100%);
+        }
+        .cal-mf-date-num {
+            font-size: 1.2rem;
+            font-weight: 900;
+            display: block;
+        }
+        .cal-mf-date-day {
+            font-size: .64rem;
+            font-weight: 700;
+            opacity: 0.92;
+            text-transform: uppercase;
+        }
+        .cal-mf-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .cal-mf-name {
+            font-size: .9rem;
+            font-weight: 800;
+            color: #0F172A;
+            margin: 0 0 3px 0;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .cal-mf-desc {
+            font-size: .76rem;
+            color: #64748B;
+            margin: 0;
+            line-height: 1.3;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .cal-selected-detail,
+        .cal-events-directory {
+            max-width: 860px;
+            margin: 0 auto 20px auto;
+        }
+
         .cal-detail-head {
             display: flex;
             justify-content: space-between;
@@ -4863,10 +5012,10 @@
         <div class="weather-strip" id="weatherStrip">
             <div class="weather-strip-inner">
                 <div class="weather-strip-left" id="weatherStripSummary">
-                    <span class="weather-strip-loc">📍 <span id="weatherStripLocName">स्थान खोज रहे हैं...</span></span>
-                    <span class="weather-strip-temp" id="weatherStripTemp">--°C</span>
-                    <span class="weather-strip-cond" id="weatherStripCond">⛅ मौसम लोड हो रहा है...</span>
-                    <span class="weather-strip-rain" id="weatherStripRain">🌧️ बारिश: --%</span>
+                    <span class="weather-strip-loc">📍 <span id="weatherStripLocName">गौरकोठी (देवरिया)</span></span>
+                    <span class="weather-strip-temp" id="weatherStripTemp">28°C</span>
+                    <span class="weather-strip-cond" id="weatherStripCond">⛅ साफ़ मौसम</span>
+                    <span class="weather-strip-rain" id="weatherStripRain">🌧️ बारिश: 10%</span>
                 </div>
                 <div class="weather-strip-right">
                                         <button type="button" class="btn-weather-home-quick" id="btnWeatherHomeQuick" title="&#2327;&#2366;&#2305;&#2357; &#2327;&#2380;&#2352;&#2325;&#2379;&#2336;&#2368; (&#2342;&#2375;&#2357;&#2352;&#2367;&#2351;&#2366;) &#2325;&#2366; &#2350;&#2380;&#2360;&#2350; &#2342;&#2375;&#2336;&#2375;&#2305;">
@@ -5048,6 +5197,22 @@
                     </div>
                 </div>
 
+                                <!-- ===================== THIS MONTH'S FESTIVALS BOX ===================== -->
+                <div class="cal-month-festivals-card" id="calMonthFestivalsCard">
+                    <div class="cal-mf-head">
+                        <div style="display:flex; align-items:center; gap:10px;">
+                            <span class="cal-mf-icon">ðŸª”</span>
+                            <div>
+                                <h3 id="calMfTitle" class="cal-mf-title">à¤‡à¤¸ à¤®à¤¹à¥€à¤¨à¥‡ à¤•à¥‡ à¤ªà¥à¤°à¤®à¥à¤– à¤¤à¥à¤¯à¥Œà¤¹à¤¾à¤° à¤µ à¤ªà¤°à¥à¤µ</h3>
+                                <p id="calMfSub" class="cal-mf-sub">à¤‡à¤¸ à¤®à¤¹à¥€à¤¨à¥‡ à¤•à¥‡ à¤¸à¤­à¥€ à¤ªà¤°à¥à¤µ, à¤¸à¤°à¤•à¤¾à¤°à¥€ à¤›à¥à¤Ÿà¥à¤Ÿà¤¿à¤¯à¤¾à¤‚ à¤µ à¤—à¥à¤°à¤¾à¤® à¤¸à¤­à¤¾ à¤¬à¥ˆà¤ à¤•à¥‡à¤‚</p>
+                            </div>
+                        </div>
+                        <span class="cal-mf-count-badge" id="calMfCountBadge">à¤¤à¥à¤¯à¥Œà¤¹à¤¾à¤° à¤µ à¤ªà¤°à¥à¤µ</span>
+                    </div>
+                    <div class="cal-mf-grid" id="calMfGrid">
+                        <!-- Dynamic Month Festivals -->
+                    </div>
+                </div>
                 <!-- Selected Date Detail Box -->
                 <div class="cal-selected-detail" id="calSelectedDetail">
                     <!-- Injected details for selected date -->
@@ -5105,7 +5270,11 @@
                 <div class="cat-grid" id="catGrid"></div>
 
                 <div id="samasyaListWrap">
-                    <div class="loading-row">Load ho raha hai...</div>
+                    <div class="locked-notice">
+                        <span class="big">🔒</span>
+                        <p>आपकी समस्या सफलतापूर्वक दर्ज हो जाएगी।</p>
+                        <p class="small">समस्याओं की सूची केवल गाँव के प्रधान जी ही (लॉगिन करके) देख सकते हैं।</p>
+                    </div>
                 </div>
             </section>
 
@@ -6248,15 +6417,18 @@
             <div class="sheet">
                 <div class="sheet-wrap">
                     <button class="close-x" data-close="overlayAdmin">✕</button>
-                    <h2>🔐 Pradhan Login</h2>
+                    <h2>🔐 प्रधान लॉगिन (Pradhan Login)</h2>
                     <form id="formAdmin">
                         <div class="field">
-                            <label>Password</label>
-                            <input type="text" id="adminPassword" placeholder="Password daalein" autocomplete="off" required>
+                            <label>प्रधान पासवर्ड (Password)</label>
+                            <div style="position:relative; display:flex; align-items:center;">
+                                <input type="password" id="adminPassword" placeholder="पासवर्ड दर्ज करें" autocomplete="current-password" required style="padding-right:42px; width:100%;">
+                                <button type="button" id="btnToggleAdminPwd" style="position:absolute; right:10px; background:none; border:none; cursor:pointer; font-size:1.15rem; color:#64748B; padding:4px;" title="पासवर्ड देखें / छिपाएं">👁️</button>
+                            </div>
                         </div>
                         <div class="sheet-actions">
-                            <button type="button" class="btn btn-outline" data-close="overlayAdmin">Radd Karein</button>
-                            <button type="submit" class="btn btn-primary">Login Karein</button>
+                            <button type="button" class="btn btn-outline" data-close="overlayAdmin">रद्द करें</button>
+                            <button type="submit" class="btn btn-primary">लॉगिन करें</button>
                         </div>
                     </form>
                 </div>
@@ -6342,53 +6514,54 @@
                                         <!-- 4.5 Village Setup & Customizer -->
                     <div class="settings-card" id="cardVillageCustomizer" style="border: 2px solid var(--turmeric); background: #FFFDF8;">
                         <div class="settings-card-title">
-                            <span>ðŸ˜ï¸ <span id="lblSetupTitle">à¤…à¤ªà¤¨à¥‡ à¤—à¤¾à¤à¤µ à¤•à¥€ à¤œà¤¾à¤¨à¤•à¤¾à¤°à¥€ à¤¬à¤¦à¤²à¥‡à¤‚ (Village Setup)</span></span>
-                            <span class="guide-item-badge" style="background:var(--turmeric); color:#fff;">à¤•à¤¸à¥à¤Ÿà¤®à¤¾à¤‡à¤œà¤¼</span>
+                            <span>🏡 <span id="lblSetupTitle">अपने गाँव की जानकारी बदलें (Village Setup)</span></span>
+                            <span class="guide-item-badge" style="background:var(--turmeric); color:#fff;">कस्टमाइज़</span>
                         </div>
                         <p style="font-size:.82rem; color:var(--ink-soft); margin:0 0 10px;">
-                            à¤¯à¤¹à¤¾à¤ à¤¸à¥‡ à¤†à¤ª à¤—à¤¾à¤à¤µ à¤•à¤¾ à¤¨à¤¾à¤®, à¤ªà¥à¤°à¤§à¤¾à¤¨ à¤œà¥€ à¤•à¤¾ à¤¨à¤¾à¤®, à¤¬à¥à¤²à¥‰à¤• à¤µ à¤œà¤¿à¤²à¤¾ à¤…à¤ªà¤¨à¥‡ à¤—à¤¾à¤à¤µ à¤•à¥‡ à¤…à¤¨à¥à¤¸à¤¾à¤° à¤†à¤¸à¤¾à¤¨à¥€ à¤¸à¥‡ à¤¬à¤¦à¤² à¤¸à¤•à¤¤à¥‡ à¤¹à¥ˆà¤‚:
+                            यहाँ से आप गाँव का नाम, प्रधान जी का नाम, ब्लॉक व जिला अपने गाँव के अनुसार आसानी से बदल सकते हैं:
                         </p>
                         <div style="display:flex; flex-direction:column; gap:10px;">
                             <div>
-                                <label style="font-size:.76rem; font-weight:700; color:var(--ink); display:block; margin-bottom:3px;">à¤—à¤¾à¤à¤µ à¤•à¤¾ à¤¨à¤¾à¤® (Village Name):</label>
-                                <input type="text" id="cfgVillageName" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--line); font-family:inherit; background:var(--card); color:var(--ink); font-weight:700; font-size:.95rem;" placeholder="à¤‰à¤¦à¤¾. à¤—à¥Œà¤°à¤•à¥‹à¤ à¥€ / à¤°à¤¾à¤®à¤ªà¥à¤° / à¤§à¤°à¤®à¤ªà¥à¤°">
+                                <label style="font-size:.76rem; font-weight:700; color:var(--ink); display:block; margin-bottom:3px;">गाँव का नाम (Village Name):</label>
+                                <input type="text" id="cfgVillageName" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--line); font-family:inherit; background:var(--card); color:var(--ink); font-weight:700; font-size:.95rem;" placeholder="उदा. गौरकोठी / रामपुर / धरमपुर">
                             </div>
                             <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
                                 <div>
-                                    <label style="font-size:.76rem; font-weight:700; color:var(--ink); display:block; margin-bottom:3px;">à¤¬à¥à¤²à¥‰à¤• / à¤ªà¥à¤°à¤–à¤£à¥à¤¡:</label>
-                                    <input type="text" id="cfgBlock" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--line); font-family:inherit; background:var(--card); color:var(--ink);" placeholder="à¤¬à¥à¤²à¥‰à¤• à¤•à¤¾ à¤¨à¤¾à¤®">
+                                    <label style="font-size:.76rem; font-weight:700; color:var(--ink); display:block; margin-bottom:3px;">ब्लॉक / प्रखंड:</label>
+                                    <input type="text" id="cfgBlock" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--line); font-family:inherit; background:var(--card); color:var(--ink);" placeholder="ब्लॉक का नाम">
                                 </div>
                                 <div>
-                                    <label style="font-size:.76rem; font-weight:700; color:var(--ink); display:block; margin-bottom:3px;">à¤¤à¤¹à¤¸à¥€à¤² à¤µ à¤œà¤¿à¤²à¤¾:</label>
-                                    <input type="text" id="cfgDistrict" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--line); font-family:inherit; background:var(--card); color:var(--ink);" placeholder="à¤œà¤¿à¤²à¤¾ à¤•à¤¾ à¤¨à¤¾à¤®">
+                                    <label style="font-size:.76rem; font-weight:700; color:var(--ink); display:block; margin-bottom:3px;">तहसील व जिला:</label>
+                                    <input type="text" id="cfgDistrict" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--line); font-family:inherit; background:var(--card); color:var(--ink);" placeholder="जिला का नाम">
                                 </div>
                             </div>
                             <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px;">
                                 <div>
-                                    <label style="font-size:.76rem; font-weight:700; color:var(--ink); display:block; margin-bottom:3px;">à¤—à¥à¤°à¤¾à¤® à¤ªà¥à¤°à¤§à¤¾à¤¨ à¤•à¤¾ à¤¨à¤¾à¤®:</label>
-                                    <input type="text" id="cfgPradhanName" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--line); font-family:inherit; background:var(--card); color:var(--ink);" placeholder="à¤ªà¥à¤°à¤§à¤¾à¤¨ à¤œà¥€ à¤•à¤¾ à¤¨à¤¾à¤®">
+                                    <label style="font-size:.76rem; font-weight:700; color:var(--ink); display:block; margin-bottom:3px;">ग्राम प्रधान का नाम:</label>
+                                    <input type="text" id="cfgPradhanName" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--line); font-family:inherit; background:var(--card); color:var(--ink);" placeholder="प्रधान जी का नाम">
                                 </div>
                                 <div>
-                                    <label style="font-size:.76rem; font-weight:700; color:var(--ink); display:block; margin-bottom:3px;">à¤ªà¥à¤°à¤§à¤¾à¤¨ à¤•à¤¾ à¤«à¤¼à¥‹à¤¨ à¤¨à¤‚à¤¬à¤°:</label>
+                                    <label style="font-size:.76rem; font-weight:700; color:var(--ink); display:block; margin-bottom:3px;">प्रधान का फ़ोन नंबर:</label>
                                     <input type="text" id="cfgPradhanPhone" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--line); font-family:inherit; background:var(--card); color:var(--ink);" placeholder="98xxxxxxxx">
                                 </div>
                             </div>
                             <div>
-                                <label style="font-size:.76rem; font-weight:700; color:var(--ink); display:block; margin-bottom:3px;">à¤ªà¥‹à¤°à¥à¤Ÿà¤² à¤•à¥à¤°à¤¿à¤à¤Ÿà¤° / à¤¡à¥‡à¤µà¤²à¤ªà¤° à¤•à¤¾ à¤¨à¤¾à¤®:</label>
-                                <input type="text" id="cfgDevName" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--line); font-family:inherit; background:var(--card); color:var(--ink);" placeholder="à¤†à¤ªà¤•à¤¾ à¤¨à¤¾à¤®">
+                                <label style="font-size:.76rem; font-weight:700; color:var(--ink); display:block; margin-bottom:3px;">पोर्टल क्रिएटर / डेवलपर का नाम:</label>
+                                <input type="text" id="cfgDevName" style="width:100%; padding:8px 10px; border-radius:8px; border:1px solid var(--line); font-family:inherit; background:var(--card); color:var(--ink);" placeholder="आपका नाम">
                             </div>
                             <div style="display:flex; gap:8px; margin-top:4px;">
                                 <button type="button" class="btn-refresh-cache" style="background:#4F6B3A; color:#fff; border:none; margin-top:0; font-weight:700;" onclick="saveVillageCustomizer()">
-                                    <span>ðŸ’¾</span> <span>à¤—à¤¾à¤à¤µ à¤•à¥€ à¤œà¤¾à¤¨à¤•à¤¾à¤°à¥€ à¤¸à¥‡à¤µ à¤•à¤°à¥‡à¤‚ (Save Changes)</span>
+                                    <span>💾</span> <span>गाँव की जानकारी सेव करें (Save Changes)</span>
                                 </button>
-                                <button type="button" class="btn-refresh-cache" style="background:transparent; color:var(--ink-soft); border:1px solid var(--line); margin-top:0; width:auto; padding:0 14px;" onclick="resetVillageCustomizer()" title="à¤¡à¤¿à¤«à¤¼à¥‰à¤²à¥à¤Ÿ à¤°à¤¿à¤¸à¥‡à¤Ÿ">
-                                    ðŸ”„
+                                <button type="button" class="btn-refresh-cache" style="background:transparent; color:var(--ink-soft); border:1px solid var(--line); margin-top:0; width:auto; padding:0 14px;" onclick="resetVillageCustomizer()" title="डिफ़ॉल्ट रीसेट">
+                                    🔄
                                 </button>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 4. Quick Actions -->
+                    
+<!-- 4. Quick Actions -->
                     <div class="settings-card">
                         <div class="settings-card-title">
                             <span id="lblCacheTitle">🔄 पोर्टल रिफ्रेश व ऐप डेटा</span>
@@ -6873,8 +7046,30 @@ setLanguage(currentLang);
             }[s]));
         }
 
+        function parseCustomDate(ts) {
+            if (!ts) return null;
+            if (ts instanceof Date) return isNaN(ts.getTime()) ? null : ts;
+            if (typeof ts === 'number') {
+                const d = new Date(ts);
+                return isNaN(d.getTime()) ? null : d;
+            }
+            if (typeof ts === 'string') {
+                const s = ts.trim();
+                const m = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})$/);
+                if (m) {
+                    const d = new Date(parseInt(m[3], 10), parseInt(m[2], 10) - 1, parseInt(m[1], 10));
+                    if (!isNaN(d.getTime())) return d;
+                }
+                const d = new Date(s);
+                if (!isNaN(d.getTime())) return d;
+            }
+            return null;
+        }
+
         function fmtDate(ts) {
-            const d = new Date(ts);
+            if (!ts) return '';
+            const d = parseCustomDate(ts);
+            if (!d) return String(ts);
             return d.toLocaleDateString('hi-IN', {
                 day: 'numeric',
                 month: 'short',
@@ -6883,14 +7078,18 @@ setLanguage(currentLang);
         }
 
         function fmtTimeAgo(ts) {
-            const diff = Date.now() - ts;
+            if (!ts) return 'आज';
+            const d = parseCustomDate(ts);
+            if (!d) return String(ts);
+            const diff = Date.now() - d.getTime();
+            if (diff < 0) return fmtDate(ts);
             const mins = Math.floor(diff / 60000);
-            if (mins < 1) return 'Abhi-abhi';
-            if (mins < 60) return `${mins} min pehle`;
+            if (mins < 1) return 'अभी-अभी';
+            if (mins < 60) return `${mins} मिनट पहले`;
             const hours = Math.floor(mins / 60);
-            if (hours < 24) return `${hours} ghante pehle`;
+            if (hours < 24) return `${hours} घंटे पहले`;
             const days = Math.floor(hours / 24);
-            if (days < 7) return `${days} din pehle`;
+            if (days < 7) return `${days} दिन पहले`;
             return fmtDate(ts);
         }
 
@@ -6900,17 +7099,17 @@ setLanguage(currentLang);
 
         /* ============ Village Portal Config & Dual Storage Layer ============ */
 const DEFAULT_VILLAGE_CONFIG = {
-    villageName: "à¤—à¥Œà¤°à¤•à¥‹à¤ à¥€",
+    villageName: "गौरकोठी",
     villageNameEn: "Gaurkothi",
-    portalTitle: "à¤—à¤¾à¤à¤µ à¤ªà¥‹à¤°à¥à¤Ÿà¤²",
-    tagline: "à¤—à¤¾à¤à¤µ à¤•à¥€ à¤†à¤µà¤¾à¤œà¤¼, à¤—à¤¾à¤à¤µ à¤•à¥‡ à¤²à¤¿à¤",
-    gramPanchayat: "à¤—à¥Œà¤°à¤•à¥‹à¤ à¥€",
-    block: "à¤—à¥Œà¤°à¤•à¥‹à¤ à¥€",
-    tehsil: "à¤¦à¥‡à¤µà¤°à¤¿à¤¯à¤¾",
-    district: "à¤¦à¥‡à¤µà¤°à¤¿à¤¯à¤¾",
-    state: "à¤‰à¤¤à¥à¤¤à¤° à¤ªà¥à¤°à¤¦à¥‡à¤¶",
+    portalTitle: "गाँव पोर्टल",
+    tagline: "गाँव की आवाज़, गाँव के लिए",
+    gramPanchayat: "गौरकोठी",
+    block: "गौरकोठी",
+    tehsil: "देवरिया",
+    district: "देवरिया",
+    state: "उत्तर प्रदेश",
     pincode: "227809",
-    pradhanName: "à¤¶à¥à¤°à¥€ à¤°à¤¾à¤®à¥‡à¤¶à¥à¤µà¤° à¤ªà¥à¤°à¤¸à¤¾à¤¦",
+    pradhanName: "श्री रामेश्वर प्रसाद",
     pradhanPhone: "9919000000",
     developerName: "Gausul Azam",
     developerPhone: "916394551849",
@@ -6948,20 +7147,20 @@ function saveVillageCustomizer() {
 
     apiSend('PUT', '/config', villageConfig, true).catch(() => {});
     applyVillageConfig();
-    toast('à¤—à¤¾à¤à¤µ à¤•à¥€ à¤œà¤¾à¤¨à¤•à¤¾à¤°à¥€ à¤¸à¤«à¤²à¤¤à¤¾à¤ªà¥‚à¤°à¥à¤µà¤• à¤¸à¥à¤°à¤•à¥à¤·à¤¿à¤¤ à¤¹à¥‹ à¤—à¤ˆ! âœ…');
+    toast('गाँव की जानकारी सफलतापूर्वक सुरक्षित हो गई! ✅');
 }
 
 function resetVillageCustomizer() {
-    if (confirm('à¤•à¥à¤¯à¤¾ à¤†à¤ª à¤¡à¤¿à¤«à¤¼à¥‰à¤²à¥à¤Ÿ à¤œà¤¾à¤¨à¤•à¤¾à¤°à¥€ à¤µà¤¾à¤ªà¤¸ à¤²à¤¾à¤¨à¤¾ à¤šà¤¾à¤¹à¤¤à¥‡ à¤¹à¥ˆà¤‚?')) {
+    if (confirm('क्या आप डिफ़ॉल्ट जानकारी वापस लाना चाहते हैं?')) {
         villageConfig = { ...DEFAULT_VILLAGE_CONFIG };
         localStorage.removeItem('gaon_village_config');
         applyVillageConfig();
-        toast('à¤¡à¤¿à¤«à¤¼à¥‰à¤²à¥à¤Ÿ à¤œà¤¾à¤¨à¤•à¤¾à¤°à¥€ à¤°à¥€à¤¸à¥‡à¤Ÿ à¤¹à¥‹ à¤—à¤ˆ! ðŸ”„');
+        toast('डिफ़ॉल्ट जानकारी रीसेट हो गई! 🔄');
     }
 }
 
 function applyVillageConfig() {
-    const vName = villageConfig.villageName || 'à¤—à¥Œà¤°à¤•à¥‹à¤ à¥€';
+    const vName = villageConfig.villageName || 'गौरकोठी';
     const vNameEn = villageConfig.villageNameEn || 'Gaurkothi';
     const devName = villageConfig.developerName || 'Gausul Azam';
 
@@ -6969,9 +7168,9 @@ function applyVillageConfig() {
     if (titleEl) titleEl.textContent = `${vNameEn} Gaon Portal`;
 
     const subEl = document.getElementById('brandSub');
-    if (subEl) subEl.textContent = `à¤—à¤¾à¤à¤µ à¤•à¥€ à¤†à¤µà¤¾à¤œà¤¼, à¤—à¤¾à¤à¤µ à¤•à¥‡ à¤²à¤¿à¤ Â· ${vName} à¤—à¤¾à¤à¤µ à¤ªà¥‹à¤°à¥à¤Ÿà¤²`;
+    if (subEl) subEl.textContent = `गाँव की आवाज़, गाँव के लिए · ${vName} गाँव पोर्टल`;
 
-    document.title = `${vName} à¤—à¤¾à¤à¤µ à¤ªà¥‹à¤°à¥à¤Ÿà¤² â€” à¤—à¤¾à¤à¤µ à¤•à¥€ à¤†à¤µà¤¾à¤œà¤¼, à¤—à¤¾à¤à¤µ à¤•à¥‡ à¤²à¤¿à¤`;
+    document.title = `${vName} गाँव पोर्टल — गाँव की आवाज़, गाँव के लिए`;
 
     // Populate input values
     const inName = document.getElementById('cfgVillageName');
@@ -7005,35 +7204,39 @@ function setLocalData(key, data) {
 }
 
 const DEFAULT_SUCHNA_FALLBACK = [
-  { id: 'n1', title: 'ðŸ›ï¸ à¤—à¥à¤°à¤¾à¤® à¤¸à¤­à¤¾ à¤•à¥€ à¤–à¥à¤²à¥€ à¤¬à¥ˆà¤ à¤•', text: 'à¤†à¤—à¤¾à¤®à¥€ à¤°à¤µà¤¿à¤µà¤¾à¤° à¤•à¥‹ à¤ªà¥à¤°à¤¾à¤¤à¤ƒ 10:00 à¤¬à¤œà¥‡ à¤ªà¤‚à¤šà¤¾à¤¯à¤¤ à¤­à¤µà¤¨ à¤®à¥‡à¤‚ à¤¬à¥ˆà¤ à¤• à¤†à¤¯à¥‹à¤œà¤¿à¤¤ à¤•à¥€ à¤œà¤¾à¤à¤—à¥€à¥¤', date: '06 à¤…à¤•à¥à¤Ÿà¥‚à¤¬à¤° 2026', urgent: true, issuer: 'à¤—à¥à¤°à¤¾à¤® à¤ªà¥à¤°à¤§à¤¾à¤¨' },
-  { id: 'n2', title: 'ðŸŒ¾ à¤°à¤¾à¤¶à¤¨ à¤µà¤¿à¤¤à¤°à¤£ à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­', text: 'à¤¸à¤°à¤•à¤¾à¤°à¥€ à¤°à¤¾à¤¶à¤¨ à¤•à¥€ à¤¦à¥à¤•à¤¾à¤¨ à¤ªà¤° à¤‡à¤¸ à¤®à¤¾à¤¹ à¤•à¤¾ à¤°à¤¾à¤¶à¤¨ à¤µà¤¿à¤¤à¤°à¤£ à¤ªà¥à¤°à¤¾à¤°à¤‚à¤­ à¤¹à¥‹ à¤—à¤¯à¤¾ à¤¹à¥ˆà¥¤', date: '05 à¤…à¤•à¥à¤Ÿà¥‚à¤¬à¤° 2026', urgent: false, issuer: 'à¤¸à¤°à¤•à¤¾à¤°à¥€ à¤•à¥‹à¤Ÿà¥‡à¤¦à¤¾à¤°' }
+  { id: 'n1', title: '🏛️ ग्राम सभा की खुली बैठक', text: 'आगामी रविवार को प्रातः 10:00 बजे पंचायत भवन में बैठक आयोजित की जाएगी।', date: '06 अक्टूबर 2026', urgent: true, issuer: 'ग्राम प्रधान' },
+  { id: 'n2', title: '🌾 राशन वितरण प्रारंभ', text: 'सरकारी राशन की दुकान पर इस माह का राशन वितरण प्रारंभ हो गया है।', date: '05 अक्टूबर 2026', urgent: false, issuer: 'सरकारी कोटेदार' }
 ];
 
 const DEFAULT_CHAUPAL_FALLBACK = [
-  { id: 'ch1', name: 'à¤°à¤¾à¤® à¤•à¥à¤®à¤¾à¤° à¤µà¤°à¥à¤®à¤¾', ward: 'à¤µà¤¾à¤°à¥à¤¡ à¤¨à¤‚. 4', time: 'à¤†à¤œ', text: 'à¤—à¤¾à¤à¤µ à¤•à¥‡ à¤ªà¥à¤°à¤¾à¤¥à¤®à¤¿à¤• à¤µà¤¿à¤¦à¥à¤¯à¤¾à¤²à¤¯ à¤®à¥‡à¤‚ à¤¬à¤šà¥à¤šà¥‹à¤‚ à¤•à¥‡ à¤–à¥‡à¤²à¤•à¥‚à¤¦ à¤•à¤¾ à¤¸à¥à¤‚à¤¦à¤° à¤†à¤¯à¥‹à¤œà¤¨ à¤¹à¥à¤†!', likes: 8, photo: null }
+  { id: 'ch1', name: 'राम कुमार वर्मा', ward: 'वार्ड नं. 4', time: 'आज', date: new Date().toISOString(), text: 'गाँव के प्राथमिक विद्यालय में बच्चों के खेलकूद का सुंदर आयोजन हुआ!', likes: 8, photo: null }
 ];
 
 const DEFAULT_SAMASYA_FALLBACK = [
-  { id: 's1', token: 'GP-48291', name: 'à¤°à¤¾à¤œà¥‡à¤¶ à¤•à¥à¤®à¤¾à¤°', mobile: '9876543210', ward: 'à¤µà¤¾à¤°à¥à¤¡ 3', category: 'à¤¬à¤¿à¤œà¤²à¥€', categoryLabel: 'à¤¬à¤¿à¤œà¤²à¥€ à¤¸à¤®à¤¸à¥à¤¯à¤¾', title: 'à¤Ÿà¥à¤°à¤¾à¤‚à¤¸à¤«à¤¾à¤°à¥à¤®à¤° à¤®à¥‡à¤‚ à¤²à¥‹ à¤µà¥‹à¤²à¥à¤Ÿà¥‡à¤œ', desc: 'à¤ªà¥à¤°à¤¾à¤‡à¤®à¤°à¥€ à¤¸à¥à¤•à¥‚à¤² à¤•à¥‡ à¤ªà¤¾à¤¸ à¤Ÿà¥à¤°à¤¾à¤‚à¤¸à¤«à¤¾à¤°à¥à¤®à¤° à¤®à¥‡à¤‚ à¤¸à¤®à¤¸à¥à¤¯à¤¾ à¤¹à¥ˆà¥¤', status: 'à¤ªà¥à¤°à¤—à¤¤à¤¿ à¤ªà¤°', date: '04/10/2026', adminRemark: 'à¤²à¤¾à¤‡à¤¨à¤®à¥ˆà¤¨ à¤•à¥‹ à¤¸à¥‚à¤šà¤¿à¤¤ à¤•à¤° à¤¦à¤¿à¤¯à¤¾ à¤—à¤¯à¤¾ à¤¹à¥ˆà¥¤' }
+  { id: 's1', token: 'GP-48291', name: 'राजेश कुमार', mobile: '9876543210', ward: 'वार्ड 3', category: 'bijli', categoryLabel: 'बिजली समस्या', title: 'ट्रांसफार्मर में लो वोल्टेज', desc: 'प्राइमरी स्कूल के पास ट्रांसफार्मर में समस्या है।', status: 'प्रगति पर', date: '04/10/2026', adminRemark: 'लाइनमैन को सूचित कर दिया गया है।' }
 ];
+
 
 /* ============ API helpers ============ */
         let adminKey = sessionStorage.getItem('adminKey') || null;
 
         async function apiGet(path, adminOnly) {
-            try {
-                const opts = adminOnly ? {
-                    headers: { 'x-admin-key': adminKey || '' }
-                } : {};
-                const ctrl = new AbortController();
-                const timeoutId = setTimeout(() => ctrl.abort(), 6000);
-                opts.signal = ctrl.signal;
-                const res = await fetch(API + path, opts);
-                clearTimeout(timeoutId);
-                if (res.status === 401) return { unauthorized: true };
-                if (res.ok) return await res.json();
-            } catch (e) {
-                // Server unavailable: smoothly fallback to LocalStorage
+            const isLocalStatic = location.port === '5500' || location.protocol === 'file:';
+            if (!isLocalStatic) {
+                try {
+                    const opts = adminOnly ? {
+                        headers: { 'x-admin-key': adminKey || '' }
+                    } : {};
+                    const ctrl = new AbortController();
+                    const timeoutId = setTimeout(() => ctrl.abort(), 2000);
+                    opts.signal = ctrl.signal;
+                    const res = await fetch(API + path, opts);
+                    clearTimeout(timeoutId);
+                    if (res.status === 401) return { unauthorized: true };
+                    if (res.ok) return await res.json();
+                } catch (e) {
+                    // Server unavailable: smoothly fallback to LocalStorage
+                }
             }
 
             // LocalStorage Fallbacks
@@ -7062,28 +7265,31 @@ const DEFAULT_SAMASYA_FALLBACK = [
         }
 
         async function apiSend(method, path, body, adminOnly, extraHeaders) {
-            try {
-                const headers = { 'Content-Type': 'application/json' };
-                if (adminOnly) headers['x-admin-key'] = adminKey || '';
-                if (extraHeaders) Object.assign(headers, extraHeaders);
-                const ctrl = new AbortController();
-                const timeoutId = setTimeout(() => ctrl.abort(), 2000);
-                const res = await fetch(API + path, {
-                    method,
-                    headers,
-                    body: JSON.stringify(body),
-                    signal: ctrl.signal
-                });
-                clearTimeout(timeoutId);
-                if (res.status === 401) return { unauthorized: true };
-                if (res.status === 403) {
-                    const err = await res.json().catch(() => ({}));
-                    toast(err.error || 'Ise karne ki anumati nahi hai âš ï¸');
-                    return null;
+            const isLocalStatic = location.port === '5500' || location.protocol === 'file:';
+            if (!isLocalStatic) {
+                try {
+                    const headers = { 'Content-Type': 'application/json' };
+                    if (adminOnly) headers['x-admin-key'] = adminKey || '';
+                    if (extraHeaders) Object.assign(headers, extraHeaders);
+                    const ctrl = new AbortController();
+                    const timeoutId = setTimeout(() => ctrl.abort(), 2000);
+                    const res = await fetch(API + path, {
+                        method,
+                        headers,
+                        body: JSON.stringify(body),
+                        signal: ctrl.signal
+                    });
+                    clearTimeout(timeoutId);
+                    if (res.status === 401) return { unauthorized: true };
+                    if (res.status === 403) {
+                        const err = await res.json().catch(() => ({}));
+                        toast(err.error || 'Ise karne ki anumati nahi hai ⚠️');
+                        return null;
+                    }
+                    if (res.ok) return await res.json();
+                } catch (e) {
+                    // Server unavailable: handle in LocalStorage
                 }
-                if (res.ok) return await res.json();
-            } catch (e) {
-                // Server unavailable: handle in LocalStorage
             }
 
             // LocalStorage Handlers
@@ -7092,7 +7298,7 @@ const DEFAULT_SAMASYA_FALLBACK = [
                 if (body && (body.password === expected || body.password === 'gaurkothi2026')) {
                     return { success: true, ok: true, key: 'admin-local-key-9988' };
                 }
-                toast('à¤—à¤²à¤¤ à¤ªà¤¾à¤¸à¤µà¤°à¥à¤¡! à¤•à¥ƒà¤ªà¤¯à¤¾ à¤¸à¤¹à¥€ à¤ªà¥à¤°à¤§à¤¾à¤¨ à¤ªà¤¾à¤¸à¤µà¤°à¥à¤¡ à¤¦à¤°à¥à¤œ à¤•à¤°à¥‡à¤‚à¥¤');
+                toast('गलत पासवर्ड! कृपया सही प्रधान पासवर्ड दर्ज करें।');
                 return null;
             }
 
@@ -7102,14 +7308,14 @@ const DEFAULT_SAMASYA_FALLBACK = [
                 const newItem = {
                     id: 's-' + Date.now(),
                     token,
-                    name: body.name || 'à¤—à¤¾à¤à¤µ à¤•à¤¾ à¤¨à¤¾à¤—à¤°à¤¿à¤•',
+                    name: body.name || 'गाँव का नागरिक',
                     mobile: body.mobile || '',
                     ward: body.ward || '',
-                    category: body.category || 'à¤…à¤¨à¥à¤¯',
-                    categoryLabel: body.categoryLabel || body.category || 'à¤¸à¤®à¤¸à¥à¤¯à¤¾',
-                    title: body.title || 'à¤œà¤¨ à¤¸à¤®à¤¸à¥à¤¯à¤¾',
+                    category: body.category || 'अन्य',
+                    categoryLabel: body.categoryLabel || body.category || 'समस्या',
+                    title: body.title || 'जन समस्या',
                     desc: body.desc || '',
-                    status: 'à¤²à¤‚à¤¬à¤¿à¤¤',
+                    status: 'लंबित',
                     date: new Date().toLocaleDateString('hi-IN'),
                     adminRemark: '',
                     photo: body.photo || null,
@@ -7148,7 +7354,7 @@ const DEFAULT_SAMASYA_FALLBACK = [
                 const item = list.find(s => s.token === token || s.id === token);
                 if (item) {
                     item.replies = item.replies || [];
-                    const reply = { by: body.by || 'à¤¨à¤¾à¤—à¤°à¤¿à¤•', text: body.text, time: new Date().toLocaleTimeString('hi-IN') };
+                    const reply = { by: body.by || 'नागरिक', text: body.text, time: new Date().toLocaleTimeString('hi-IN') };
                     item.replies.push(reply);
                     setLocalData('samasya', list);
                     return { success: true, message: reply };
@@ -7159,9 +7365,10 @@ const DEFAULT_SAMASYA_FALLBACK = [
                 const list = getLocalData('chaupal', DEFAULT_CHAUPAL_FALLBACK);
                 const newItem = {
                     id: 'ch-' + Date.now(),
-                    name: body.name || 'à¤—à¤¾à¤à¤µ à¤•à¤¾ à¤¨à¤¿à¤µà¤¾à¤¸à¥€',
+                    name: body.name || 'गाँव का निवासी',
                     ward: body.ward || '',
-                    time: 'à¤…à¤­à¥€-à¤…à¤­à¥€',
+                    time: 'अभी-अभी',
+                    date: new Date().toISOString(),
                     text: body.text || '',
                     likes: 0,
                     photo: body.photo || null
@@ -7194,16 +7401,17 @@ const DEFAULT_SAMASYA_FALLBACK = [
                 const list = getLocalData('suchna', DEFAULT_SUCHNA_FALLBACK);
                 const newItem = {
                     id: 'notice-' + Date.now(),
-                    title: body.title || 'à¤¨à¤ˆ à¤¸à¥‚à¤šà¤¨à¤¾',
+                    title: body.title || 'नई सूचना',
                     text: body.text || '',
                     date: body.date || new Date().toLocaleDateString('hi-IN'),
                     urgent: Boolean(body.urgent),
-                    issuer: body.issuer || 'à¤—à¥à¤°à¤¾à¤® à¤ªà¥à¤°à¤§à¤¾à¤¨'
+                    issuer: body.issuer || 'ग्राम प्रधान'
                 };
                 list.unshift(newItem);
                 setLocalData('suchna', list);
                 return newItem;
             }
+
 
             if (path.startsWith('/suchna/') && method === 'PUT') {
                 const list = getLocalData('suchna', DEFAULT_SUCHNA_FALLBACK);
@@ -7294,19 +7502,35 @@ const DEFAULT_SAMASYA_FALLBACK = [
         });
 
         /* ============ SAMASYA (Problem reporting) ============ */
+        function getDedupedSamasya() {
+            const seen = new Set();
+            const result = [];
+            (samasyaList || []).forEach(s => {
+                const k = (s.token || s.id || '').trim();
+                if (k && !seen.has(k)) {
+                    seen.add(k);
+                    result.push(s);
+                } else if (!k) {
+                    result.push(s);
+                }
+            });
+            return result;
+        }
+
         function renderCatGrid() {
             const grid = document.getElementById('catGrid');
+            const deduped = getDedupedSamasya();
             grid.innerHTML = CATEGORIES.map(c => {
-                        const count = samasyaList.filter(s => s.category === c.id).length;
-                        return `<button type="button" class="cat-card ${activeCategory===c.id?'active':''}" data-cat="${c.id}">
+                const count = deduped.filter(s => s.category === c.id).length;
+                return `<button type="button" class="cat-card ${activeCategory===c.id?'active':''}" data-cat="${c.id}">
       ${(adminKey && count)?`<span class="count">${count}</span>`:''}
       <span class="icon">${c.icon}</span>
       <span class="name">${c.name}</span>
     </button>`;
-  }).join('') + `<button type="button" class="cat-card ${activeCategory===null?'active':''}" data-cat="all">
+            }).join('') + `<button type="button" class="cat-card ${activeCategory===null?'active':''}" data-cat="all">
       <span class="icon">🗂️</span><span class="name">सभी</span>
     </button>`;
-}
+        }
 // Event delegation: one listener on the grid itself, so clicks always work
 // even after renderCatGrid() rebuilds the buttons inside it.
 document.getElementById('catGrid').addEventListener('click', (e)=>{
@@ -7328,10 +7552,11 @@ function renderAdminDashboard(){
   }
   bar.style.display = 'block';
 
-  const total = samasyaList.length;
-  const nayi = samasyaList.filter(s=>s.status==='nayi').length;
-  const progress = samasyaList.filter(s=>s.status==='progress').length;
-  const solved = samasyaList.filter(s=>s.status==='solved').length;
+  const deduped = getDedupedSamasya();
+  const total = deduped.length;
+  const nayi = deduped.filter(s => s.status === 'nayi' || s.status === 'लंबित' || !s.status).length;
+  const progress = deduped.filter(s => s.status === 'progress' || s.status === 'प्रगति पर').length;
+  const solved = deduped.filter(s => s.status === 'solved' || s.status === 'समाधान हुआ').length;
   const rate = total > 0 ? Math.round((solved / total) * 100) : 0;
 
   grid.innerHTML = `
@@ -7359,17 +7584,18 @@ function renderAdminDashboard(){
 }
 
 function printAdminReport(){
-  if(!adminKey || samasyaList.length === 0){
+  const deduped = getDedupedSamasya();
+  if(!adminKey || deduped.length === 0){
     toast('प्रिंट करने के लिए कोई शिकायत उपलब्ध नहीं है ⚠️');
     return;
   }
-  const total = samasyaList.length;
-  const nayi = samasyaList.filter(s=>s.status==='nayi').length;
-  const progress = samasyaList.filter(s=>s.status==='progress').length;
-  const solved = samasyaList.filter(s=>s.status==='solved').length;
+  const total = deduped.length;
+  const nayi = deduped.filter(s => s.status === 'nayi' || s.status === 'लंबित' || !s.status).length;
+  const progress = deduped.filter(s => s.status === 'progress' || s.status === 'प्रगति पर').length;
+  const solved = deduped.filter(s => s.status === 'solved' || s.status === 'समाधान हुआ').length;
   const rate = total > 0 ? Math.round((solved / total) * 100) : 0;
 
-  const rows = samasyaList.slice().sort((a,b)=>b.date-a.date).map((s, idx) => {
+  const rows = deduped.slice().sort((a,b)=>b.date-a.date).map((s, idx) => {
     const cat = CATEGORIES.find(c=>c.id===s.category);
     return `
       <tr>
@@ -7449,11 +7675,9 @@ function printAdminReport(){
         <div>हस्ताक्षर / मुहर ग्राम सेक्रेटरी</div>
         <div>हस्ताक्षर / मुहर ग्राम प्रधान</div>
       </div>
-      <script>
-        window.onload = function(){ window.print(); };
-      <\/script>
-    </body>
-    </html>
+      ${'<' + 'script>window.onload = function(){ window.print(); };<' + '/script>'}
+      ${'<' + '/body>'}
+      ${'<' + '/html>'}
   `;
 
   const w = window.open('', '_blank');
@@ -8223,7 +8447,7 @@ function renderSamasyaList(){
     return;
   }
 
-  let list = samasyaList.slice().sort((a,b)=>b.date-a.date);
+  let list = getDedupedSamasya().sort((a,b)=>b.date-a.date);
   if(activeCategory) list = list.filter(s=>s.category===activeCategory);
 
   if(list.length===0){
@@ -8611,13 +8835,17 @@ document.getElementById('formSamasya').addEventListener('submit', async (e)=>{
     messages: []
   };
 
-  // Add to in-memory list
-  samasyaList.unshift(newItem);
+  // Add to in-memory list ONLY if not already present
+  if (!samasyaList.some(s => s.token === token || (newItem.id && s.id === newItem.id))) {
+    samasyaList.unshift(newItem);
+  }
 
-  // Save to LocalStorage
+  // Ensure local storage has it without duplicating
   const localList = getLocalData('samasya', DEFAULT_SAMASYA_FALLBACK);
-  localList.unshift(newItem);
-  setLocalData('samasya', localList);
+  if (!localList.some(s => s.token === token || (newItem.id && s.id === newItem.id))) {
+    localList.unshift(newItem);
+    setLocalData('samasya', localList);
+  }
 
   renderCatGrid();
   renderSamasyaList();
@@ -8840,7 +9068,7 @@ function renderChaupal(){
         <div class="chaupal-author-avatar">${initial}</div>
         <div class="chaupal-author-info">
           <h4 class="chaupal-author-name">${escapeHtml(p.name || 'गाँव वासी')}</h4>
-          <p class="chaupal-post-time">${fmtTimeAgo(p.date)}</p>
+          <p class="chaupal-post-time">${fmtTimeAgo(p.date || p.time)}</p>
         </div>
       </div>
       ${p.text ? `<div class="chaupal-card-text">${linkify(p.text)}</div>` : ''}
@@ -9951,14 +10179,51 @@ async function loadSamasyaList(){
     });
   }
   
-  samasyaList = list || [];
+  // Strict deduplication by token and id
+  const seenKeys = new Set();
+  const dedupedList = [];
+  (list || []).forEach(item => {
+    const k = (item.token || item.id || '').trim();
+    if (k && !seenKeys.has(k)) {
+      seenKeys.add(k);
+      dedupedList.push(item);
+    } else if (!k) {
+      dedupedList.push(item);
+    }
+  });
+
+  samasyaList = dedupedList;
   renderCatGrid();
   renderSamasyaList();
 }
+
 document.getElementById('adminLoginBtn').addEventListener('click', ()=>{
-  if(adminKey){ adminLogout(); }
-  else { document.getElementById('adminPassword').value=''; openOverlay('overlayAdmin'); }
+  if(adminKey){ 
+    adminLogout(); 
+  } else { 
+    const pwdInp = document.getElementById('adminPassword');
+    if (pwdInp) { pwdInp.value = ''; pwdInp.type = 'password'; }
+    const toggleBtn = document.getElementById('btnToggleAdminPwd');
+    if (toggleBtn) { toggleBtn.textContent = '👁️'; }
+    openOverlay('overlayAdmin'); 
+  }
 });
+
+const btnTogglePwd = document.getElementById('btnToggleAdminPwd');
+if (btnTogglePwd) {
+  btnTogglePwd.addEventListener('click', () => {
+    const pwd = document.getElementById('adminPassword');
+    if (!pwd) return;
+    if (pwd.type === 'password') {
+      pwd.type = 'text';
+      btnTogglePwd.textContent = '🙈';
+    } else {
+      pwd.type = 'password';
+      btnTogglePwd.textContent = '👁️';
+    }
+  });
+}
+
 document.getElementById('formAdmin').addEventListener('submit', async (e)=>{
   e.preventDefault();
   const password = document.getElementById('adminPassword').value;
@@ -9972,9 +10237,9 @@ document.getElementById('formAdmin').addEventListener('submit', async (e)=>{
     renderChaupal();
     renderSuchna();
     renderJaankari();
-    toast('Pradhan ke roop me login ho gaya ✅');
+    toast('प्रधान जी के रूप में लॉगिन हो गया ✅');
   } else {
-    toast('Galat password ⚠️');
+    toast('गलत पासवर्ड! कृपया सही प्रधान पासवर्ड दर्ज करें ⚠️');
   }
 });
 
@@ -11446,7 +11711,7 @@ function renderCalendarGrid() {
   // 1. Previous Month Spillover Days
   for (let i = firstDayIndex - 1; i >= 0; i--) {
     const pDay = prevMonthTotalDays - i;
-    html += `<div class="cal-day cal-day-other"><span class="cal-day-num">${pDay}</span></div>`;
+    html += `<div class="cal-day-cell cal-day other-month cal-day-other"><span class="cal-day-num">${pDay}</span></div>`;
   }
 
   // 2. Current Month Days
@@ -11459,7 +11724,8 @@ function renderCalendarGrid() {
     const panchang = getPanchangDetails(thisDateObj);
     const events = getVillageEventsForDate(dateKey, thisDateObj);
 
-    let classes = 'cal-day';
+    let classes = 'cal-day-cell cal-day';
+    if (thisDateObj.getDay() === 0) classes += ' is-sun';
     if (isToday) classes += ' is-today';
     if (isSelected) classes += ' is-selected';
 
@@ -11475,7 +11741,7 @@ function renderCalendarGrid() {
     html += `
       <div class="${classes}" data-date="${dateKey}" role="button" tabindex="0">
         <span class="cal-day-num">${d}</span>
-        <span class="cal-day-tithi">${panchang.tithiName}</span>
+        <span class="cal-day-hindu cal-day-tithi">${panchang.tithiName}</span>
         ${dotsHtml ? `<div class="cal-dots-wrap">${dotsHtml}</div>` : ''}
       </div>
     `;
@@ -11485,20 +11751,105 @@ function renderCalendarGrid() {
   const totalRendered = firstDayIndex + totalDays;
   const remainingSlots = (totalRendered % 7 === 0) ? 0 : (7 - (totalRendered % 7));
   for (let n = 1; n <= remainingSlots; n++) {
-    html += `<div class="cal-day cal-day-other"><span class="cal-day-num">${n}</span></div>`;
+    html += `<div class="cal-day-cell cal-day other-month cal-day-other"><span class="cal-day-num">${n}</span></div>`;
   }
 
   grid.innerHTML = html;
 
   // Add click listeners to active days
-  grid.querySelectorAll('.cal-day[data-date]').forEach(cell => {
+  grid.querySelectorAll('[data-date]').forEach(cell => {
     cell.addEventListener('click', () => {
       const dateKey = cell.getAttribute('data-date');
       const [y, m, d] = dateKey.split('-').map(Number);
       selectedCalDate = new Date(y, m - 1, d);
-      grid.querySelectorAll('.cal-day').forEach(c => c.classList.remove('is-selected'));
+      grid.querySelectorAll('[data-date]').forEach(c => c.classList.remove('is-selected'));
       cell.classList.add('is-selected');
       selectCalendarDate(dateKey);
+    });
+  });
+
+  // Render Month Festivals Card Box
+  renderMonthFestivalsBox(year, month);
+}
+
+function renderMonthFestivalsBox(year, month) {
+  const container = document.getElementById('calMfGrid');
+  const titleEl = document.getElementById('calMfTitle');
+  const subEl = document.getElementById('calMfSub');
+  const badgeEl = document.getElementById('calMfCountBadge');
+  if (!container) return;
+
+  const y = (year !== undefined) ? year : currentCalDate.getFullYear();
+  const m = (month !== undefined) ? month : currentCalDate.getMonth();
+
+  const monthName = MONTH_NAMES_HI[m] || 'à¤®à¤¾à¤¹';
+  if (titleEl) titleEl.textContent = `${monthName} ${y} à¤•à¥‡ à¤ªà¥à¤°à¤®à¥à¤– à¤¤à¥à¤¯à¥Œà¤¹à¤¾à¤°, à¤ªà¤°à¥à¤µ à¤µ à¤¬à¥ˆà¤ à¤•à¥‡à¤‚`;
+  if (subEl) subEl.textContent = `à¤‡à¤¸ à¤®à¤¹à¥€à¤¨à¥‡ à¤•à¥‡ à¤¸à¤­à¥€ à¤§à¤¾à¤°à¥à¤®à¤¿à¤• à¤ªà¤°à¥à¤µ, à¤¸à¤°à¤•à¤¾à¤°à¥€ à¤›à¥à¤Ÿà¥à¤Ÿà¤¿à¤¯à¤¾à¤‚ à¤µ à¤—à¥à¤°à¤¾à¤® à¤¸à¤­à¤¾ à¤¬à¥ˆà¤ à¤•à¥‡à¤‚`;
+
+  const totalDays = new Date(y, m + 1, 0).getDate();
+  const monthItems = [];
+
+  for (let d = 1; d <= totalDays; d++) {
+    const dObj = new Date(y, m, d);
+    const dateKey = formatCalDateKey(y, m, d);
+    const dayEvents = getVillageEventsForDate(dateKey, dObj);
+
+    dayEvents.forEach(ev => {
+      monthItems.push({
+        day: d,
+        dow: dObj.getDay(),
+        dayName: HINDI_WEEKDAYS[dObj.getDay()] || '',
+        dateKey: dateKey,
+        ...ev
+      });
+    });
+  }
+
+  if (badgeEl) {
+    badgeEl.textContent = monthItems.length > 0 ? `${monthItems.length} à¤®à¥à¤–à¥à¤¯ à¤•à¤¾à¤°à¥à¤¯à¤•à¥à¤°à¤® / à¤ªà¤°à¥à¤µ` : 'à¤•à¥‹à¤ˆ à¤µà¤¿à¤¶à¥‡à¤· à¤ªà¤°à¥à¤µ à¤¨à¤¹à¥€à¤‚';
+  }
+
+  if (monthItems.length === 0) {
+    container.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align:center; padding:24px 10px; color:var(--ink-soft,#64748B); font-size:.9rem;">
+        ðŸ•Šï¸ ${monthName} ${y} à¤®à¥‡à¤‚ à¤•à¥‹à¤ˆ à¤µà¤¿à¤¶à¥‡à¤· à¤¤à¥à¤¯à¥Œà¤¹à¤¾à¤° à¤¯à¤¾ à¤¸à¤¾à¤°à¥à¤µà¤œà¤¨à¤¿à¤• à¤¬à¥ˆà¤ à¤• à¤¦à¤°à¥à¤œ à¤¨à¤¹à¥€à¤‚ à¤¹à¥ˆà¥¤ à¤¸à¤¾à¤®à¤¾à¤¨à¥à¤¯ à¤¦à¥ˆà¤¨à¤¿à¤• à¤•à¤¾à¤°à¥à¤¯ à¤¦à¤¿à¤µà¤¸à¥¤
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = monthItems.map(item => {
+    const isSun = (item.dow === 0);
+    return `
+      <div class="cal-mf-item" data-date="${item.dateKey}" role="button" tabindex="0" title="à¤•à¥ˆà¤²à¥‡à¤‚à¤¡à¤° à¤®à¥‡à¤‚ à¤¤à¤¾à¤°à¥€à¤– à¤¦à¥‡à¤–à¤¨à¥‡ à¤•à¥‡ à¤²à¤¿à¤ à¤•à¥à¤²à¤¿à¤• à¤•à¤°à¥‡à¤‚">
+        <div class="cal-mf-date-badge ${isSun ? 'is-sun' : ''}">
+          <span class="cal-mf-date-num">${item.day}</span>
+          <span class="cal-mf-date-day">${item.dayName.slice(0, 3)}</span>
+        </div>
+        <div class="cal-mf-info">
+          <div class="cal-mf-name">${item.title}</div>
+          <p class="cal-mf-desc">${item.desc || item.location || 'à¤—à¥Œà¤°à¤•à¥‹à¤ à¥€ à¤—à¥à¤°à¤¾à¤® à¤—à¤¤à¤¿à¤µà¤¿à¤§à¤¿'}</p>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  container.querySelectorAll('.cal-mf-item').forEach(card => {
+    card.addEventListener('click', () => {
+      const dKey = card.getAttribute('data-date');
+      const [iy, im, id] = dKey.split('-').map(Number);
+      selectedCalDate = new Date(iy, im - 1, id);
+      const grid = document.getElementById('calDaysGrid');
+      if (grid) {
+        grid.querySelectorAll('[data-date]').forEach(c => c.classList.remove('is-selected'));
+        const targetCell = grid.querySelector(`[data-date="${dKey}"]`);
+        if (targetCell) targetCell.classList.add('is-selected');
+      }
+      selectCalendarDate(dKey);
+      const detailEl = document.getElementById('calSelectedDetail');
+      if (detailEl) {
+        detailEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
     });
   });
 }
@@ -11941,6 +12292,40 @@ function initCalendar() {
 
 /* ============ Init ============ */
 async function init(){
+  // Auto-clean any corrupt mojibake from localStorage
+  ['gaon_db_chaupal', 'gaon_db_suchna', 'gaon_db_samasya', 'gaon_village_config'].forEach(k => {
+    try {
+      const v = localStorage.getItem(k);
+      if (v && (v.includes('\u00C3\u00A0') || v.includes('Ã Â¤') || v.includes('Ã Â¥') || v.includes('\u00E0') || v.includes('Invalid Date'))) {
+        localStorage.removeItem(k);
+      }
+    } catch(e){}
+  });
+
+  // Auto-deduplicate any complaints in localStorage so existing duplicate cards vanish
+  try {
+    const rawSamasya = localStorage.getItem('gaon_db_samasya');
+    if (rawSamasya) {
+      const parsed = JSON.parse(rawSamasya);
+      if (Array.isArray(parsed)) {
+        const seen = new Set();
+        const deduped = [];
+        for (const item of parsed) {
+          const key = (item.token || item.id || '').trim();
+          if (key && !seen.has(key)) {
+            seen.add(key);
+            deduped.push(item);
+          } else if (!key) {
+            deduped.push(item);
+          }
+        }
+        if (deduped.length !== parsed.length) {
+          localStorage.setItem('gaon_db_samasya', JSON.stringify(deduped));
+        }
+      }
+    }
+  } catch(e){}
+
   try { updateAdminButton(); } catch(e) { console.error('updateAdminButton err:', e); }
   try { initVoiceInput(); } catch(e) { console.error('initVoiceInput err:', e); }
   try { initWeather(); } catch(e) { console.error('initWeather err:', e); }
@@ -11955,6 +12340,15 @@ async function init(){
       if(jaankariTab) jaankariTab.click();
     });
   }
+
+  // Immediate instant render on launch (0ms wait)
+  try { renderCatGrid(); } catch(e) { console.error('renderCatGrid err:', e); }
+  try { renderSamasyaList(); } catch(e) { console.error('renderSamasyaList err:', e); }
+  try { renderChaupal(); } catch(e) { console.error('renderChaupal err:', e); }
+  try { renderSuchna(); } catch(e) { console.error('renderSuchna err:', e); }
+  try { renderJaankari(); } catch(e) { console.error('renderJaankari err:', e); }
+  try { renderYojana(); } catch(e) { console.error('renderYojana err:', e); }
+  try { renderKrishi(); } catch(e) { console.error('renderKrishi err:', e); }
 
   try {
     const [su, j, y, ch, kr] = await Promise.all([
